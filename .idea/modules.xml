@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ComputerGraphicsExample/ComputerGraphicsExample.iml" filepath="$PROJECT_DIR$/ComputerGraphicsExample/ComputerGraphicsExample.iml" />
       <module fileurl="file://$PROJECT_DIR$/MasterThesis.iml" filepath="$PROJECT_DIR$/MasterThesis.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/appEpicOrg/appEpicOrg.iml" filepath="$PROJECT_DIR$/appEpicOrg/appEpicOrg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test0/test0.iml" filepath="$PROJECT_DIR$/test0/test0.iml" />
     </modules>
   </component>
 </project>
