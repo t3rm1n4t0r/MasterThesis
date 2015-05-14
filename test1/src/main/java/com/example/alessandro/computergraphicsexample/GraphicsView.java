@@ -64,7 +64,7 @@ public class GraphicsView extends GLSurfaceView{
             material.getTextures().add(texture);
 
             //Step 4: load a Geometry
-            ArrayObject[] objects = ObjLoader.arrayObjectFromFile(context, "resources/chitarra.obj");
+            ArrayObject[] objects = ObjLoader.arrayObjectFromFile(context, "chitarra.obj");
 
             Mesh mesh=new Mesh(objects[0]);
             mesh.init();
