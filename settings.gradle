@@ -1,1 +1,1 @@
-include ':app', ':appEpicOrg', ':ComputerGraphicsExample', ':test0'
+include ':app', ':appEpicOrg', ':ComputerGraphicsExample', ':test0', ':test1'
