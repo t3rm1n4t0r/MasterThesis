@@ -35,12 +35,16 @@ public class ShadersKeeper {
 
     public static void loadPipelineShaders(Context context, String shadername){
 
-        String vertexShader= Shaders.loadText(context, shadername+".vsh");
-        String fragmentShader=Shaders.loadText(context, shadername+".fsh");
+        if(!shaders.containsKey(shadername)){
+            String vertexShader= Shaders.loadText(context, shadername+".vsh");
+            String fragmentShader=Shaders.loadText(context, shadername+".fsh");
 
-        ShadingProgram program=Shaders.loadShaderModel(context, vertexShader, fragmentShader, pTextureMaterial);
-        program.init();
-        shaders.put(shadername, program);
+            ShadingProgram program=Shaders.loadShaderModel(context, vertexShader, fragmentShader, pTextureMaterial);
+            program.init();
+            shaders.put(shadername, program);
+        }
+
+
     }
 
     public static ShadingProgram getProgram(String name){

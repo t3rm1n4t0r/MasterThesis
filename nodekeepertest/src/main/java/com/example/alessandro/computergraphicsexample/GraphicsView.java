@@ -16,13 +16,16 @@ import sfogl.integration.Material;
 import sfogl.integration.Mesh;
 import sfogl.integration.Model;
 import sfogl.integration.Node;
+import sfogl.integration.Shaders;
 import sfogl.integration.ShadingProgram;
 import sfogl2.SFOGLSystemState;
 import sfogl2.SFOGLTextureModel;
 import shadow.graphics.SFImageFormat;
 import shadow.math.SFMatrix3f;
 import shadow.math.SFTransform3f;
+import thesis.NodesKeeper;
 import thesis.ShadersKeeper;
+import thesis.TexturesKeeper;
 
 /**
  * Created by Alessandro on 13/03/15.
@@ -30,6 +33,7 @@ import thesis.ShadersKeeper;
 public class GraphicsView extends GLSurfaceView{
 
     private Context context;
+    private static final String STANDARD_SHADER = "stdShader";
 
     public GraphicsView(Context context) {
         super(context);
@@ -45,73 +49,26 @@ public class GraphicsView extends GLSurfaceView{
 
         private float t=0;
 
-        private ShadingProgram program;
-
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-            //Step 1 : load Shading effects
-            ShadersKeeper.loadPipelineShaders(context, "stdShader");
-            program= ShadersKeeper.getProgram("stdShader");
-
-            //Step 2 : load Textures
-            int textureModel=SFOGLTextureModel.generateTextureObjectModel(SFImageFormat.RGB,
-                    GLES20.GL_REPEAT, GLES20.GL_REPEAT, GLES20.GL_LINEAR, GLES20.GL_LINEAR);
-            BitmapTexture texture= BitmapTexture.loadBitmapTexture(BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.paddedroomtexture01), textureModel);
-            texture.init();
-
-            //2nd texture
-            int texture2 = SFOGLTextureModel.generateTextureObjectModel(SFImageFormat.RGB,
-                    GLES20.GL_REPEAT, GLES20.GL_REPEAT, GLES20.GL_LINEAR, GLES20.GL_LINEAR);
-            BitmapTexture text2 = BitmapTexture.loadBitmapTexture(BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.paddedgreen), texture2);
-            text2.init();
+           node = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cubo.obj", "cubo1");
+           Node anothernode = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedgreen, "cubo.obj", "cubo2");
+           Node anotheranothernode = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cubo.obj", "cubo3");
 
 
-            //Step 3 : create a Material (materials combine shaders+textures+shading parameters)
-            Material material=new Material(program);
-            material.getTextures().add(texture);
-
-            //2nd material
-            Material material2=new Material(program);
-            material2.getTextures().add(text2);
-
-            //Step 4: load a Geometry
-            ArrayObject[] objects = ObjLoader.arrayObjectFromFile(context, "chitarra.obj");
-
-            Mesh mesh=new Mesh(objects[0]);
-            mesh.init();
-
-            //2nd mesh
-            ArrayObject[] obj2 = ObjLoader.arrayObjectFromFile(context, "chitarra.obj");
-            Mesh mesh2=new Mesh(obj2[0]);
-            mesh2.init();
-
-            //Step 5: create a Model combining material+geometry
-            Model model1=new Model();
-            model1.setRootGeometry(mesh);
-            model1.setMaterialComponent(material);
-
-            Model model2= new Model();
-            model2.setRootGeometry(mesh2);
-            model2.setMaterialComponent(material2);
-
-            //Step 6: create a Node, that is a reference system where you can place your Model
-            node=new Node();
-            node.setModel(model1);
             node.getRelativeTransform().setPosition(0, 0, 0);
 
-            Node anotherNode=new Node();
-            anotherNode.setModel(model1);
-            anotherNode.getRelativeTransform().setPosition(1, -25, 0);
-            //anotherNode.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
-            node.getSonNodes().add(anotherNode);
+            node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
 
-            Node anotheranothernode = new Node();
-            anotheranothernode.setModel(model2);
-            anotheranothernode.getRelativeTransform().setPosition(0, 25f, 0);
-            //anotheranothernode.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
+
+            anothernode.getRelativeTransform().setPosition(1, -300, 0);
+            //anothernode.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
+            node.getSonNodes().add(anothernode);
+
+
+            anotheranothernode.getRelativeTransform().setPosition(0, 300f, 0);
+
             node.getSonNodes().add(anotheranothernode);
         }
 
@@ -131,13 +88,14 @@ public class GraphicsView extends GLSurfaceView{
                     0,0,1,0,
                     0,0,0,1,
             };
-            program.setupProjection(projection);
+            ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(projection);
 
 
             //Change the Node transform
             t+=0.01f;
             float rotation=0.2f+t;
-            float scaling=0.02f;
+            float scaling=0.01f;
+
             SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
             SFMatrix3f spin = SFMatrix3f.getIdentity();
 
@@ -155,8 +113,7 @@ public class GraphicsView extends GLSurfaceView{
             node.getRelativeTransform().setMatrix(matrix3f);
             node.updateTree(new SFTransform3f());
 
-            node.getSonNodes().get(0).getRelativeTransform().setMatrix(SFMatrix3f.getRotationX(rotation));
-            node.getSonNodes().get(1).getRelativeTransform().setMatrix(SFMatrix3f.getRotationX(rotation));
+
 
 
 

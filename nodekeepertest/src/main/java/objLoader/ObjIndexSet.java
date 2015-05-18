@@ -1,5 +1,7 @@
 package objLoader;
 
+import android.util.Log;
+
 /**
  * Responsible for the +1/-1 issue on indices
  * 
@@ -12,6 +14,8 @@ public class ObjIndexSet implements Comparable<ObjIndexSet>{
 	private int vtIndex=-1;
 	
 	public ObjIndexSet(String indices){
+
+		Log.e("Stringa", indices);
 		indices=indices.trim();
 		int indexOfSlash01=indices.indexOf("/");
 		int indexOfSlash02=indices.lastIndexOf("/");
@@ -19,6 +23,7 @@ public class ObjIndexSet implements Comparable<ObjIndexSet>{
 		String[] splits=indices.split("/");
 
 		vIndex=Integer.parseInt(splits[0])-1;
+
 		if(indexOfSlash01>0){
 			if(indexOfSlash01==indexOfSlash02){// v/vt
 				vtIndex=Integer.parseInt(splits[1])-1;

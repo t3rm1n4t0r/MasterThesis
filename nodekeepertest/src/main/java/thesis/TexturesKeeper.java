@@ -18,7 +18,7 @@ public class TexturesKeeper {
 
     private static HashMap<Integer, BitmapTexture> textures = new HashMap<>();
 
-    public static BitmapTexture getTexture(Context context, int textureId) {
+    public static BitmapTexture generateTexture(Context context, int textureId) {
         if (textures.containsKey(textureId))
             return textures.get(textureId);
         else {
