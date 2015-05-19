@@ -2,9 +2,12 @@ package com.example.alessandro.computergraphicsexample;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -34,6 +37,8 @@ public class GraphicsView extends GLSurfaceView{
 
     private Context context;
     private static final String STANDARD_SHADER = "stdShader";
+    private static final int CUBE_ROWS = 5;
+    private static final int CUBE_COLS = 5;
 
     public GraphicsView(Context context) {
         super(context);
@@ -45,31 +50,31 @@ public class GraphicsView extends GLSurfaceView{
 
     public class GraphicsRenderer implements Renderer{
 
-        private Node node;
+        private ArrayList<Node> nodes = new ArrayList<>();
+        Node father;
 
         private float t=0;
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-           node = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cubo.obj", "cubo1");
-           Node anothernode = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedgreen, "cubo.obj", "cubo2");
-           Node anotheranothernode = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cubo.obj", "cubo3");
+            int intColor;
+
+            father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cube.obj", "father");
+
+            for (int i=0; i<CUBE_COLS; i++){
+                for(int j=0; j<CUBE_ROWS; j++){
+                    intColor = Color.argb(255, 50*i, 50*j, 0);
+                    String color = String.format("#%06X", 0xFFFFFFFF & intColor);
+                    String id = String.valueOf(i*CUBE_COLS + j);
+                    Node node = NodesKeeper.generateNode(context, "stdShader", color, "cube.obj", "cube"+id);
+                    node.getRelativeTransform().setPosition(10*i-20, 10*j-20, 0);
+                    father.getSonNodes().add(node);
+                }
+            }
 
 
-            node.getRelativeTransform().setPosition(0, 0, 0);
 
-            node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
-
-
-            anothernode.getRelativeTransform().setPosition(1, -300, 0);
-            //anothernode.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.3f, 0.2f, 0.1f));
-            node.getSonNodes().add(anothernode);
-
-
-            anotheranothernode.getRelativeTransform().setPosition(0, 300f, 0);
-
-            node.getSonNodes().add(anotheranothernode);
         }
 
         @Override
@@ -94,32 +99,28 @@ public class GraphicsView extends GLSurfaceView{
             //Change the Node transform
             t+=0.01f;
             float rotation=0.2f+t;
-            float scaling=0.01f;
+            float scaling=0.04f;
 
             SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
             SFMatrix3f spin = SFMatrix3f.getIdentity();
 
-
-
-
-
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
 
             matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
-            matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
-            matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
-
-
-            node.getRelativeTransform().setMatrix(matrix3f);
-            node.updateTree(new SFTransform3f());
+            matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
+            matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
 
 
 
+
+            father.getRelativeTransform().setMatrix(matrix3f);
+            father.draw();
+
+            father.updateTree(new SFTransform3f());
 
 
             //Draw the node
 
-            node.draw();
 
             //int[] viewport=new int[4];
             //GLES20.glGetIntegerv(GLES20.GL_VIEWPORT,viewport,0);
