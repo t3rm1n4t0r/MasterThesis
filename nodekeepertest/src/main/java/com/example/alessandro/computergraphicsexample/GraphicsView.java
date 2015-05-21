@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
+import android.renderscript.Matrix4f;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ import thesis.NodesKeeper;
 import thesis.ShadersKeeper;
 import thesis.TexturesKeeper;
 
+import static android.opengl.GLES20.glViewport;
+import static android.opengl.Matrix.frustumM;
+
 /**
  * Created by Alessandro on 13/03/15.
  */
@@ -39,6 +44,12 @@ public class GraphicsView extends GLSurfaceView{
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
+    private float[] projection={
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1,
+    };
 
     public GraphicsView(Context context) {
         super(context);
@@ -75,10 +86,25 @@ public class GraphicsView extends GLSurfaceView{
 
 
 
+
+
+
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
+            float r = (float)width/height;
+            if(r<1) {
+                projection[0] = 1;
+
+                projection[5] = r;
+            }
+            else if(r>1){
+                projection[0] = 1/r;
+
+                projection[5] = 1;
+            }
+
 
         }
 
@@ -87,40 +113,40 @@ public class GraphicsView extends GLSurfaceView{
 
             SFOGLSystemState.cleanupColorAndDepth(0, 0, 0, 1);
             //setup the View Projection
-            float[] projection={
-                    1,0,0,0,
-                    0,1,0,0,
-                    0,0,1,0,
-                    0,0,0,1,
-            };
-            ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(projection);
 
+            ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(projection);
 
             //Change the Node transform
             t+=0.01f;
             float rotation=0.2f+t;
+            //float rotation=0;
             float scaling=0.04f;
 
             SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
-            SFMatrix3f spin = SFMatrix3f.getIdentity();
+
 
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
 
-            matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
-            matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
-            matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
-
+            //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
+            //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
+            //matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
 
 
 
             father.getRelativeTransform().setMatrix(matrix3f);
-            father.draw();
-
             father.updateTree(new SFTransform3f());
+            //matrix3f=SFMatrix3f.getIdentity().MultMatrix(SFMatrix3f.getRotationY(rotation));
+
+
+            Node node;
+
+            for (int i=0; i<father.getSonNodes().size(); i++){
+                node = father.getSonNodes().get(i);
+                node.draw();
+            }
 
 
             //Draw the node
-
 
             //int[] viewport=new int[4];
             //GLES20.glGetIntegerv(GLES20.GL_VIEWPORT,viewport,0);
