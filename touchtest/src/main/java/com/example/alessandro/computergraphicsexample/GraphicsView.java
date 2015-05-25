@@ -50,31 +50,36 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onRightSwipe(float distance) {
         Log.e("TOUCH", "RIGHT SWIPE");
-        renderer.incrementTX(0.01f);
+        renderer.incrementTX(-0.01f);
     }
 
     @Override
     public void onLeftSwipe(float distance) {
         Log.e("TOUCH", "LEFT SWIPE");
-        renderer.incrementTX(-0.01f);
+        renderer.incrementTX(0.01f);
     }
 
     @Override
     public void onUpSwipe(float distance) {
         Log.e("TOUCH", "UP SWIPE");
-        renderer.incrementTY(0.01f);
+        renderer.incrementTY(-0.01f);
     }
 
     @Override
     public void onDownSwipe(float distance) {
         Log.e("TOUCH", "DOWN SWIPE");
-        renderer.incrementTY(-0.01f);
+        renderer.incrementTY(0.01f);
     }
 
     @Override
     public void onDoubleTap() {
         Log.e("TOUCH", "DOUBLE TAP");
         renderer.stopMovement();
+    }
+
+    @Override
+    public void onLongPress() {
+        renderer.resetPosition();
     }
 
     public class GraphicsRenderer implements Renderer{
@@ -99,6 +104,13 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             this.TY =0;
         }
 
+        public void resetPosition(){
+            this.t=0;
+            this.t2=0;
+            this.TX =0;
+            this.TY=0;
+        }
+
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -112,7 +124,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
                     String color = String.format("#%06X", 0xFFFFFFFF & intColor);
                     String id = String.valueOf(i*CUBE_COLS + j);
                     Node node = NodesKeeper.generateNode(context, "stdShader", color, "cube.obj", "cube"+id);
-                    node.getRelativeTransform().setPosition(10*i-20, 10*j-20, 0);
+                    node.getRelativeTransform().setPosition(10*j-20, 10*i-20, 0);
                     father.getSonNodes().add(node);
                 }
             }
@@ -159,8 +171,8 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationX(rotation2));
 
             //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
-            //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
-            //matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
+            //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX((float)Math.PI)));
+            //matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY((float)Math.PI)));
 
 
 

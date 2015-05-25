@@ -10,4 +10,5 @@ public interface TouchActivity {
     public void onUpSwipe(float distance);
     public void onDownSwipe(float distance);
     public void onDoubleTap();
+    public void onLongPress();
 }

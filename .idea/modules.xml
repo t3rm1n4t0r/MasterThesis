@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/MasterThesis.iml" filepath="$PROJECT_DIR$/MasterThesis.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/appEpicOrg/appEpicOrg.iml" filepath="$PROJECT_DIR$/appEpicOrg/appEpicOrg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arthastest/arthastest.iml" filepath="$PROJECT_DIR$/arthastest/arthastest.iml" />
       <module fileurl="file://$PROJECT_DIR$/nodekeepertest/nodekeepertest.iml" filepath="$PROJECT_DIR$/nodekeepertest/nodekeepertest.iml" />
       <module fileurl="file://$PROJECT_DIR$/test0/test0.iml" filepath="$PROJECT_DIR$/test0/test0.iml" />
       <module fileurl="file://$PROJECT_DIR$/test1/test1.iml" filepath="$PROJECT_DIR$/test1/test1.iml" />

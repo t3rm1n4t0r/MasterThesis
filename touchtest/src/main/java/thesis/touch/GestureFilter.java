@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 public class GestureFilter extends android.view.GestureDetector.SimpleOnGestureListener {
     // Swipe properties, you can change it to make the swipe
     // longer or shorter and speed
-    private int swipe_Min_Distance = 50;
+    private int swipe_Min_Distance = 100;
     private int swipe_Max_Distance = 9999;
     private int swipe_Min_Velocity = 10;
     private TouchActivity myactivity;
@@ -57,5 +57,10 @@ public class GestureFilter extends android.view.GestureDetector.SimpleOnGestureL
     public boolean onDoubleTap(MotionEvent e) {
         myactivity.onDoubleTap();
         return super.onDoubleTap(e);
+    }
+
+    @Override
+    public void onLongPress(MotionEvent event) {
+        myactivity.onLongPress();
     }
 }
