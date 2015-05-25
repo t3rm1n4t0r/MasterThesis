@@ -3,7 +3,7 @@ package com.example.alessandro.computergraphicsexample;
 import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLSurfaceView;
-import android.view.MotionEvent;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -16,11 +16,12 @@ import shadow.math.SFMatrix3f;
 import shadow.math.SFTransform3f;
 import thesis.Graphics.NodesKeeper;
 import thesis.Graphics.ShadersKeeper;
+import thesis.touch.TouchActivity;
 
 /**
  * Created by Alessandro on 13/03/15.
  */
-public class GraphicsView extends GLSurfaceView{
+public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
     private Context context;
     private static final String STANDARD_SHADER = "stdShader";
@@ -33,18 +34,47 @@ public class GraphicsView extends GLSurfaceView{
             0,0,0,1,
     };
 
+    private GraphicsRenderer renderer;
+
     public GraphicsView(Context context) {
         super(context);
         setEGLContextClientVersion(2);
         this.context=context;
-        super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
-        setRenderer(new GraphicsRenderer());
+        super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        renderer = new GraphicsRenderer();
+        setRenderer(renderer);
+    }
+
+
+
+    @Override
+    public void onRightSwipe(float distance) {
+        Log.e("TOUCH", "RIGHT SWIPE");
+        renderer.incrementTX(0.01f);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void onLeftSwipe(float distance) {
+        Log.e("TOUCH", "LEFT SWIPE");
+        renderer.incrementTX(-0.01f);
+    }
 
-        return super.onTouchEvent(event);
+    @Override
+    public void onUpSwipe(float distance) {
+        Log.e("TOUCH", "UP SWIPE");
+        renderer.incrementTY(0.01f);
+    }
+
+    @Override
+    public void onDownSwipe(float distance) {
+        Log.e("TOUCH", "DOWN SWIPE");
+        renderer.incrementTY(-0.01f);
+    }
+
+    @Override
+    public void onDoubleTap() {
+        Log.e("TOUCH", "DOUBLE TAP");
+        renderer.stopMovement();
     }
 
     public class GraphicsRenderer implements Renderer{
@@ -53,6 +83,21 @@ public class GraphicsView extends GLSurfaceView{
         Node father;
 
         private float t=0;
+        private float t2=0;
+        private float TX=0;
+        private float TY=0;
+
+        public void incrementTX(float t){
+            this.TX +=t;
+        }
+        public void incrementTY(float t){
+            this.TY +=t;
+        }
+
+        public void stopMovement(){
+            this.TX =0;
+            this.TY =0;
+        }
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -71,11 +116,6 @@ public class GraphicsView extends GLSurfaceView{
                     father.getSonNodes().add(node);
                 }
             }
-
-
-
-
-
 
         }
 
@@ -105,8 +145,10 @@ public class GraphicsView extends GLSurfaceView{
             ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(projection);
 
             //Change the Node transform
-            t+=0.01f;
-            float rotation=0.2f+t;
+            t+=TX;
+            t2+=TY;
+            float rotation=0f+t;
+            float rotation2=0f+t2;
             //float rotation=0;
             float scaling=0.04f;
 
@@ -114,6 +156,7 @@ public class GraphicsView extends GLSurfaceView{
 
 
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
+            matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationX(rotation2));
 
             //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
             //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
