@@ -115,7 +115,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
             int intColor;
 
-            father = NodesKeeper.generateNode(context, "stdShader", R.drawable.arthas, "ArthasBello.obj", "father");
+            father = NodesKeeper.generateNode(context, "stdShader", R.drawable.arthastexture, "ArthasBello.obj", "father");
 
             father.getRelativeTransform().setPosition(0, -0.5f, 0);
 
