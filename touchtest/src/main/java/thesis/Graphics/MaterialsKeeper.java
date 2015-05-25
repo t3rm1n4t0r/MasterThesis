@@ -1,11 +1,4 @@
-package thesis;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import sfogl.integration.BitmapTexture;
-import sfogl.integration.Material;
-import sfogl.integration.ShadingProgram;
+package thesis.Graphics;
 
 /**
  * Created by Marco on 18/05/2015.

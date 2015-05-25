@@ -1,39 +1,21 @@
 package com.example.alessandro.computergraphicsexample;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
-import android.renderscript.Matrix4f;
-import android.util.Log;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import objLoader.ObjLoader;
-import sfogl.integration.ArrayObject;
-import sfogl.integration.BitmapTexture;
-import sfogl.integration.Material;
-import sfogl.integration.Mesh;
-import sfogl.integration.Model;
 import sfogl.integration.Node;
-import sfogl.integration.Shaders;
-import sfogl.integration.ShadingProgram;
 import sfogl2.SFOGLSystemState;
-import sfogl2.SFOGLTextureModel;
-import shadow.graphics.SFImageFormat;
 import shadow.math.SFMatrix3f;
 import shadow.math.SFTransform3f;
-import thesis.NodesKeeper;
-import thesis.ShadersKeeper;
-import thesis.TexturesKeeper;
-
-import static android.opengl.GLES20.glViewport;
-import static android.opengl.Matrix.frustumM;
+import thesis.Graphics.NodesKeeper;
+import thesis.Graphics.ShadersKeeper;
 
 /**
  * Created by Alessandro on 13/03/15.
@@ -57,6 +39,12 @@ public class GraphicsView extends GLSurfaceView{
         this.context=context;
         super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
         setRenderer(new GraphicsRenderer());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return super.onTouchEvent(event);
     }
 
     public class GraphicsRenderer implements Renderer{

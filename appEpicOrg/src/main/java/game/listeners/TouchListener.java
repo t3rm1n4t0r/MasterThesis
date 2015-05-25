@@ -27,6 +27,7 @@ public class TouchListener implements TouchListenerInterface {
     private float previousX, previousY;
     private Thread moveThread;
 
+
     public TouchListener(ButtonsControl buttonsControl, DirectionMoveListenerInterface directionMoveListener) {
         this.buttonsControl = buttonsControl;
         this.directionMoveListener = directionMoveListener;

@@ -1,4 +1,4 @@
-package thesis;
+package thesis.Graphics;
 
 import android.content.Context;
 
