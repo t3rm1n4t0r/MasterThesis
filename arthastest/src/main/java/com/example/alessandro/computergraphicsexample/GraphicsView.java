@@ -115,9 +115,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
             int intColor;
 
-            father = NodesKeeper.generateNode(context, "stdShader", R.drawable.arthastexture, "ArthasBello.obj", "father");
+            father = NodesKeeper.generateNode(context, "stdShader", R.drawable.arthastexture, "arthas.obj", "father");
 
-            father.getRelativeTransform().setPosition(0, -0.5f, 0);
+            father.getRelativeTransform().setPosition(0, -0.4f, 0);
 
         }
 
@@ -152,7 +152,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             float rotation=0f+t;
             float rotation2=0f+t2;
             //float rotation=0;
-            float scaling=0.015f;
+            float scaling=0.3f;
 
             SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
 
@@ -160,7 +160,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
             matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationX(rotation2));
 
-            //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
+            matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI/2)));
             matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY(1.57079633f)));
             matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX(1.57079633f)));
 

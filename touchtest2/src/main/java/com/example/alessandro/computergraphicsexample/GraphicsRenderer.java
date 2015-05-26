@@ -1,11 +1,15 @@
 package com.example.alessandro.computergraphicsexample;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.renderscript.Matrix4f;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -27,6 +31,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
+
+    private boolean screenshot=false;
 
     Context context;
 
@@ -73,6 +79,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         this.TX =0;
         this.TY=0;
     }
+
+    public void touch(float x, float y){
+
+    }
+
+
 
     public GraphicsRenderer(Context context){
         this.context=context;
@@ -131,7 +143,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         SFOGLSystemState.cleanupColorAndDepth(0, 0, 0, 1);
 
-        Matrix.setLookAtM(camera, 0, 0, 0, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(camera, 0, 0, 2, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
 
@@ -170,6 +182,24 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         }
 
 
+        if (screenshot) {
+            int screenshotSize = this.width * this.height;
+            ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
+            bb.order(ByteOrder.nativeOrder());
+            gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
+            int pixelsBuffer[] = new int[screenshotSize];
+            bb.asIntBuffer().get(pixelsBuffer);
+            bb = null;
+
+            for (int i = 0; i < screenshotSize; ++i) {
+                // The alpha and green channels' positions are preserved while the red and blue are swapped
+                pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            bitmap.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+            this.screenshot = false;
+        }
         //Draw the node
 
         //int[] viewport=new int[4];
