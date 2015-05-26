@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/test0/test0.iml" filepath="$PROJECT_DIR$/test0/test0.iml" />
       <module fileurl="file://$PROJECT_DIR$/test1/test1.iml" filepath="$PROJECT_DIR$/test1/test1.iml" />
       <module fileurl="file://$PROJECT_DIR$/touchtest/touchtest.iml" filepath="$PROJECT_DIR$/touchtest/touchtest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/touchtest2/touchtest2.iml" filepath="$PROJECT_DIR$/touchtest2/touchtest2.iml" />
     </modules>
   </component>
 </project>

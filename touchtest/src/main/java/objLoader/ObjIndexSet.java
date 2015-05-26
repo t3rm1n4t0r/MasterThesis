@@ -15,7 +15,6 @@ public class ObjIndexSet implements Comparable<ObjIndexSet>{
 	
 	public ObjIndexSet(String indices){
 
-		Log.e("Stringa", indices);
 		indices=indices.trim();
 		int indexOfSlash01=indices.indexOf("/");
 		int indexOfSlash02=indices.lastIndexOf("/");
