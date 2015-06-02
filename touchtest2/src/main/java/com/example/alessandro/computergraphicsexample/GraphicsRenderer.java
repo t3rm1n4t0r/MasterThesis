@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -71,6 +72,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     public void stopMovement(){
         this.TX =0;
         this.TY =0;
+        printMVP();
     }
 
     public void resetPosition(){
@@ -143,11 +145,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         SFOGLSystemState.cleanupColorAndDepth(0, 0, 0, 1);
 
-        Matrix.setLookAtM(camera, 0, 0, 2, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(camera, 0, 0, 0, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
+
 
         //Change the Node transform
         t+=TX;
@@ -181,29 +184,26 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             node.draw();
         }
 
-
-        if (screenshot) {
-            int screenshotSize = this.width * this.height;
-            ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
-            bb.order(ByteOrder.nativeOrder());
-            gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
-            int pixelsBuffer[] = new int[screenshotSize];
-            bb.asIntBuffer().get(pixelsBuffer);
-            bb = null;
-
-            for (int i = 0; i < screenshotSize; ++i) {
-                // The alpha and green channels' positions are preserved while the red and blue are swapped
-                pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
-            }
-
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            bitmap.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
-            this.screenshot = false;
-        }
         //Draw the node
 
         //int[] viewport=new int[4];
         //GLES20.glGetIntegerv(GLES20.GL_VIEWPORT,viewport,0);
         //Log.e("Graphics View Size", Arrays.toString(viewport));
+    }
+
+    public void printMVP(){
+        //Need to see MVP to correctly introduce ray picking
+        String matrice = new String();
+        matrice+="\n";
+
+        for (int i=0; i<4; i++){
+            for (int j=0; j<4; j++){
+                matrice+=mvp[i*4+j];
+                matrice+=" ";
+            }
+            matrice+="\n";
+        }
+
+        Log.d("MVP", matrice);
     }
 }
