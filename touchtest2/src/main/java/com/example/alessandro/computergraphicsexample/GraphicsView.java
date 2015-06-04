@@ -75,5 +75,6 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onSingleTapUp(float x, float y) {
         Log.d("TOUCH", "SINGLE TAP on ("+String.valueOf(x)+","+String.valueOf(y)+")" );
+        renderer.touch(x, y);
     }
 }
