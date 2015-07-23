@@ -16,14 +16,13 @@ public class MatrixChecker {
             Log.e("ERROR", "Minimum segment size to check for is greater than one of matrix's dimensions");
             throw new Exception("Minimum segment size to check for is greater than one of matrix's dimensions");
         }
-        else if(isSquared(matrix) == false){
+        else if(isRectangular(matrix) == false){
             Log.e("ERROR", "Given Matrix is not rectangular");
             throw new Exception("Given Matrix is not rectangular");
         }
         else {
-            LinkedList<Integer> values = new LinkedList<>();
-            HashMap<Integer, Integer> consecutives = new HashMap<>();
-            int last=matrix[0][0];
+
+            int last;
             int current;
             int count=0;
             for (int i=0; i<matrix.length;i++)
@@ -92,11 +91,11 @@ public class MatrixChecker {
     }
 
     //might be useful
-    private static boolean isSquared(int[][] matrix){
+    private static boolean isRectangular(int[][] matrix){
         boolean result = true;
         int current = matrix[0].length;
         for (int i=1; i<matrix.length;i++){
-            if (current != matrix[i].length || matrix.length != matrix[i].length)
+            if (current != matrix[i].length )
                 result = false;
         }
         return result;

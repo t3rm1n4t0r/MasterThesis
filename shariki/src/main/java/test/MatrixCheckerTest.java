@@ -23,9 +23,6 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
 */
 
 
-
-
-
     public void testCorrectMatrixRow() throws Exception{
 
         int[][] start={
@@ -132,8 +129,26 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
             assertEquals(e.getMessage(), "Minimum segment size to check for is greater than one of matrix's dimensions");
         }
 
+    }
+
+    public void testMatrixNotSquared() throws Exception{
+
+        int[][] start={
+                {1,1,1,2,2,5},
+                {1,2,2,1,2,2},
+                {2,1,1,2,1,3,7},
+                {1,1,2,1,2,5},
+                {1,2,1,1,2,3}
+        };
 
 
+        try {
+            MatrixChecker.CheckForSegments(start, 3);
+            fail("Should have thrown exception");
+        }
+        catch (Exception e){
+            assertEquals(e.getMessage(), "Given Matrix is not rectangular");
+        }
 
     }
 
