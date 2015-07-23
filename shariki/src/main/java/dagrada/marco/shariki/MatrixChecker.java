@@ -11,12 +11,14 @@ import java.util.LinkedList;
  */
 public class MatrixChecker {
 
-    public static void CheckForSegments(int[][] matrix, int minsize){
+    public static void CheckForSegments(int[][] matrix, int minsize) throws Exception {
         if(minsize > matrix.length || minsize >matrix[0].length){
             Log.e("ERROR", "Minimum segment size to check for is greater than one of matrix's dimensions");
+            throw new Exception("Minimum segment size to check for is greater than one of matrix's dimensions");
         }
         else if(isSquared(matrix) == false){
             Log.e("ERROR", "Given Matrix is not rectangular");
+            throw new Exception("Given Matrix is not rectangular");
         }
         else {
             LinkedList<Integer> values = new LinkedList<>();
