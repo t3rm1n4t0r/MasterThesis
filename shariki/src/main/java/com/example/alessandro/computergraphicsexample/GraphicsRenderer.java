@@ -180,7 +180,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         int intColor;
 
-        father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "cube.obj", "father");
+        father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj", "father");
 
         for (int i=0; i<CUBE_COLS; i++){
             for(int j=0; j<CUBE_ROWS; j++){
@@ -188,7 +188,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                 colormap.add(i*CUBE_COLS + j, intColor);
                 String color = String.format("#%06X", 0xFFFFFFFF & intColor);
                 String id = String.valueOf(i*CUBE_COLS + j);
-                Node node = NodesKeeper.generateNode(context, "stdShader", color, "cube.obj", "cube"+id);
+                Node node = NodesKeeper.generateNode(context, "stdShader", color, "sphere.obj", "cube"+id);
                 node.getRelativeTransform().setPosition(10 * j - 20, 10 * i - 20, 0);
                 father.getSonNodes().add(i*CUBE_COLS + j, node);
             }
