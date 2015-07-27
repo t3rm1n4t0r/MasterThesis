@@ -1,21 +1,33 @@
 package test;
 
+
 import android.content.Context;
 import android.test.AndroidTestCase;
 
+import org.junit.Test;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import dagrada.marco.shariki.MatrixFileReader;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by Marco on 27/07/2015.
  */
-public class MatrixFileReaderTest extends AndroidTestCase {
 
 
+public class MatrixFileReaderTest {
 
+
+    private static final String path = "C:\\Users\\Marco\\AndroidStudioProjects\\MasterThesis\\shariki\\src\\main\\assets\\";
+
+    @Test
     public void testCorrectMatrixReadFromFile(){
+
+
 
         int[][] expected={
                 {1, -1},
@@ -29,7 +41,7 @@ public class MatrixFileReaderTest extends AndroidTestCase {
 
         try {
 
-            result = MatrixFileReader.getMatrix(getContext().getAssets().open("test1.marbles"));
+            result = MatrixFileReader.getMatrix(new FileInputStream(path+"test1.txt"));
 
             assertTrue(Arrays.equals(expected[0], result[0]));
             assertTrue(Arrays.equals(expected[1], result[1]));
@@ -42,32 +54,31 @@ public class MatrixFileReaderTest extends AndroidTestCase {
         }
     }
 
+
+
+    @Test(expected = FileNotFoundException.class)
     public void testWrongFilename() throws Exception {
 
         int[][] result;
 
+            result = MatrixFileReader.getMatrix(new FileInputStream(path+"pippo"));
 
-        try {
-            result = MatrixFileReader.getMatrix(getContext().getAssets().open("pippo"));
-            fail("Should have thrown exception");
 
-        } catch (FileNotFoundException e){
-            assertEquals(e.getMessage(), "pippo");
-        }
 
     }
 
+    @Test(expected = Exception.class)
     public void testFileFormatNotRespected() throws Exception {
 
         int[][] result;
-
-        try {
-            result = MatrixFileReader.getMatrix(getContext().getAssets().open("test2.marbles"));
-            fail("Should have thrown exception");
-
-        } catch (Exception e){
-            assertEquals(e.getMessage(), "File format is not respected");
-        }
-
+        result = MatrixFileReader.getMatrix(new FileInputStream(path + "test2.txt"));
     }
+
+    @Test(expected = Exception.class)
+    public void testZeroValuesInTheFile() throws Exception{
+
+        int[][] result;
+        result = MatrixFileReader.getMatrix(new FileInputStream(path + "test3.txt"));
+    }
+
 }

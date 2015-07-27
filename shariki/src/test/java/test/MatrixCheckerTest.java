@@ -1,28 +1,31 @@
 package test;
 
+import android.content.Context;
+import android.util.Log;
 
-import android.test.InstrumentationTestCase;
+import org.junit.Test;
+import org.mockito.Mock;
+
 import java.util.Arrays;
 import dagrada.marco.shariki.MatrixChecker;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
- * Created by Marco on 23/07/2015.
+ * Created by Marco on 27/07/2015.
  */
 
+public class MatrixCheckerTest {
 
-public class MatrixCheckerTest extends InstrumentationTestCase {
+    @Mock
+    Context context;
 
-/*
-    int[][] start={
-        {1,1,2,1,2},
-        {1,2,2,1,2},
-        {2,1,1,2,1},
-        {1,1,2,1,2},
-        {1,2,1,1,2}
-    };
-*/
+    @Mock
+    Log log;
 
-
+    @Test
     public void testCorrectMatrixRow() throws Exception{
 
         int[][] start={
@@ -52,35 +55,7 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
 
     }
 
-    public void testCorrectMatrixColumn() throws Exception{
-
-        int[][] start={
-                {1,1,2,1,2},
-                {1,2,2,1,2},
-                {1,2,1,2,1},
-                {1,1,2,1,2},
-                {1,2,1,1,2}
-        };
-
-        int[][] finalm={
-                {0,1,2,1,2},
-                {0,2,2,1,2},
-                {0,2,1,2,1},
-                {0,1,2,1,2},
-                {0,2,1,1,2}
-        };
-
-        MatrixChecker.CheckForSegments(start, 3);
-
-        assertTrue(Arrays.equals(start[0], finalm[0]));
-        assertTrue(Arrays.equals(start[1], finalm[1]));
-        assertTrue(Arrays.equals(start[2], finalm[2]));
-        assertTrue(Arrays.equals(start[3], finalm[3]));
-        assertTrue(Arrays.equals(start[4], finalm[4]));
-
-
-    }
-
+    @Test
     public void testCorrectMatrixButBiggerMinsize() throws Exception{
 
         int[][] start={
@@ -110,6 +85,7 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
 
     }
 
+    @Test
     public void testShorterMinsize() throws Exception{
 
         int[][] start={
@@ -131,6 +107,7 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
 
     }
 
+    @Test
     public void testMatrixNotSquared() throws Exception{
 
         int[][] start={
@@ -151,8 +128,4 @@ public class MatrixCheckerTest extends InstrumentationTestCase {
         }
 
     }
-
-
-
-
 }
