@@ -7,7 +7,7 @@ public class MatrixLoader {
 
     int[][] marbles;
 
-    public static void loadGameFile(String path){
+    public static void loadGame(String filename){
 
     }
 }
