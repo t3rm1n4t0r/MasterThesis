@@ -1,9 +1,9 @@
 package test;
 
+import android.content.Context;
 import android.test.AndroidTestCase;
-import android.test.InstrumentationTestCase;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import dagrada.marco.shariki.MatrixFileReader;
@@ -13,7 +13,6 @@ import dagrada.marco.shariki.MatrixFileReader;
  */
 public class MatrixFileReaderTest extends AndroidTestCase {
 
-    String filename = "test1.marbles";
 
 
     public void testCorrectMatrixReadFromFile(){
@@ -29,7 +28,8 @@ public class MatrixFileReaderTest extends AndroidTestCase {
         int[][] result;
 
         try {
-            result = MatrixFileReader.getMatrix(getContext(), filename);
+
+            result = MatrixFileReader.getMatrix(getContext().getAssets().open("test1.marbles"));
 
             assertTrue(Arrays.equals(expected[0], result[0]));
             assertTrue(Arrays.equals(expected[1], result[1]));
@@ -42,5 +42,32 @@ public class MatrixFileReaderTest extends AndroidTestCase {
         }
     }
 
+    public void testWrongFilename() throws Exception {
 
+        int[][] result;
+
+
+        try {
+            result = MatrixFileReader.getMatrix(getContext().getAssets().open("pippo"));
+            fail("Should have thrown exception");
+
+        } catch (FileNotFoundException e){
+            assertEquals(e.getMessage(), "pippo");
+        }
+
+    }
+
+    public void testEmptyFile() throws Exception {
+
+        int[][] result;
+
+        try {
+            result = MatrixFileReader.getMatrix(getContext().getAssets().open("test2.marbles"));
+            fail("Should have thrown exception");
+
+        } catch (Exception e){
+            assertEquals(e.getMessage(), "File format is not respected");
+        }
+
+    }
 }

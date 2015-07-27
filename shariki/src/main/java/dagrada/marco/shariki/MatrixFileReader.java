@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
@@ -20,10 +21,9 @@ public class MatrixFileReader {
     private static final String delimiter = " ";
 
 
-    public static int[][] getMatrix(Context context, String filename) throws Exception {
+    public static int[][] getMatrix(InputStream stream) throws Exception {
 
-        File file = new File(filename);
-        BufferedReader br = new BufferedReader((new InputStreamReader(context.getAssets().open(filename), "UTF-8")));
+        BufferedReader br = new BufferedReader((new InputStreamReader(stream, "UTF-8")));
         String buffer;
         int[][] marbles = null;
         StringTokenizer tk;
@@ -32,6 +32,11 @@ public class MatrixFileReader {
 
         if((buffer = br.readLine()) != null) {
             tk = new StringTokenizer(buffer, delimiter);
+
+            if(tk.countTokens() !=2){
+                throw new Exception("File format is not respected");
+            }
+
             marbles = new int[Integer.parseInt(tk.nextToken())][Integer.parseInt(tk.nextToken())];
 
             int count = 0;
@@ -42,6 +47,9 @@ public class MatrixFileReader {
                 }
                 count++;
             }
+        }
+        else{
+            throw new Exception("File is empty");
         }
         br.close();
 
