@@ -57,7 +57,7 @@ public class MatrixFileReaderTest extends AndroidTestCase {
 
     }
 
-    public void testEmptyFile() throws Exception {
+    public void testFileFormatNotRespected() throws Exception {
 
         int[][] result;
 
