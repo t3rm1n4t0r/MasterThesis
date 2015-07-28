@@ -1,5 +1,7 @@
 package dagrada.marco.shariki;
 
+import android.graphics.Matrix;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ public class GameStatusHandler {
 
     private static final int MAX_WIDTH = 5;
     private static final int MAX_HEIGTH = 5;
+    private static final int MIN_SEGMENT_SIZE = 3;
 
     private int[][] marbles;
     private ArrayList<String> levels;
@@ -53,6 +56,20 @@ public class GameStatusHandler {
             buffer = marbles[marble1X][marble1Y];
             marbles[marble1X][marble1Y] = marbles[marble2X][marble2Y];
             marbles[marble2X][marble2Y] = buffer;
+        }
+
+        int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
+
+        for (int i=0; i<MAX_HEIGTH; i++){
+            for (int j=0; j<MAX_WIDTH; j++){
+                toCheck[i][j] = marbles[i][j];
+            }
+        }
+
+        try {
+            MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
