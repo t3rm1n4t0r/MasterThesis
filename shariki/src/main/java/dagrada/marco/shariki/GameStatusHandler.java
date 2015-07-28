@@ -58,19 +58,6 @@ public class GameStatusHandler {
             marbles[marble2X][marble2Y] = buffer;
         }
 
-        int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
-
-        for (int i=0; i<MAX_HEIGTH; i++){
-            for (int j=0; j<MAX_WIDTH; j++){
-                toCheck[i][j] = marbles[i][j];
-            }
-        }
-
-        try {
-            MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public int[][] getMarbles() {
