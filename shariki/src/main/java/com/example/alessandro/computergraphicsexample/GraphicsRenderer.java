@@ -182,6 +182,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj", "father");
 
+        float scale = 1.5f;
+
         for (int i=0; i<CUBE_COLS; i++){
             for(int j=0; j<CUBE_ROWS; j++){
                 intColor = Color.argb(MAX_COLOR, (MAX_COLOR/CUBE_ROWS) * i, (MAX_COLOR/CUBE_COLS) * j, 0);
@@ -190,6 +192,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                 String id = String.valueOf(i*CUBE_COLS + j);
                 Node node = NodesKeeper.generateNode(context, "stdShader", color, "sphere.obj", "cube"+id);
                 node.getRelativeTransform().setPosition(10 * j - 20, 10 * i - 20, 0);
+                node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
+                node.updateTree(new SFTransform3f());
                 father.getSonNodes().add(i*CUBE_COLS + j, node);
             }
         }
@@ -248,7 +252,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         float rotation=0f+t;
         float rotation2=0f+t2;
         //float rotation=0;
-        float scaling=0.04f;
+        float scaling=0.032f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
 

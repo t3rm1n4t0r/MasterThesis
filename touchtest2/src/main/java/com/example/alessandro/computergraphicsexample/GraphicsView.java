@@ -25,6 +25,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
     private GraphicsRenderer renderer;
 
+
     public GraphicsView(Context context) {
         super(context);
         setEGLContextClientVersion(2);

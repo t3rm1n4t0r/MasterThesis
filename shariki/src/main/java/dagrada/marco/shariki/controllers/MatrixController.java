@@ -1,64 +1,48 @@
 package dagrada.marco.shariki.controllers;
 
+import android.os.Handler;
+
+import dagrada.marco.shariki.GameStatusHandler;
 import dagrada.marco.shariki.MatrixChecker;
 import thesis.touch.TouchActivity;
 
 /**
  * Created by Marco on 28/07/2015.
  */
-public class MatrixController implements TouchActivity{
+public class MatrixController {
 
+    private GameStatusHandler handler;
 
-    /*
-    int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
-
-    for (int i=0; i<MAX_HEIGTH; i++){
-        for (int j=0; j<MAX_WIDTH; j++){
-            toCheck[i][j] = marbles[i][j];
-        }
-    }
-
-    try {
-        MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
-        compactMarbles();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    */
-
-
-    @Override
-    public void onRightSwipe(float startX, float startY, float endX, float endY) {
+    public MatrixController(GameStatusHandler handler){
+        this. handler = handler;
 
     }
 
-    @Override
-    public void onLeftSwipe(float startX, float startY, float endX, float endY) {
+
+
+
+
+
+    public void switchPosition(int row1, int col1, int row2, int col2){
+
+        handler.switchMarbles(row1, col1, row2, col2);
+        handler.checkForSegments();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // your code here
+            }
+        }, 800/* 1sec delay */);
+        handler.compactMarbles();
 
     }
 
-    @Override
-    public void onUpSwipe(float startX, float startY, float endX, float endY) {
+    public int[] getMatrixIndeces(float x, float y, float screenWidth, float screenHeight){
 
-    }
-
-    @Override
-    public void onDownSwipe(float startX, float startY, float endX, float endY) {
-
-    }
-
-    @Override
-    public void onDoubleTap(float x, float y) {
-
-    }
-
-    @Override
-    public void onLongPress(float x, float y) {
-
-    }
-
-    @Override
-    public void onSingleTapUp(float x, float y) {
-
+        int indeces[] = new int[2];
+        indeces[0] = (int) (x / (screenWidth/GameStatusHandler.MAX_WIDTH));
+        indeces[1] = (int) (y / (screenWidth/GameStatusHandler.MAX_HEIGTH));
+        return indeces;
     }
 }

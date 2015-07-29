@@ -5,13 +5,15 @@ import android.graphics.Matrix;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
+import dagrada.marco.shariki.exceptions.GameEndException;
+
 /**
  * Created by Marco on 23/07/2015.
  */
 public class GameStatusHandler {
 
-    private static final int MAX_WIDTH = 5;
-    private static final int MAX_HEIGTH = 5;
+    public static final int MAX_WIDTH = 5;
+    public static final int MAX_HEIGTH = 5;
     private static final int MIN_SEGMENT_SIZE = 3;
 
     private int[][] marbles;
@@ -27,15 +29,21 @@ public class GameStatusHandler {
     }
 
     public void loadLevel (int level)throws Exception{
-        CURRENT_LEVEL = level;
-        marbles = MatrixFileReader.getMatrix(stream = new FileInputStream(levels.get(CURRENT_LEVEL)));
+
+        if (level >= levels.size())
+            throw new GameEndException();
+        else{
+            CURRENT_LEVEL = level;
+            marbles = MatrixFileReader.getMatrix(stream = new FileInputStream(levels.get(CURRENT_LEVEL)));
+        }
+
     }
 
     public void nextLevel() throws Exception {
         loadLevel(getCurrentLevel()+1);
     }
 
-    private void compactMarbles(){
+    public void compactMarbles(){
         int buffer;
         for (int i=0; i<marbles.length; i++){
             for (int j=0; j<marbles[i].length;j++){
@@ -50,14 +58,33 @@ public class GameStatusHandler {
         }
     }
 
-    public void switchMarbles(int marble1X, int marble1Y, int marble2X, int marble2Y){
+    public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col){
         int buffer;
-        if(!(marble1X <1 || marble1Y <1 || marble2X <1 || marble2Y <1 || marble1X > MAX_WIDTH || marble2X > MAX_WIDTH || marble1Y > MAX_HEIGTH || marble2Y > MAX_HEIGTH)){
-            buffer = marbles[marble1X][marble1Y];
-            marbles[marble1X][marble1Y] = marbles[marble2X][marble2Y];
-            marbles[marble2X][marble2Y] = buffer;
+        if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
+            buffer = marbles[marble1row][marble1col];
+            marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
+            marbles[marble2row][marble2col] = buffer;
         }
 
+
+
+
+    }
+
+    public void checkForSegments(){
+        int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
+
+        for (int i=0; i<MAX_HEIGTH; i++){
+            for (int j=0; j<MAX_WIDTH; j++){
+                toCheck[i][j] = marbles[i][j];
+            }
+        }
+
+        try {
+            MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int[][] getMarbles() {
