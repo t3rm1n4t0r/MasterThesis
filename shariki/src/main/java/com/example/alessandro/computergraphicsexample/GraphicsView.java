@@ -15,6 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 import dagrada.marco.shariki.GameStatusHandler;
 import dagrada.marco.shariki.MatrixChecker;
 import dagrada.marco.shariki.controllers.MatrixController;
+import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
 import shadow.math.SFMatrix3f;
@@ -36,7 +37,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         setEGLContextClientVersion(2);
         this.context=context;
         super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        renderer = new GraphicsRenderer(context);
+        renderer = new GraphicsRenderer(context, controller.getHandler());
         setRenderer(renderer);
         this.controller = controller;
     }
@@ -46,11 +47,15 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "RIGHT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int x = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[0];
-        int y = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[1];
-        controller.switchPosition(y ,x, y, x+1 );
+        int[] indices = new int[0];
+        try {
+            indices = renderer.detectTouchedItem(startX, startY);
+            int x = indices[0];
+            int y = indices[1];
+            controller.switchPosition(y ,x, y, x+1 );
+            renderer.update();
+        } catch (TouchedItemNotFoundException e) {}
+
     }
 
     @Override
@@ -58,11 +63,17 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "LEFT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int x = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[0];
-        int y = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[1];
-        controller.switchPosition(y, x, y, x - 1);
+        int[] indices = new int[0];
+        try {
+            indices = renderer.detectTouchedItem(startX, startY);
+            int x = indices[0];
+            int y = indices[1];
+            controller.switchPosition(y, x, y, x - 1);
+            renderer.update();
+        } catch (TouchedItemNotFoundException e) {
+
+        }
+
     }
 
     @Override
@@ -70,11 +81,17 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "UP SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int x = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[0];
-        int y = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[1];
-        controller.switchPosition(y, x, y-1, x);
+        int[] indices = new int[0];
+        try {
+            indices = renderer.detectTouchedItem(startX, startY);
+            int x = indices[0];
+            int y = indices[1];
+            controller.switchPosition(y, x, y-1, x);
+            renderer.update();
+        } catch (TouchedItemNotFoundException e) {
+
+        }
+
     }
 
     @Override
@@ -82,11 +99,17 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "DOWN SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int x = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[0];
-        int y = controller.getMatrixIndeces(startX, startY, display.getWidth(), display.getHeight())[1];
-        controller.switchPosition(y, x, y+1, x);
+        int[] indices = new int[0];
+        try {
+            indices = renderer.detectTouchedItem(startX, startY);
+            int x = indices[0];
+            int y = indices[1];
+            controller.switchPosition(y, x, y+1, x);
+            renderer.update();
+        } catch (TouchedItemNotFoundException e) {
+
+        }
+
     }
 
     @Override
@@ -98,12 +121,21 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onLongPress(float x, float y) {
         Log.d("TOUCH", "LONG PRESS");
-
+        renderer.update();
     }
 
     @Override
     public void onSingleTapUp(float x, float y) {
         Log.d("TOUCH", "SINGLE TAP on (" + String.valueOf(x) + "," + String.valueOf(y) + ")");
-        //renderer.touch(x, y);
+        int[] indices = new int[0];
+        try {
+            indices = renderer.detectTouchedItem(x, y);
+            int xx = indices[0];
+            int yy = indices[1];
+            Log.d("TOUCH", "INDICES "+ String.valueOf(xx)+","+String.valueOf(yy));
+        } catch (TouchedItemNotFoundException e) {
+
+        }
+;
     }
 }

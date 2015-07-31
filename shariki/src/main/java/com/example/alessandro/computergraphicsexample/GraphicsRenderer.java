@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.Marble;
+import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
 import shadow.math.SFMatrix3f;
@@ -41,8 +44,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     float blue = 0;
     float green = 0;
 
-    private boolean screenshot=false;
-
     Context context;
 
     private float[] projection={
@@ -66,43 +67,22 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     Node father;
 
     private ArrayList<Integer> colormap = new ArrayList<>();
+    private GameStatusHandler handler;
+    private ArrayList<Marble> marbles = new ArrayList<>();
 
-    private float t=0;
-    private float t2=0;
-    private float TX=0;
-    private float TY=0;
 
-    public void incrementTX(float t){
-        this.TX +=t;
-    }
-    public void incrementTY(float t){
-        this.TY +=t;
-    }
-
-    public void stopMovement(){
-        this.TX =0;
-        this.TY =0;
-        //printMatrix(mvp, "Model View Projection");
-    }
-
-    public void resetPosition(){
-        this.t=0;
-        this.t2=0;
-        this.TX =0;
-        this.TY=0;
-    }
-
-    public void touch(float x, float y){
+    public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
 
         float[] matrix = new float[16];
         float[] result = new float[4];
         float[] position = new float[4];
         float[] temp = new float[16];
         Node current;
+        int[] indices = new int[2];
 
-        for (int i=0; i<father.getSonNodes().size(); i++){
+        for (int i=0; i<marbles.size(); i++){
 
-            current = father.getSonNodes().get(i);
+            current = marbles.get(i).getNode();
             position[0] = current.getX();
             position[1] = current.getY();
             position[2] = current.getZ();
@@ -159,44 +139,68 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             float distance = (float) Math.sqrt((x-cubecoordX)*(x-cubecoordX) + (y-cubecoordY)*(y-cubecoordY));
             //Log.d("DISTANCE", String.valueOf(distance));
             if(distance<RADIUS){
-                red = (float)Color.red(colormap.get(i))/MAX_COLOR;
-                green = (float)Color.green(colormap.get(i))/MAX_COLOR;
-                blue = (float)Color.blue(colormap.get(i))/MAX_COLOR;
+                return marbles.get(i).getIndices();
 
-                Log.d("COLORE", String.valueOf(red)+" "+String.valueOf(green)+" "+String.valueOf(blue));
+
+            }
+        }
+        throw new TouchedItemNotFoundException();
+
+    }
+
+
+
+    public GraphicsRenderer(Context context, GameStatusHandler handler){
+        this.context=context;
+        this.handler = handler;
+    }
+
+    public void update(){
+
+        marbles = new ArrayList<>();
+
+        float[] mat = new float[CUBE_COLS * CUBE_ROWS];
+        for (int i=0; i<CUBE_ROWS; i++){
+            for(int j=0; j<CUBE_COLS; j++){
+                mat[i*CUBE_COLS + j] = handler.getMarbles()[i][j];
             }
         }
 
-    }
-
-
-
-    public GraphicsRenderer(Context context){
-        this.context=context;
-    }
-
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-        int intColor;
+        printMatrix(mat, "marbles");
 
         father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj", "father");
 
         float scale = 1.5f;
 
+        ArrayList<String> colors = new ArrayList<String>();
+        colors.add(0, "#00000000");
+        colors.add(1, "#FFFF0000");
+        colors.add(2, "#FF00FF00");
+
+
         for (int i=0; i<CUBE_COLS; i++){
             for(int j=0; j<CUBE_ROWS; j++){
-                intColor = Color.argb(MAX_COLOR, (MAX_COLOR/CUBE_ROWS) * i, (MAX_COLOR/CUBE_COLS) * j, 0);
-                colormap.add(i*CUBE_COLS + j, intColor);
-                String color = String.format("#%06X", 0xFFFFFFFF & intColor);
+                //Log.d("MARBLE", String.valueOf(handler.getMarbles()[i][j]));
                 String id = String.valueOf(i*CUBE_COLS + j);
-                Node node = NodesKeeper.generateNode(context, "stdShader", color, "sphere.obj", "cube"+id);
-                node.getRelativeTransform().setPosition(10 * j - 20, 10 * i - 20, 0);
+                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(handler.getMarbles()[i][j]), "sphere.obj", "sphere" + id);
+                node.getRelativeTransform().setPosition(10 * i - 20, 10 * j - 20, 0);
                 node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
                 node.updateTree(new SFTransform3f());
-                father.getSonNodes().add(i*CUBE_COLS + j, node);
+                father.getSonNodes().add(i * CUBE_COLS + j, node);
+                int[] pos = new int[2];
+                pos[0] = i;
+                pos[1] = j;
+                marbles.add(i*CUBE_COLS + j, new Marble(node, pos));
             }
         }
+    }
+
+    @Override
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        update();
+
+
 
     }
 
@@ -247,18 +251,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
 
         //Change the Node transform
-        t+=TX;
-        t2+=TY;
-        float rotation=0f+t;
-        float rotation2=0f+t2;
+
         //float rotation=0;
         float scaling=0.032f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
 
-
-        matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
-        matrix3f=matrix3f.MultMatrix(SFMatrix3f.getRotationX(rotation2));
 
         //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
         //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX((float)Math.PI)));
@@ -268,13 +266,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
-        //matrix3f=SFMatrix3f.getIdentity().MultMatrix(SFMatrix3f.getRotationY(rotation));
+        //matrix3f=SFMatrix3f.getIdentity().MultMatrix(SFMatrix3f.getRotationY((float)(Math.PI/2)));
 
 
         Node node;
 
-        for (int i=0; i<father.getSonNodes().size(); i++){
-            node = father.getSonNodes().get(i);
+        for (int i=0; i<marbles.size(); i++){
+            node = marbles.get(i).getNode();
             node.draw();
         }
 
@@ -285,16 +283,16 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //Log.e("Graphics View Size", Arrays.toString(viewport));
     }
 
-    /*
+
     public void printMatrix(float[] matrix, String name){
         //Need to see MVP to correctly introduce ray picking
         String matrice = new String();
         matrice+=name+":\n";
 
 
-        for (int i=0; i<4; i++){
-            for (int j=0; j<4; j++){
-                matrice+=matrix[i*4+j];
+        for (int i=0; i<CUBE_ROWS; i++){
+            for (int j=0; j<CUBE_COLS; j++){
+                matrice+=matrix[i*CUBE_COLS+j];
                 matrice+=" ";
             }
             matrice+="\n";
@@ -302,6 +300,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         Log.d(name, matrice);
     }
+
+    /*
     public void printVector(float[] vector, String name){
         //Need to see MVP to correctly introduce ray picking
         String matrice = new String();

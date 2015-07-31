@@ -22,10 +22,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //Setting up levels for the game
-        GameStatusHandler handler = new GameStatusHandler();
+        GameStatusHandler handler = new GameStatusHandler(this);
         ArrayList<String> list = new ArrayList<>();
 
-        list.add(0, getFilesDir().getAbsolutePath() + "/level1.txt");
+        list.add(0, "level0.txt");
         try {
             handler.loadGame(list);
         } catch (Exception e) {

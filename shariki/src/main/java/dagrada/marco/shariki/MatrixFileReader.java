@@ -1,5 +1,7 @@
 package dagrada.marco.shariki;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 
 import java.io.InputStream;
@@ -59,6 +61,12 @@ public class MatrixFileReader {
             }
         }
 
+        return marbles;
+    }
+
+    public static int[][] getMatrix(Context context, String name) throws Exception {
+
+        int[][] marbles = getMatrix(context.getAssets().open(name));
         return marbles;
     }
 }

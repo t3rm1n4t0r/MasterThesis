@@ -1,5 +1,6 @@
 package dagrada.marco.shariki;
 
+import android.content.Context;
 import android.graphics.Matrix;
 
 import java.io.FileInputStream;
@@ -19,7 +20,12 @@ public class GameStatusHandler {
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
-    FileInputStream stream;
+
+    Context context;
+
+    public GameStatusHandler(Context context){
+        this.context = context;
+    }
 
     public void loadGame(ArrayList<String> levels) throws Exception {
 
@@ -34,7 +40,7 @@ public class GameStatusHandler {
             throw new GameEndException();
         else{
             CURRENT_LEVEL = level;
-            marbles = MatrixFileReader.getMatrix(stream = new FileInputStream(levels.get(CURRENT_LEVEL)));
+            marbles = MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL));
         }
 
     }
