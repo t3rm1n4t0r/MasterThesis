@@ -88,9 +88,16 @@ public class GameStatusHandler {
 
         try {
             MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
+            for (int i=0; i<MAX_HEIGTH; i++){
+                for (int j=0; j<MAX_WIDTH; j++){
+                    marbles[i][j] = toCheck[i][j];
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     public int[][] getMarbles() {

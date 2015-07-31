@@ -70,6 +70,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private GameStatusHandler handler;
     private ArrayList<Marble> marbles = new ArrayList<>();
 
+    float t=0;
+
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
 
@@ -159,6 +161,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         marbles = new ArrayList<>();
 
+
+
         float[] mat = new float[CUBE_COLS * CUBE_ROWS];
         for (int i=0; i<CUBE_ROWS; i++){
             for(int j=0; j<CUBE_COLS; j++){
@@ -169,6 +173,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         printMatrix(mat, "marbles");
 
         father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj", "father");
+        father.getSonNodes().removeAll(father.getSonNodes());
 
         float scale = 1.5f;
 
@@ -182,7 +187,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             for(int j=0; j<CUBE_ROWS; j++){
                 //Log.d("MARBLE", String.valueOf(handler.getMarbles()[i][j]));
                 String id = String.valueOf(i*CUBE_COLS + j);
-                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(handler.getMarbles()[i][j]), "sphere.obj", "sphere" + id);
+                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(handler.getMarbles()[i][j]), "sphere.obj", "sphere" + id + colors.get(handler.getMarbles()[i][j]));
                 node.getRelativeTransform().setPosition(10 * i - 20, 10 * j - 20, 0);
                 node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
                 node.updateTree(new SFTransform3f());
@@ -193,6 +198,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                 marbles.add(i*CUBE_COLS + j, new Marble(node, pos));
             }
         }
+
+        Log.d("SIZE", String.valueOf(marbles.size()));
+
     }
 
     @Override
@@ -255,7 +263,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //float rotation=0;
         float scaling=0.032f;
 
-        SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
+        SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
 
 
         //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
