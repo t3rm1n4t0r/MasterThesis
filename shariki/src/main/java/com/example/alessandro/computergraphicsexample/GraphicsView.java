@@ -86,7 +86,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y, x, y-1, x);
+            controller.switchPosition(y, x, y, x+1);
             renderer.update();
         } catch (TouchedItemNotFoundException e) {
 
@@ -104,7 +104,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y, x, y+1, x);
+            controller.switchPosition(y, x, y, x-1);
             renderer.update();
         } catch (TouchedItemNotFoundException e) {
 

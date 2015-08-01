@@ -1,12 +1,15 @@
 package com.example.alessandro.computergraphicsexample;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Build;
 import android.renderscript.Matrix4f;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -36,7 +39,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
-    private static final int RADIUS = 100;
+    private static final int RADIUS = 60;
     private static final int MAX_COLOR = 250;
     float width, height;
 
@@ -75,12 +78,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
 
+        Log.e("TOUCHED POSITION", String.valueOf(x)+","+String.valueOf(y));
+
         float[] matrix = new float[16];
         float[] result = new float[4];
         float[] position = new float[4];
         float[] temp = new float[16];
         Node current;
         int[] indices = new int[2];
+
+        y = y-getSoftbuttonsbarHeight() + getStatusBarHeight();
+        Log.d("WIDTH", String.valueOf(width));
+        Log.d("ACTUAL", String.valueOf(getActualWidth()));
 
         for (int i=0; i<marbles.size(); i++){
 
@@ -134,13 +143,16 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
             float cubecoordY = ((1 - result[1]) * this.height)/2;
 
-//            Log.d("CubeX", String.valueOf(cubecoordX));
-//            Log.d("CubeY", String.valueOf(cubecoordY));
+
 
 
             float distance = (float) Math.sqrt((x-cubecoordX)*(x-cubecoordX) + (y-cubecoordY)*(y-cubecoordY));
-            //Log.d("DISTANCE", String.valueOf(distance));
+
             if(distance<RADIUS){
+
+                Log.d("DISTANCE", String.valueOf(distance));
+                Log.d("NodeX", String.valueOf(cubecoordX));
+                Log.d("NodeY", String.valueOf(cubecoordY));
                 return marbles.get(i).getIndices();
 
 
@@ -155,6 +167,36 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     public GraphicsRenderer(Context context, GameStatusHandler handler){
         this.context=context;
         this.handler = handler;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    public int getActualWidth(){
+        return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+
+    private int getSoftbuttonsbarHeight() {
+        // getRealMetrics is only available with API 17 and +
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int usableHeight = metrics.heightPixels;
+            ((Activity)context).getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int realHeight = metrics.heightPixels;
+            if (realHeight > usableHeight)
+                return realHeight - usableHeight;
+            else
+                return 0;
+        }
+        return 0;
     }
 
     public void update(){
@@ -261,7 +303,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //Change the Node transform
 
         //float rotation=0;
-        float scaling=0.032f;
+        float scaling=0.03f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
 

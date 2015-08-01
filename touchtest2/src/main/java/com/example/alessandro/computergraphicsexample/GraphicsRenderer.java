@@ -1,17 +1,15 @@
 package com.example.alessandro.computergraphicsexample;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.renderscript.Matrix4f;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -35,11 +33,11 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private static final int CUBE_COLS = 5;
     private static final int RADIUS = 100;
     private static final int MAX_COLOR = 250;
-    float width, height;
+    float width, realheight;
 
-    float red=0;
-    float blue = 0;
-    float green = 0;
+    float red=1;
+    float blue = 1;
+    float green = 1;
 
     private boolean screenshot=false;
 
@@ -100,6 +98,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         float[] temp = new float[16];
         Node current;
 
+        y = y-getSoftbuttonsbarHeight() + getStatusBarHeight();
+
         for (int i=0; i<father.getSonNodes().size(); i++){
 
             current = father.getSonNodes().get(i);
@@ -150,15 +150,19 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
             float cubecoordX = ((1 + result[0]) * this.width)/2;
 
-            float cubecoordY = ((1 - result[1]) * this.height)/2;
+            float cubecoordY = ((1 - result[1]) * this.realheight)/2;
 
-//            Log.d("CubeX", String.valueOf(cubecoordX));
-//            Log.d("CubeY", String.valueOf(cubecoordY));
+
 
 
             float distance = (float) Math.sqrt((x-cubecoordX)*(x-cubecoordX) + (y-cubecoordY)*(y-cubecoordY));
-            //Log.d("DISTANCE", String.valueOf(distance));
+
             if(distance<RADIUS){
+                Log.d("CubeX", String.valueOf(cubecoordX));
+                Log.d("CubeY", String.valueOf(cubecoordY));
+                Log.d("DISTANCE", String.valueOf(distance));
+                Log.d("SOFT KEY BAR", String.valueOf(getSoftbuttonsbarHeight()));
+                Log.d("STATUS BAR", String.valueOf(getStatusBarHeight()));
                 red = (float)Color.red(colormap.get(i))/MAX_COLOR;
                 green = (float)Color.green(colormap.get(i))/MAX_COLOR;
                 blue = (float)Color.blue(colormap.get(i))/MAX_COLOR;
@@ -173,6 +177,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     public GraphicsRenderer(Context context){
         this.context=context;
+
     }
 
     @Override
@@ -196,12 +201,38 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+
+    private int getSoftbuttonsbarHeight() {
+        // getRealMetrics is only available with API 17 and +
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int usableHeight = metrics.heightPixels;
+            ((Activity)context).getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int realHeight = metrics.heightPixels;
+            if (realHeight > usableHeight)
+                return realHeight - usableHeight;
+            else
+                return 0;
+        }
+        return 0;
+    }
+
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
-        GLES20.glViewport(0, 0, width, height);
 
-        /*float r = (float)width/height;
+
+        /*float r = (float)width/realheight;
         if(r<1) {
             projection[0] = 1;
 
@@ -212,8 +243,17 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
             projection[5] = 1;
         }
+
+
 */
-        float ratio = (float) width / height;
+
+        this.width = width;
+        //this.realheight = height-getSoftbuttonsbarHeight()-getStatusBarHeight();
+        this.realheight = height;
+
+        GLES20.glViewport(0, 0, width, (int)realheight);
+
+        float ratio = (float) width / realheight;
 
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
@@ -224,8 +264,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
 
-        this.width = width;
-        this.height = height;
+
 
 
 
