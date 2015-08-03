@@ -32,13 +32,13 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     private GraphicsRenderer renderer;
     private MatrixController controller;
 
-    public GraphicsView(Context context, MatrixController controller) {
+    public GraphicsView(Context context, MatrixController controller, GraphicsRenderer renderer) {
         super(context);
         setEGLContextClientVersion(2);
         this.context=context;
         super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        renderer = new GraphicsRenderer(context, controller.getHandler());
-        setRenderer(renderer);
+        this.renderer = renderer;
+        setRenderer(this.renderer);
         this.controller = controller;
     }
 
@@ -52,8 +52,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y ,x, y+1, x );
-            renderer.update();
+            controller.switchPosition(x, y, x + 1, y);
         } catch (TouchedItemNotFoundException e) {}
 
     }
@@ -68,8 +67,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y, x, y-1, x);
-            renderer.update();
+            controller.switchPosition(x, y, x - 1, y);
         } catch (TouchedItemNotFoundException e) {
 
         }
@@ -86,8 +84,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y, x, y, x+1);
-            renderer.update();
+            controller.switchPosition(x, y, x, y + 1);
         } catch (TouchedItemNotFoundException e) {
 
         }
@@ -104,8 +101,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
             indices = renderer.detectTouchedItem(startX, startY);
             int x = indices[0];
             int y = indices[1];
-            controller.switchPosition(y, x, y, x-1);
-            renderer.update();
+            controller.switchPosition(x, y, x,y - 1);
         } catch (TouchedItemNotFoundException e) {
 
         }
@@ -121,7 +117,6 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onLongPress(float x, float y) {
         Log.d("TOUCH", "LONG PRESS");
-        renderer.update();
     }
 
     @Override
@@ -137,5 +132,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
         }
 ;
+    }
+
+    public GraphicsRenderer getRenderer() {
+        return renderer;
     }
 }

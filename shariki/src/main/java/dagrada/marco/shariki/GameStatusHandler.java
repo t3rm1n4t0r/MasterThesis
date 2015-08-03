@@ -3,15 +3,18 @@ package dagrada.marco.shariki;
 import android.content.Context;
 import android.graphics.Matrix;
 
+import com.example.alessandro.computergraphicsexample.GraphicsRenderer;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import dagrada.marco.shariki.exceptions.GameEndException;
 
 /**
  * Created by Marco on 23/07/2015.
  */
-public class GameStatusHandler {
+public class GameStatusHandler{
 
     public static final int MAX_WIDTH = 5;
     public static final int MAX_HEIGTH = 5;
@@ -20,11 +23,13 @@ public class GameStatusHandler {
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
+    private GraphicsRenderer renderer;
 
     Context context;
 
-    public GameStatusHandler(Context context){
+    public GameStatusHandler(Context context, GraphicsRenderer renderer){
         this.context = context;
+        this.renderer = renderer;
     }
 
     public void loadGame(ArrayList<String> levels) throws Exception {
@@ -41,6 +46,7 @@ public class GameStatusHandler {
         else{
             CURRENT_LEVEL = level;
             marbles = MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL));
+            renderer.updateModel(marbles);
         }
 
     }
@@ -49,7 +55,7 @@ public class GameStatusHandler {
         loadLevel(getCurrentLevel()+1);
     }
 
-    public void compactMarbles(){
+    private void compactMarbles(){
         int buffer;
         for (int i=0; i<marbles.length; i++){
             for (int j=0; j<marbles[i].length;j++){
@@ -64,6 +70,16 @@ public class GameStatusHandler {
         }
     }
 
+    private int[][] copyModel(){
+        int[][] copy = new int[marbles.length][marbles[0].length];
+        for (int i=0; i<marbles.length; i++){
+            for (int j =0; j<marbles[i].length; j++){
+                copy[i][j] = marbles[i][j];
+            }
+        }
+        return copy;
+    }
+
     public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col){
         int buffer;
         if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
@@ -73,11 +89,15 @@ public class GameStatusHandler {
         }
 
 
+        checkForSegments();
+        //compactMarbles();
 
+        renderer.updateModel(copyModel());
+        renderer.update();
 
     }
 
-    public void checkForSegments(){
+    private void checkForSegments(){
         int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
 
         for (int i=0; i<MAX_HEIGTH; i++){
@@ -107,5 +127,7 @@ public class GameStatusHandler {
     public int getCurrentLevel() {
         return CURRENT_LEVEL;
     }
+
+
 
 }

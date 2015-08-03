@@ -22,8 +22,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //Setting up levels for the game
-        GameStatusHandler handler = new GameStatusHandler(this);
+        GraphicsRenderer renderer = new GraphicsRenderer(this);
+        GameStatusHandler handler = new GameStatusHandler(this, renderer);
         ArrayList<String> list = new ArrayList<>();
+
+
+
+        MatrixController controller = new MatrixController(handler);
+
+
+        GraphicsView view = new GraphicsView(this, controller, renderer);
+        detector = new GestureDetector(this, new GestureFilter(view));
+        setContentView(view);
 
         list.add(0, "level0.txt");
         try {
@@ -31,12 +41,6 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        MatrixController controller = new MatrixController(handler);
-
-        GraphicsView view = new GraphicsView(this, controller);
-        detector = new GestureDetector(this, new GestureFilter(view));
-        setContentView(view);
     }
 
     @Override

@@ -52,10 +52,6 @@ public class NodesKeeper {
 
     public static Node generateNode(Context context, String shadername, String textureColor, String objFilePath, String nodeID){
 
-        if(nodes.containsKey(nodeID)){
-            return nodes.get(nodeID);
-        }
-        else {
             ShadersKeeper.loadPipelineShaders(context, shadername);
             BitmapTexture texture = MonochromaticTexturesKeeper.generateTexture(context,textureColor);
             Material mat = new Material(ShadersKeeper.getProgram(shadername));
@@ -67,9 +63,9 @@ public class NodesKeeper {
             Node node = new Node();
             node.setModel(model);
             node.getRelativeTransform().setPosition(0, 0, 0);
-            nodes.put(nodeID, node);
+
             return node;
-        }
+
 
     }
 

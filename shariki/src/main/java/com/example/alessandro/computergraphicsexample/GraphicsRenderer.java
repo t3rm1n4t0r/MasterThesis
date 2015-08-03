@@ -42,6 +42,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private static final int RADIUS = 60;
     private static final int MAX_COLOR = 250;
     float width, height;
+    ArrayList<String> colors = new ArrayList<String>();
 
     float red=0;
     float blue = 0;
@@ -70,8 +71,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     Node father;
 
     private ArrayList<Integer> colormap = new ArrayList<>();
-    private GameStatusHandler handler;
     private ArrayList<Marble> marbles = new ArrayList<>();
+    private int[][] model;
 
     float t=0;
 
@@ -164,9 +165,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
 
 
-    public GraphicsRenderer(Context context, GameStatusHandler handler){
+    public GraphicsRenderer(Context context){
         this.context=context;
-        this.handler = handler;
+        model = new int[CUBE_ROWS][CUBE_COLS];
+        colors.add(0, "#FFFFFFFF");
+        colors.add(1, "#FFFF0000");
+        colors.add(2, "#FF00FF00");
+
     }
 
     public int getStatusBarHeight() {
@@ -203,12 +208,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         marbles = new ArrayList<>();
 
-
-
         float[] mat = new float[CUBE_COLS * CUBE_ROWS];
         for (int i=0; i<CUBE_ROWS; i++){
-            for(int j=0; j<CUBE_COLS; j++){
-                mat[i*CUBE_COLS + j] = handler.getMarbles()[i][j];
+            for(int j=0; j<CUBE_COLS; j++) {
+                mat[i*CUBE_COLS + j] = model[i][j];
             }
         }
 
@@ -219,17 +222,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         float scale = 1.5f;
 
-        ArrayList<String> colors = new ArrayList<String>();
-        colors.add(0, "#00000000");
-        colors.add(1, "#FFFF0000");
-        colors.add(2, "#FF00FF00");
-
 
         for (int i=0; i<CUBE_COLS; i++){
             for(int j=0; j<CUBE_ROWS; j++){
                 //Log.d("MARBLE", String.valueOf(handler.getMarbles()[i][j]));
                 String id = String.valueOf(i*CUBE_COLS + j);
-                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(handler.getMarbles()[i][j]), "sphere.obj", "sphere" + id + colors.get(handler.getMarbles()[i][j]));
+                //Log.d("COLOR", colors.get(model[i][j]));
+                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(model[i][j]), "sphere.obj", "sphere_" + id +"_"+ colors.get(model[i][j]));
                 node.getRelativeTransform().setPosition(10 * i - 20, 10 * j - 20, 0);
                 node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
                 node.updateTree(new SFTransform3f());
@@ -241,7 +240,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        Log.d("SIZE", String.valueOf(marbles.size()));
+        //Log.d("SIZE", String.valueOf(marbles.size()));
 
     }
 
@@ -259,18 +258,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glViewport(0, 0, width, height);
 
-        /*float r = (float)width/height;
-        if(r<1) {
-            projection[0] = 1;
-
-            projection[5] = r;
-        }
-        else if(r>1){
-            projection[0] = 1/r;
-
-            projection[5] = 1;
-        }
-*/
         float ratio = (float) width / height;
 
         // this projection matrix is applied to object coordinates
@@ -299,43 +286,25 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
 
-
-        //Change the Node transform
-
-        //float rotation=0;
         float scaling=0.03f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
 
-
-        //matrix3f=matrix3f.MultMatrix((SFMatrix3f.getRotationZ((float) Math.PI)));
-        //matrix3f = matrix3f.MultMatrix((SFMatrix3f.getRotationX((float)Math.PI)));
-        //matrix3f= matrix3f.MultMatrix((SFMatrix3f.getRotationY((float)Math.PI)));
-
-
-
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
-        //matrix3f=SFMatrix3f.getIdentity().MultMatrix(SFMatrix3f.getRotationY((float)(Math.PI/2)));
-
 
         Node node;
 
-        for (int i=0; i<marbles.size(); i++){
-            node = marbles.get(i).getNode();
+        for (int i=0; i<father.getSonNodes().size(); i++){
+            node = father.getSonNodes().get(i);
             node.draw();
         }
 
-        //Draw the node
-
-        //int[] viewport=new int[4];
-        //GLES20.glGetIntegerv(GLES20.GL_VIEWPORT,viewport,0);
-        //Log.e("Graphics View Size", Arrays.toString(viewport));
     }
 
 
     public void printMatrix(float[] matrix, String name){
-        //Need to see MVP to correctly introduce ray picking
+
         String matrice = new String();
         matrice+=name+":\n";
 
@@ -369,4 +338,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         Log.d(name, matrice);
     }
     */
+
+    public void updateModel(int[][] model){
+        this.model = model;
+    }
 }
