@@ -11,7 +11,9 @@ import java.util.LinkedList;
  */
 public class MatrixChecker {
 
-    public static void CheckForSegments(int[][] matrix, int minsize) throws Exception {
+    public static boolean CheckForSegments(int[][] matrix, int minsize) throws Exception {
+
+        boolean found = false;
         if(minsize > matrix.length || minsize >matrix[0].length){
             //Log.e("ERROR", "Minimum segment size to check for is greater than one of matrix's dimensions");
             throw new Exception("Minimum segment size to check for is greater than one of matrix's dimensions");
@@ -31,6 +33,7 @@ public class MatrixChecker {
                     for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
                         matrix[i-1][k] =0;
                     }
+                    found = true;
                 }
                 count = 0;
                 last = matrix[i][0];
@@ -42,6 +45,7 @@ public class MatrixChecker {
                             for (int k=j-count; k<j; k++){
                                 matrix[i][k] =0;
                             }
+                            found = true;
                         }
                         last = current;
                         count=1;
@@ -62,6 +66,7 @@ public class MatrixChecker {
                     for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
                         matrix[k][i-1] =0;
                     }
+                    found = true;
                 }
                 count = 0;
                 last = matrix[0][i];
@@ -73,6 +78,7 @@ public class MatrixChecker {
                             for (int k=j-count; k<j; k++){
                                 matrix[k][i] =0;
                             }
+                            found = true;
                         }
                         last = current;
                         count=1;
@@ -88,6 +94,7 @@ public class MatrixChecker {
 
 
         }
+        return found;
     }
 
     //might be useful

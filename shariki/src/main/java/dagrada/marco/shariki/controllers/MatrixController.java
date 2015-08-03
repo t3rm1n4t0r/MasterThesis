@@ -1,10 +1,6 @@
 package dagrada.marco.shariki.controllers;
 
-import android.os.Handler;
-
 import dagrada.marco.shariki.GameStatusHandler;
-import dagrada.marco.shariki.MatrixChecker;
-import thesis.touch.TouchActivity;
 
 /**
  * Created by Marco on 28/07/2015.
@@ -25,9 +21,10 @@ public class MatrixController {
 
     public void switchPosition(int row1, int col1, int row2, int col2){
 
-        handler.switchMarbles(row1, col1, row2, col2);
+        handler.tryToSwitch(row1, col1, row2, col2);
 
     }
+
 
     /*
     public int[] getMatrixIndeces(float x, float y, float screenWidth, float screenHeight){

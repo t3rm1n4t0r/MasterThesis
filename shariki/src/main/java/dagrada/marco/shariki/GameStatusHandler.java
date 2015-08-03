@@ -43,24 +43,31 @@ public class GameStatusHandler{
 
         if (level >= levels.size())
             throw new GameEndException();
+        else if(level < 0){
+            throw new Exception("Level doesn't exists");
+        }
         else{
             CURRENT_LEVEL = level;
-            marbles = MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL));
+            setMarbles(MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL)));
             renderer.updateModel(marbles);
         }
 
+    }
+
+    public void setMarbles(int[][] marbles) {
+        this.marbles = marbles;
     }
 
     public void nextLevel() throws Exception {
         loadLevel(getCurrentLevel()+1);
     }
 
-    private void compactMarbles(){
+    public void compactMarbles(){
         int buffer;
         for (int i=0; i<marbles.length; i++){
-            for (int j=0; j<marbles[i].length;j++){
+            for (int j=marbles[i].length-2; j>=0;j--){
                 if (marbles[i][j] == 0){
-                    for (int k=j; k<marbles.length-1;k++){
+                    for (int k=j; k<marbles[i].length-1;k++){
                         buffer = marbles[i][k];
                         marbles[i][k] = marbles[i][k+1];
                         marbles[i][k+1] = buffer;
@@ -80,7 +87,7 @@ public class GameStatusHandler{
         return copy;
     }
 
-    public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col){
+    public void tryToSwitch(int marble1row, int marble1col, int marble2row, int marble2col){
         int buffer;
         if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
             buffer = marbles[marble1row][marble1col];
@@ -89,16 +96,28 @@ public class GameStatusHandler{
         }
 
 
-        checkForSegments();
-        //compactMarbles();
+        if(checkForSegments()){
 
-        renderer.updateModel(copyModel());
-        renderer.update();
+            compactMarbles();
+            updateRenderer();
+        }
+
+        else{
+            buffer = marbles[marble1row][marble1col];
+            marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
+            marbles[marble2row][marble2col] = buffer;
+        }
 
     }
 
-    private void checkForSegments(){
+    public void updateRenderer(){
+        renderer.updateModel(copyModel());
+        renderer.update();
+    }
+
+    public boolean checkForSegments(){
         int[][] toCheck = new int[MAX_HEIGTH][MAX_WIDTH];
+        boolean found = false;
 
         for (int i=0; i<MAX_HEIGTH; i++){
             for (int j=0; j<MAX_WIDTH; j++){
@@ -107,16 +126,22 @@ public class GameStatusHandler{
         }
 
         try {
-            MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
+            found = MatrixChecker.CheckForSegments(toCheck, MIN_SEGMENT_SIZE);
             for (int i=0; i<MAX_HEIGTH; i++){
                 for (int j=0; j<MAX_WIDTH; j++){
                     marbles[i][j] = toCheck[i][j];
                 }
             }
+
+
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+            return found;
 
     }
 

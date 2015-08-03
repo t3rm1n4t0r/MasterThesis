@@ -79,7 +79,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
 
-        Log.e("TOUCHED POSITION", String.valueOf(x)+","+String.valueOf(y));
+        //Log.e("TOUCHED POSITION", String.valueOf(x)+","+String.valueOf(y));
 
         float[] matrix = new float[16];
         float[] result = new float[4];
@@ -89,8 +89,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         int[] indices = new int[2];
 
         y = y-getSoftbuttonsbarHeight() + getStatusBarHeight();
-        Log.d("WIDTH", String.valueOf(width));
-        Log.d("ACTUAL", String.valueOf(getActualWidth()));
+        //Log.d("WIDTH", String.valueOf(width));
+       // Log.d("ACTUAL", String.valueOf(getActualWidth()));
 
         for (int i=0; i<marbles.size(); i++){
 
@@ -151,9 +151,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
             if(distance<RADIUS){
 
-                Log.d("DISTANCE", String.valueOf(distance));
-                Log.d("NodeX", String.valueOf(cubecoordX));
-                Log.d("NodeY", String.valueOf(cubecoordY));
+                //Log.d("DISTANCE", String.valueOf(distance));
+                //Log.d("NodeX", String.valueOf(cubecoordX));
+                //Log.d("NodeY", String.valueOf(cubecoordY));
                 return marbles.get(i).getIndices();
 
 
@@ -263,7 +263,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
 
-        Log.d("SCREEN RATIO", "Width/Height =" + ratio);
+        //Log.d("SCREEN RATIO", "Width/Height =" + ratio);
         Matrix.frustumM(projection, 0, -ratio, ratio, -1, 1, 3, 7);
         Matrix.setLookAtM(camera, 0, 0, 0, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
@@ -317,7 +317,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             matrice+="\n";
         }
 
-        Log.d(name, matrice);
+        //Log.d(name, matrice);
     }
 
     /*
