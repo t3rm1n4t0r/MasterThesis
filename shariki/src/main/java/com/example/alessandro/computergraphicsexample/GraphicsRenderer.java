@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -42,7 +43,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private static final int RADIUS = 60;
     private static final int MAX_COLOR = 250;
     float width, height;
-    ArrayList<String> colors = new ArrayList<String>();
+
+    HashMap<Integer, String> colors = new HashMap<>();
 
     float red=0;
     float blue = 0;
@@ -71,7 +73,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     Node father;
 
     private ArrayList<Integer> colormap = new ArrayList<>();
-    private ArrayList<Marble> marbles = new ArrayList<>();
+    private HashMap<Integer, Marble> marbles = new HashMap<>();
     private int[][] model;
 
     float t=0;
@@ -151,9 +153,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
             if(distance<RADIUS){
 
-                //Log.d("DISTANCE", String.valueOf(distance));
-                //Log.d("NodeX", String.valueOf(cubecoordX));
-                //Log.d("NodeY", String.valueOf(cubecoordY));
+                Log.d("DISTANCE", String.valueOf(distance));
+                Log.d("NodeX", String.valueOf(cubecoordX));
+                Log.d("NodeY", String.valueOf(cubecoordY));
                 return marbles.get(i).getIndices();
 
 
@@ -168,9 +170,11 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     public GraphicsRenderer(Context context){
         this.context=context;
         model = new int[CUBE_ROWS][CUBE_COLS];
-        colors.add(0, "#FFFFFFFF");
-        colors.add(1, "#FFFF0000");
-        colors.add(2, "#FF00FF00");
+
+        colors.put(0, "#FFFFFFFF");
+        colors.put(1, "#FFFF0000");
+        colors.put(2, "#FF00FF00");
+        colors.put(-1, "#FFFFFFFF");
 
     }
 
@@ -206,8 +210,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     public void update(){
 
-        marbles = new ArrayList<>();
-
         float[] mat = new float[CUBE_COLS * CUBE_ROWS];
         for (int i=0; i<CUBE_ROWS; i++){
             for(int j=0; j<CUBE_COLS; j++) {
@@ -228,7 +230,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                 //Log.d("MARBLE", String.valueOf(handler.getMarbles()[i][j]));
                 String id = String.valueOf(i*CUBE_COLS + j);
                 //Log.d("COLOR", colors.get(model[i][j]));
-                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(model[i][j]), "sphere.obj", "sphere_" + id +"_"+ colors.get(model[i][j]));
+                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(model[i][j]), "sphere.obj");
                 node.getRelativeTransform().setPosition(10 * i - 20, 10 * j - 20, 0);
                 node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
                 node.updateTree(new SFTransform3f());
@@ -236,7 +238,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                 int[] pos = new int[2];
                 pos[0] = i;
                 pos[1] = j;
-                marbles.add(i*CUBE_COLS + j, new Marble(node, pos));
+                marbles.put(i*CUBE_COLS + j, new Marble(node, pos));
             }
         }
 
@@ -286,7 +288,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
 
-        float scaling=0.03f;
+        float scaling=0.04f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
 
@@ -295,8 +297,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         Node node;
 
-        for (int i=0; i<father.getSonNodes().size(); i++){
-            node = father.getSonNodes().get(i);
+        for (int i=0; i<marbles.size(); i++){
+            node = marbles.get(i).getNode();
             node.draw();
         }
 

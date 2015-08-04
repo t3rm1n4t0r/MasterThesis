@@ -2,12 +2,15 @@ package dagrada.marco.shariki;
 
 import android.content.Context;
 import android.graphics.Matrix;
+import android.util.Log;
 
 import com.example.alessandro.computergraphicsexample.GraphicsRenderer;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import dagrada.marco.shariki.exceptions.GameEndException;
 
@@ -19,6 +22,7 @@ public class GameStatusHandler{
     public static final int MAX_WIDTH = 5;
     public static final int MAX_HEIGTH = 5;
     private static final int MIN_SEGMENT_SIZE = 3;
+    private static final int CHECK_TIME_DELAY = 1500;
 
     private int[][] marbles;
     private ArrayList<String> levels;
@@ -87,32 +91,63 @@ public class GameStatusHandler{
         return copy;
     }
 
-    public void tryToSwitch(int marble1row, int marble1col, int marble2row, int marble2col){
+    public void tryToSwitch(int marble1row, int marble1col, int marble2row, int marble2col) throws GameEndException {
         int buffer;
         if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
             buffer = marbles[marble1row][marble1col];
             marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
             marbles[marble2row][marble2col] = buffer;
+
+            boolean changed = false;
+
+            Timer timer = new Timer("Delay");
+
+            while(checkForSegments()){
+                changed = true;
+
+
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        compactMarbles();
+
+                    }
+                };
+                timer.schedule(task, CHECK_TIME_DELAY);
+
+                if(checkForEndGame()){
+
+                    throw new GameEndException();
+
+                }
+                updateRenderer();
+
+
+            }
+
+            if(!changed){
+                buffer = marbles[marble1row][marble1col];
+                marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
+                marbles[marble2row][marble2col] = buffer;
+            }
         }
 
 
-        if(checkForSegments()){
-
-            compactMarbles();
-            updateRenderer();
-        }
-
-        else{
-            buffer = marbles[marble1row][marble1col];
-            marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
-            marbles[marble2row][marble2col] = buffer;
-        }
 
     }
 
     public void updateRenderer(){
         renderer.updateModel(copyModel());
         renderer.update();
+    }
+
+    public boolean checkForEndGame(){
+        try {
+            return MatrixChecker.CheckForEndGame(getMarbles(), MAX_WIDTH, MAX_HEIGTH);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean checkForSegments(){

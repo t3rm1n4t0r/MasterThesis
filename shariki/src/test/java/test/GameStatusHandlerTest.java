@@ -1,26 +1,21 @@
 package test;
 
 import android.content.Context;
-import android.test.ActivityTestCase;
-import android.test.AndroidTestCase;
-import android.test.ServiceTestCase;
-import android.test.mock.MockContext;
+
 
 import com.example.alessandro.computergraphicsexample.GraphicsRenderer;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.And;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 
-import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.exceptions.GameEndException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,12 +29,13 @@ public class GameStatusHandlerTest {
 
     private GameStatusHandler handler;
     private ArrayList<String> list = new ArrayList<>();
-    Context context;
+
+    @Mock private GraphicsRenderer renderer;
+
+    @Mock private Context context;
 
     @Before
     public void setUp(){
-
-        GraphicsRenderer renderer = new GraphicsRenderer(context);
 
         handler = new GameStatusHandler(context, renderer);
 
@@ -164,8 +160,39 @@ public class GameStatusHandlerTest {
 
     }
 
+    /*
     @Test
-    public void testTryToSwitchWhichShouldNotSwitch(){
+    public void testTryToSwitch() throws GameEndException {
+
+        int[][] start={
+                {1,2,3,2,2,1,2,1,1,-1},
+                {1,3,2,1,2,1,1,2,1,-1},
+                {2,1,1,2,3,2,2,1,2,-1},
+                {1,1,2,3,2,1,2,2,1,-1},
+                {1,2,1,1,2,2,1,2,2,-1}
+        };
+
+        int[][] finalm={
+                {1,2,3,2,2,1,2,1,1,-1},
+                {1,2,1,2,1,1,2,1,-1,0},
+                {2,1,1,3,2,2,1,2,-1,0},
+                {1,1,3,2,1,2,2,1,-1,0},
+                {1,2,1,1,2,2,1,2,2,-1}
+        };
+        handler.setMarbles(start);
+        handler.tryToSwitch(2, 2, 2, 3);
+
+        assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
+        assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));
+        assertTrue(Arrays.equals(handler.getMarbles()[2], finalm[2]));
+        assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
+        assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
+
+    }
+    */
+
+    @Test
+    public void testTryToSwitchWhichShouldNotSwitch() throws GameEndException {
 
         int[][] start={
                 {1,2,1,2,2,1,2,1,1},
@@ -184,7 +211,37 @@ public class GameStatusHandlerTest {
         };
 
         handler.setMarbles(start);
-        handler.tryToSwitch(0,0,1,0);
+        handler.tryToSwitch(0, 0, 1, 0);
+
+        assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
+        assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));
+        assertTrue(Arrays.equals(handler.getMarbles()[2], finalm[2]));
+        assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
+        assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
+
+    }
+
+    @Test
+    public void testTryToSwitchWhichShouldNotSwitchBecauseOfBadIndices() throws GameEndException {
+
+        int[][] start={
+                {1,2,1,2,2,1,2,1,1},
+                {1,2,2,1,2,1,1,2,1},
+                {2,1,1,2,1,2,2,1,2},
+                {1,1,2,1,2,1,2,2,1},
+                {1,2,1,1,2,2,1,2,2}
+        };
+
+        int[][] finalm={
+                {1,2,1,2,2,1,2,1,1},
+                {1,2,2,1,2,1,1,2,1},
+                {2,1,1,2,1,2,2,1,2},
+                {1,1,2,1,2,1,2,2,1},
+                {1,2,1,1,2,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+        handler.tryToSwitch(0,0,-1,0);
 
         assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
         assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));

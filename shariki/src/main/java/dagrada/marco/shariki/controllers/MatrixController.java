@@ -1,6 +1,9 @@
 package dagrada.marco.shariki.controllers;
 
+import android.util.Log;
+
 import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.exceptions.GameEndException;
 
 /**
  * Created by Marco on 28/07/2015.
@@ -21,7 +24,15 @@ public class MatrixController {
 
     public void switchPosition(int row1, int col1, int row2, int col2){
 
-        handler.tryToSwitch(row1, col1, row2, col2);
+        try {
+            handler.tryToSwitch(row1, col1, row2, col2);
+        } catch (GameEndException e) {
+            try {
+                handler.nextLevel();
+            } catch (Exception e1) {
+                Log.d("GAME END", "<---");
+            }
+        }
 
     }
 

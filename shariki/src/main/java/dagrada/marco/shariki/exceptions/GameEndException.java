@@ -5,11 +5,4 @@ package dagrada.marco.shariki.exceptions;
  */
 public class GameEndException extends  Exception{
 
-    public GameEndException(){
-        super();
-    }
-
-    public GameEndException(String message){
-        super(message);
-    }
 }

@@ -11,6 +11,9 @@ import java.util.LinkedList;
  */
 public class MatrixChecker {
 
+    private static final int BLOWN_MARBLE = 0;
+    private static final int ENDGAME_MARBLE = -1;
+
     public static boolean CheckForSegments(int[][] matrix, int minsize) throws Exception {
 
         boolean found = false;
@@ -31,7 +34,7 @@ public class MatrixChecker {
             {
                 if(count >= minsize){
                     for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
-                        matrix[i-1][k] =0;
+                        matrix[i-1][k] =BLOWN_MARBLE;
                     }
                     found = true;
                 }
@@ -43,7 +46,7 @@ public class MatrixChecker {
 
                         if(count >= minsize){
                             for (int k=j-count; k<j; k++){
-                                matrix[i][k] =0;
+                                matrix[i][k] =BLOWN_MARBLE;
                             }
                             found = true;
                         }
@@ -64,7 +67,7 @@ public class MatrixChecker {
             {
                 if(count >= minsize){
                     for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
-                        matrix[k][i-1] =0;
+                        matrix[k][i-1] =BLOWN_MARBLE;
                     }
                     found = true;
                 }
@@ -76,7 +79,7 @@ public class MatrixChecker {
 
                         if(count >= minsize){
                             for (int k=j-count; k<j; k++){
-                                matrix[k][i] =0;
+                                matrix[k][i] =BLOWN_MARBLE;
                             }
                             found = true;
                         }
@@ -92,6 +95,33 @@ public class MatrixChecker {
             }
 
 
+
+        }
+        return found;
+    }
+
+    public static boolean CheckForEndGame(int[][] matrix, int maxWidth, int maxHeight) throws Exception {
+
+        boolean found = false;
+        if(isRectangular(matrix) == false){
+            //Log.e("ERROR", "Given Matrix is not rectangular");
+            throw new Exception("Given Matrix is not rectangular");
+        }
+        else if(maxHeight>matrix.length || maxWidth > matrix[0].length){
+            throw new Exception("You are checking for endgame marbles out of the matrix !");
+        }
+        else {
+
+            for (int i=0; i<maxHeight;i++)
+            {
+                for (int j=0;j<maxWidth; j++){
+
+                    if(matrix[i][j] == ENDGAME_MARBLE)
+                        return true;
+
+                }
+
+            }
 
         }
         return found;
