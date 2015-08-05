@@ -1,18 +1,13 @@
 package dagrada.marco.shariki;
 
 import android.content.Context;
-import android.graphics.Matrix;
-import android.util.Log;
 
-import com.example.alessandro.computergraphicsexample.GraphicsRenderer;
-
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import dagrada.marco.shariki.exceptions.GameEndException;
+import thesis.Graphics.GraphicsEngine;
 
 /**
  * Created by Marco on 23/07/2015.
@@ -27,11 +22,11 @@ public class GameStatusHandler{
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
-    private GraphicsRenderer renderer;
+    private GraphicsEngine renderer;
 
     Context context;
 
-    public GameStatusHandler(Context context, GraphicsRenderer renderer){
+    public GameStatusHandler(Context context, GraphicsEngine renderer){
         this.context = context;
         this.renderer = renderer;
     }

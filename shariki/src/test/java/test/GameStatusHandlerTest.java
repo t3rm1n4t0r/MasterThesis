@@ -3,18 +3,17 @@ package test;
 import android.content.Context;
 
 
-import com.example.alessandro.computergraphicsexample.GraphicsRenderer;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import dagrada.marco.shariki.GameStatusHandler;
+import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.exceptions.GameEndException;
 
 import static org.junit.Assert.assertFalse;
@@ -30,13 +29,14 @@ public class GameStatusHandlerTest {
     private GameStatusHandler handler;
     private ArrayList<String> list = new ArrayList<>();
 
-    @Mock private GraphicsRenderer renderer;
+    @Mock
+    GraphicsEngine renderer;
 
     @Mock private Context context;
 
     @Before
     public void setUp(){
-
+        renderer = Mockito.mock(GraphicsEngine.class);
         handler = new GameStatusHandler(context, renderer);
 
     }
@@ -160,7 +160,7 @@ public class GameStatusHandlerTest {
 
     }
 
-    /*
+
     @Test
     public void testTryToSwitch() throws GameEndException {
 
@@ -174,7 +174,7 @@ public class GameStatusHandlerTest {
 
         int[][] finalm={
                 {1,2,3,2,2,1,2,1,1,-1},
-                {1,2,1,2,1,1,2,1,-1,0},
+                {1,3,1,2,1,1,2,1,-1,0},
                 {2,1,1,3,2,2,1,2,-1,0},
                 {1,1,3,2,1,2,2,1,-1,0},
                 {1,2,1,1,2,2,1,2,2,-1}
@@ -189,7 +189,7 @@ public class GameStatusHandlerTest {
         assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
 
     }
-    */
+
 
     @Test
     public void testTryToSwitchWhichShouldNotSwitch() throws GameEndException {

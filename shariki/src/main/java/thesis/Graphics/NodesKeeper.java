@@ -50,6 +50,24 @@ public class NodesKeeper {
 
     }
 
+    public static Node generateNode(Context context, String shadername, int textureID, String objFilePath){
+
+            ShadersKeeper.loadPipelineShaders(context, shadername);
+            BitmapTexture texture = TexturesKeeper.generateTexture(context, textureID);
+            Material mat = new Material(ShadersKeeper.getProgram(shadername));
+            mat.getTextures().add(texture);
+            Mesh mesh = MeshesKeeper.generateMesh(context, objFilePath);
+            Model model = new Model();
+            model.setRootGeometry(mesh);
+            model.setMaterialComponent(mat);
+            Node node = new Node();
+            node.setModel(model);
+            node.getRelativeTransform().setPosition(0, 0, 0);
+            return node;
+        }
+
+
+
     public static Node generateNode(Context context, String shadername, String textureColor, String objFilePath, String nodeID){
 
         if(nodes.containsKey(nodeID)){

@@ -2,26 +2,20 @@ package com.example.alessandro.computergraphicsexample;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Build;
-import android.renderscript.Matrix4f;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import dagrada.marco.shariki.GameStatusHandler;
+import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.Marble;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
@@ -30,11 +24,12 @@ import shadow.math.SFMatrix3f;
 import shadow.math.SFTransform3f;
 import thesis.Graphics.NodesKeeper;
 import thesis.Graphics.ShadersKeeper;
+import thesis.Graphics.GraphicsAnimation;
 
 /**
  * Created by Marco on 26/05/2015.
  */
-public class GraphicsRenderer implements GLSurfaceView.Renderer {
+public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine {
 
 
     private static final String STANDARD_SHADER = "stdShader";
@@ -217,10 +212,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        printMatrix(mat, "marbles");
+        //printMatrix(mat, "marbles");
 
-        father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj", "father");
-        father.getSonNodes().removeAll(father.getSonNodes());
+        father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj");
 
         float scale = 1.5f;
 
@@ -319,7 +313,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             matrice+="\n";
         }
 
-        //Log.d(name, matrice);
+        Log.d(name, matrice);
     }
 
     /*
@@ -341,7 +335,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     }
     */
 
-    public void updateModel(int[][] model){
-        this.model = model;
+    public void updateModel(Object obj){
+        this.model = (int[][]) obj;
+    }
+
+    @Override
+    public void animate(GraphicsAnimation animation) {
+
     }
 }
