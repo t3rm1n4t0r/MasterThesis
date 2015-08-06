@@ -15,6 +15,7 @@ import java.util.HashMap;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import dagrada.marco.shariki.GraphicsUpdatePacket;
 import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.Marble;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
@@ -70,6 +71,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private ArrayList<Integer> colormap = new ArrayList<>();
     private HashMap<Integer, Marble> marbles = new HashMap<>();
     private int[][] model;
+    private int score;
 
     float t=0;
 
@@ -237,6 +239,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         }
 
         //Log.d("SIZE", String.valueOf(marbles.size()));
+        Log.d("SCORE", String.valueOf(score));
 
     }
 
@@ -282,7 +285,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
 
-        float scaling=0.04f;
+        float scaling=0.032f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
 
@@ -295,6 +298,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
             node = marbles.get(i).getNode();
             node.draw();
         }
+
+
 
     }
 
@@ -336,7 +341,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     */
 
     public void updateModel(Object obj){
-        this.model = (int[][]) obj;
+
+        GraphicsUpdatePacket packet = (GraphicsUpdatePacket)obj;
+        this.model = packet.getModel();
+        this.score = packet.getScore();
     }
 
     @Override

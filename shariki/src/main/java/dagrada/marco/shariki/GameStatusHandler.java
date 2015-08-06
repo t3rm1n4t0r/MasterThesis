@@ -4,7 +4,6 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import dagrada.marco.shariki.exceptions.GameEndException;
 import thesis.Graphics.GraphicsEngine;
@@ -18,17 +17,20 @@ public class GameStatusHandler{
     public static final int MAX_HEIGTH = 5;
     private static final int MIN_SEGMENT_SIZE = 3;
     private static final int CHECK_TIME_DELAY = 1500;
+    private static final int SCORE_FOR_MARBLE = 20;
 
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
     private GraphicsEngine renderer;
+    private ScoreKeeper scorekeeper;
 
     Context context;
 
     public GameStatusHandler(Context context, GraphicsEngine renderer){
         this.context = context;
         this.renderer = renderer;
+        this.scorekeeper = new ScoreKeeper();
     }
 
     public void loadGame(ArrayList<String> levels) throws Exception {
@@ -100,16 +102,19 @@ public class GameStatusHandler{
             while(checkForSegments()){
                 changed = true;
 
+                updateScore();
 
-                TimerTask task = new TimerTask() {
+
+                /*TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-
+*/
                         compactMarbles();
-
+/*
                     }
                 };
                 timer.schedule(task, CHECK_TIME_DELAY);
+*/
 
                 if(checkForEndGame()){
 
@@ -132,9 +137,23 @@ public class GameStatusHandler{
 
     }
 
+    public void updateScore() {
+        for (int i = 0; i < MAX_HEIGTH; i++) {
+            for (int j = 0; j < MAX_WIDTH; j++) {
+                if (marbles[i][j] == 0) {
+                    scorekeeper.updateScore(SCORE_FOR_MARBLE);
+                }
+            }
+        }
+    }
+
     public void updateRenderer(){
         renderer.updateModel(copyModel());
         renderer.update();
+    }
+
+    public ScoreKeeper getScorekeeper() {
+        return scorekeeper;
     }
 
     public boolean checkForEndGame(){

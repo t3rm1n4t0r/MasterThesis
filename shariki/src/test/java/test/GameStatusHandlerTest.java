@@ -187,6 +187,7 @@ public class GameStatusHandlerTest {
         assertTrue(Arrays.equals(handler.getMarbles()[2], finalm[2]));
         assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
         assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
+        assertTrue(handler.getScorekeeper().getScore()== 60);
 
     }
 

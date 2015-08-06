@@ -14,6 +14,7 @@ public class MatrixChecker {
     private static final int BLOWN_MARBLE = 0;
     private static final int ENDGAME_MARBLE = -1;
 
+
     public static boolean CheckForSegments(int[][] matrix, int minsize) throws Exception {
 
         boolean found = false;
