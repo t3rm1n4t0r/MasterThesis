@@ -7,5 +7,5 @@ public interface GraphicsEngine {
 
     public void update();
     public void updateModel(Object obj);
-    public void animate(GraphicsAnimation animation);
+    public void addAnimation(GraphicsAnimation animation);
 }

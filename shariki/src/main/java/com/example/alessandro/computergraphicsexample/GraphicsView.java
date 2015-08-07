@@ -117,6 +117,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onLongPress(float x, float y) {
         Log.d("TOUCH", "LONG PRESS");
+        renderer.testAnimation();
     }
 
     @Override

@@ -50,7 +50,8 @@ public class GameStatusHandler{
         else{
             CURRENT_LEVEL = level;
             setMarbles(MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL)));
-            renderer.updateModel(marbles);
+            GraphicsUpdatePacket packet = new GraphicsUpdatePacket(marbles, 0);
+            renderer.updateModel(packet);
         }
 
     }
@@ -148,7 +149,8 @@ public class GameStatusHandler{
     }
 
     public void updateRenderer(){
-        renderer.updateModel(copyModel());
+        GraphicsUpdatePacket packet = new GraphicsUpdatePacket(copyModel(), scorekeeper.getScore());
+        renderer.updateModel(packet);
         renderer.update();
     }
 

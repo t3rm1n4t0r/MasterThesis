@@ -6,16 +6,20 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dagrada.marco.shariki.GraphicsUpdatePacket;
+import dagrada.marco.shariki.animations.SwitchAnimation;
+import thesis.Graphics.Exceptions.AnimationEndException;
 import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.Marble;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
@@ -74,6 +78,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private int score;
 
     float t=0;
+
+    private LinkedList<GraphicsAnimation> animations = new LinkedList();
+
+    private long current=0;
+    private long previous=0;
+    private long frametime;
 
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
@@ -280,10 +290,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        previous = current;
+        current = SystemClock.elapsedRealtime();
+        frametime = current-previous;
+
+        Log.d("TIME", String.valueOf(frametime));
 
         SFOGLSystemState.cleanupColorAndDepth(red, green, blue, 1);
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
+
+        updateAnimations();
+
 
         float scaling=0.032f;
 
@@ -292,7 +310,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
 
+
+
         Node node;
+
 
         for (int i=0; i<marbles.size(); i++){
             node = marbles.get(i).getNode();
@@ -302,6 +323,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
     }
+
+
+    public void updateAnimations(){
+        for (GraphicsAnimation anim : animations) {
+            try {
+                anim.goOn();
+            } catch (AnimationEndException e) {
+                animations.remove(anim);
+            }
+        }
+    }
+
 
 
     public void printMatrix(float[] matrix, String name){
@@ -348,7 +381,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     }
 
     @Override
-    public void animate(GraphicsAnimation animation) {
+    public void addAnimation(GraphicsAnimation animation) {
+        animations.add(animation);
+    }
 
+    public void testAnimation(){
+        SwitchAnimation animation = new SwitchAnimation(marbles.get(12).getNode(), marbles.get(17).getNode());
+        addAnimation(animation);
     }
 }
