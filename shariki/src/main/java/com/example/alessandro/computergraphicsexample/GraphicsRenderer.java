@@ -10,7 +10,6 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -18,6 +17,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dagrada.marco.shariki.GraphicsUpdatePacket;
+import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.animations.SwitchAnimation;
 import thesis.Graphics.Exceptions.AnimationEndException;
 import thesis.Graphics.GraphicsEngine;
@@ -43,6 +43,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private static final int RADIUS = 60;
     private static final int MAX_COLOR = 250;
     float width, height;
+    private boolean isBlocked = false;
 
     HashMap<Integer, String> colors = new HashMap<>();
 
@@ -68,11 +69,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     private float[] mvp = new float[16];
 
-
-    private ArrayList<Node> nodes = new ArrayList<>();
     Node father;
-
-    private ArrayList<Integer> colormap = new ArrayList<>();
     private HashMap<Integer, Marble> marbles = new HashMap<>();
     private int[][] model;
     private int score;
@@ -80,6 +77,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     float t=0;
 
     private LinkedList<GraphicsAnimation> animations = new LinkedList();
+    private LinkedList<GraphicsAnimation> blockingAnimations = new LinkedList();
 
     private long current=0;
     private long previous=0;
@@ -131,8 +129,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
             Matrix.multiplyMM(matrix, 0,  mvp, 0, temp, 0);
 
 
-
-
             Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
 
 
@@ -140,8 +136,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
             result[1] = result[1] / result[3];
             result[2] = result[2] / result[3];
             result[3] = result[3] / result[3];
-
-
 
 
 
@@ -294,7 +288,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         current = SystemClock.elapsedRealtime();
         frametime = current-previous;
 
-        Log.d("TIME", String.valueOf(frametime));
+        //Log.d("TIME", String.valueOf(frametime));
 
         SFOGLSystemState.cleanupColorAndDepth(red, green, blue, 1);
 
@@ -326,6 +320,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
     public void updateAnimations(){
+
+        for (GraphicsAnimation anim : blockingAnimations){
+            try {
+                anim.goOn();
+            } catch (AnimationEndException e) {
+                blockingAnimations.remove(anim);
+                if(blockingAnimations.size() == 0){
+                    isBlocked = false;
+                }
+            }
+        }
+
         for (GraphicsAnimation anim : animations) {
             try {
                 anim.goOn();
@@ -382,11 +388,33 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     @Override
     public void addAnimation(GraphicsAnimation animation) {
-        animations.add(animation);
+        if(animation.isblocking()){
+            isBlocked = true;
+            blockingAnimations.add(animation);
+        }
+        else{
+
+            animations.add(animation);
+        }
+    }
+
+    @Override
+    public void animate(Object object) {
+        AnimationPacket packet = (AnimationPacket) object;
+        addAnimation(new SwitchAnimation(marbles.get(packet.getY1()*CUBE_COLS + packet.getX1()).getNode(), marbles.get(packet.getY2() * CUBE_COLS + packet.getX2()).getNode()));
     }
 
     public void testAnimation(){
         SwitchAnimation animation = new SwitchAnimation(marbles.get(12).getNode(), marbles.get(17).getNode());
         addAnimation(animation);
     }
+
+    public boolean isBlocked(){
+        return isBlocked;
+    }
+
+    public HashMap<Integer, Marble> getMarbles() {
+        return marbles;
+    }
+
 }

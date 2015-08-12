@@ -7,4 +7,5 @@ import thesis.Graphics.Exceptions.AnimationEndException;
  */
 public interface GraphicsAnimation {
     public void goOn() throws AnimationEndException;
+    public boolean isblocking();
 }

@@ -1,10 +1,12 @@
 package dagrada.marco.shariki;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Timer;
 
+import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.exceptions.GameEndException;
 import thesis.Graphics.GraphicsEngine;
 
@@ -96,9 +98,16 @@ public class GameStatusHandler{
             marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
             marbles[marble2row][marble2col] = buffer;
 
+            renderer.animate(new AnimationPacket(marble1row, marble1col, marble2row, marble2col));
+            int counter = 0;
+            while(renderer.isBlocked()){
+                counter ++;
+            }
+
+//            Log.e("COUNTER", String.valueOf(counter));
+
             boolean changed = false;
 
-            Timer timer = new Timer("Delay");
 
             while(checkForSegments()){
                 changed = true;
@@ -187,7 +196,6 @@ public class GameStatusHandler{
 
 
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,6 +211,8 @@ public class GameStatusHandler{
     public int getCurrentLevel() {
         return CURRENT_LEVEL;
     }
+
+
 
 
 
