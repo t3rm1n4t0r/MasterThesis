@@ -2,7 +2,7 @@ package dagrada.marco.shariki.controllers;
 
 import android.util.Log;
 
-import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.GameModelHandler;
 import dagrada.marco.shariki.exceptions.GameEndException;
 
 /**
@@ -10,15 +10,15 @@ import dagrada.marco.shariki.exceptions.GameEndException;
  */
 public class MatrixController {
 
-    private GameStatusHandler handler;
+    private GameModelHandler handler;
 
-    public MatrixController(GameStatusHandler handler){
+    public MatrixController(GameModelHandler handler){
         this. handler = handler;
 
     }
 
 
-    public GameStatusHandler getHandler() {
+    public GameModelHandler getHandler() {
         return handler;
     }
 
@@ -41,8 +41,8 @@ public class MatrixController {
     public int[] getMatrixIndeces(float x, float y, float screenWidth, float screenHeight){
 
         int indeces[] = new int[2];
-        indeces[0] = (int) (x / (screenWidth/GameStatusHandler.MAX_WIDTH));
-        indeces[1] = (int) (y / (screenWidth/GameStatusHandler.MAX_HEIGTH));
+        indeces[0] = (int) (x / (screenWidth/GameModelHandler.MAX_WIDTH));
+        indeces[1] = (int) (y / (screenWidth/GameModelHandler.MAX_HEIGTH));
         return indeces;
     }
     */

@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.GameModelHandler;
 import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.exceptions.GameEndException;
 
@@ -24,9 +24,9 @@ import static org.junit.Assert.assertTrue;
  *
  *
  */
-public class GameStatusHandlerTest {
+public class GameModelHandlerTest {
 
-    private GameStatusHandler handler;
+    private GameModelHandler handler;
     private ArrayList<String> list = new ArrayList<>();
 
     @Mock
@@ -37,7 +37,7 @@ public class GameStatusHandlerTest {
     @Before
     public void setUp(){
         renderer = Mockito.mock(GraphicsEngine.class);
-        handler = new GameStatusHandler(context, renderer);
+        handler = new GameModelHandler(context, renderer);
 
     }
 

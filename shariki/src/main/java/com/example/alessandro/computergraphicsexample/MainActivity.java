@@ -1,14 +1,13 @@
 package com.example.alessandro.computergraphicsexample;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
-import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.GameModelHandler;
 import dagrada.marco.shariki.controllers.MatrixController;
 import thesis.touch.GestureFilter;
 
@@ -23,7 +22,7 @@ public class MainActivity extends Activity {
 
         //Setting up levels for the game
         GraphicsRenderer renderer = new GraphicsRenderer(this);
-        GameStatusHandler handler = new GameStatusHandler(this, renderer);
+        GameModelHandler handler = new GameModelHandler(this, renderer);
         ArrayList<String> list = new ArrayList<>();
 
 

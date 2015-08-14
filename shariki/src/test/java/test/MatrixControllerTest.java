@@ -2,7 +2,7 @@ package test;
 
 import org.mockito.Mock;
 
-import dagrada.marco.shariki.GameStatusHandler;
+import dagrada.marco.shariki.GameModelHandler;
 
 /**
  * Created by Marco on 03/08/2015.
@@ -10,7 +10,7 @@ import dagrada.marco.shariki.GameStatusHandler;
 public class MatrixControllerTest {
 
     @Mock
-    GameStatusHandler handler;
+    GameModelHandler handler;
 
 
 

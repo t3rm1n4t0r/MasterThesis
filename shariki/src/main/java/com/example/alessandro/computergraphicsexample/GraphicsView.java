@@ -1,27 +1,11 @@
 package com.example.alessandro.computergraphicsexample;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 
-import java.util.ArrayList;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
-import dagrada.marco.shariki.GameStatusHandler;
-import dagrada.marco.shariki.MatrixChecker;
 import dagrada.marco.shariki.controllers.MatrixController;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
-import sfogl.integration.Node;
-import sfogl2.SFOGLSystemState;
-import shadow.math.SFMatrix3f;
-import shadow.math.SFTransform3f;
-import thesis.Graphics.NodesKeeper;
-import thesis.Graphics.ShadersKeeper;
 import thesis.touch.TouchActivity;
 
 

@@ -401,7 +401,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     @Override
     public void animate(Object object) {
         AnimationPacket packet = (AnimationPacket) object;
-        addAnimation(new SwitchAnimation(marbles.get(packet.getY1()*CUBE_COLS + packet.getX1()).getNode(), marbles.get(packet.getY2() * CUBE_COLS + packet.getX2()).getNode()));
+        addAnimation(new SwitchAnimation(marbles.get(packet.getX1()*CUBE_COLS + packet.getY1()).getNode(), marbles.get(packet.getX2() * CUBE_COLS + packet.getY2()).getNode()));
     }
 
     public void testAnimation(){

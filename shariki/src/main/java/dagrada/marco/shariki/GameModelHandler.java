@@ -13,7 +13,7 @@ import thesis.Graphics.GraphicsEngine;
 /**
  * Created by Marco on 23/07/2015.
  */
-public class GameStatusHandler{
+public class GameModelHandler {
 
     public static final int MAX_WIDTH = 5;
     public static final int MAX_HEIGTH = 5;
@@ -29,7 +29,7 @@ public class GameStatusHandler{
 
     Context context;
 
-    public GameStatusHandler(Context context, GraphicsEngine renderer){
+    public GameModelHandler(Context context, GraphicsEngine renderer){
         this.context = context;
         this.renderer = renderer;
         this.scorekeeper = new ScoreKeeper();
@@ -104,7 +104,7 @@ public class GameStatusHandler{
                 counter ++;
             }
 
-//            Log.e("COUNTER", String.valueOf(counter));
+            Log.e("COUNTER", String.valueOf(counter));
 
             boolean changed = false;
 
