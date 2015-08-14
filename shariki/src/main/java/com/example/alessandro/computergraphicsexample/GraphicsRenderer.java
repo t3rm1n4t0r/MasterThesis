@@ -17,6 +17,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dagrada.marco.shariki.GraphicsUpdatePacket;
+import dagrada.marco.shariki.MatrixChecker;
 import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.animations.SwitchAnimation;
 import thesis.Graphics.Exceptions.AnimationEndException;
@@ -102,35 +103,32 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         for (int i=0; i<marbles.size(); i++){
 
             current = marbles.get(i).getNode();
-            position[0] = current.getX();
-            position[1] = current.getY();
-            position[2] = current.getZ();
+            position[0] = 0;
+            position[1] = 0;
+            position[2] = 0;
             position[3] = 1;
 
 
-            temp [0] = current.getRelativeTransform().getV()[0];
-            temp [1] = current.getRelativeTransform().getV()[1];
-            temp [2] = current.getRelativeTransform().getV()[2];
-            temp [3] = 0;
-            temp [4] = current.getRelativeTransform().getV()[3];;
-            temp [5] = current.getRelativeTransform().getV()[4];
-            temp [6] = current.getRelativeTransform().getV()[5];
-            temp [7] = 0;
-            temp [8] = current.getRelativeTransform().getV()[6];
-            temp [9] = current.getRelativeTransform().getV()[7];
-            temp [10] = current.getRelativeTransform().getV()[8];
-            temp [11] = 0;
-            temp [12] = 0;
-            temp [13] = 0;
-            temp [14] = 0;
-            temp [15] = 1;
+            current.getOpenGLMatrix(temp);
 
+            /*
+            Log.d("X", String.valueOf(temp[12]));
+
+            Log.d("Y", String.valueOf(temp[13]));
+
+            Log.d("Z", String.valueOf(temp[14]));
+
+            /*
 
             Matrix.multiplyMM(matrix, 0,  mvp, 0, temp, 0);
 
+            //Matrix.multiplyMM(matrix, 0, temp, 0, mvp, 0);
 
             Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
 
+*/
+            Matrix.multiplyMV(result, 0, temp, 0, position, 0);
+            Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
 
             result[0] = result[0] / result[3];
             result[1] = result[1] / result[3];
@@ -139,13 +137,15 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
 
-//            printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix");
-//            printVector(result, "Node " + String.valueOf(i)+ " Final Position");
+            //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
+            //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
 
 
             float cubecoordX = ((1 + result[0]) * this.width)/2;
 
             float cubecoordY = ((1 - result[1]) * this.height)/2;
+
+            //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
 
 
 
@@ -343,15 +343,15 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
 
-    public void printMatrix(float[] matrix, String name){
+    public void printMatrix(float[] matrix, String name, int size){
 
         String matrice = new String();
         matrice+=name+":\n";
 
 
-        for (int i=0; i<CUBE_ROWS; i++){
-            for (int j=0; j<CUBE_COLS; j++){
-                matrice+=matrix[i*CUBE_COLS+j];
+        for (int i=0; i<size; i++){
+            for (int j=0; j<size; j++){
+                matrice+=matrix[i*size+j];
                 matrice+=" ";
             }
             matrice+="\n";
@@ -360,7 +360,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         Log.d(name, matrice);
     }
 
-    /*
+
     public void printVector(float[] vector, String name){
         //Need to see MVP to correctly introduce ray picking
         String matrice = new String();
@@ -377,7 +377,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         Log.d(name, matrice);
     }
-    */
+
 
     public void updateModel(Object obj){
 

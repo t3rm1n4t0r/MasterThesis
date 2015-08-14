@@ -109,22 +109,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
             position[3] = 1;
 
 
-            temp [0] = current.getRelativeTransform().getV()[0];
-            temp [1] = current.getRelativeTransform().getV()[1];
-            temp [2] = current.getRelativeTransform().getV()[2];
-            temp [3] = 0;
-            temp [4] = current.getRelativeTransform().getV()[3];;
-            temp [5] = current.getRelativeTransform().getV()[4];
-            temp [6] = current.getRelativeTransform().getV()[5];
-            temp [7] = 0;
-            temp [8] = current.getRelativeTransform().getV()[6];
-            temp [9] = current.getRelativeTransform().getV()[7];
-            temp [10] = current.getRelativeTransform().getV()[8];
-            temp [11] = 0;
-            temp [12] = 0;
-            temp [13] = 0;
-            temp [14] = 0;
-            temp [15] = 1;
+            current.getOpenGLMatrix(temp);
 
 
             Matrix.multiplyMM(matrix, 0,  mvp, 0, temp, 0);
