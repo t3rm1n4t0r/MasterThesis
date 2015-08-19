@@ -3,6 +3,8 @@ package dagrada.marco.shariki.animations;
 import android.renderscript.Matrix3f;
 import android.util.Log;
 
+import dagrada.marco.shariki.GameEvent;
+import dagrada.marco.shariki.GameStateHandler;
 import dagrada.marco.shariki.animations.utility.BezierCurve;
 import dagrada.marco.shariki.animations.utility.ParameterOutOfRangeException;
 import dagrada.marco.shariki.animations.utility.SecondOrderBezierCurve;
@@ -28,8 +30,9 @@ public class SwitchAnimation implements GraphicsAnimation {
     private static final int TOTAL_FRAMES = 15;
     private float current = 0;
     BezierCurve curvefront, curveback;
+    private GameEvent event;
 
-    public SwitchAnimation(Node node1, Node node2){
+    public SwitchAnimation(Node node1, Node node2, GameEvent event){
         this.node1 = node1;
         this.node2 = node2;
         startpoint = new SFVertex3f();
@@ -42,6 +45,7 @@ public class SwitchAnimation implements GraphicsAnimation {
 
         curvefront = new SecondOrderBezierCurve(startpoint, midpointfront, endpoint);
         curveback = new SecondOrderBezierCurve(endpoint, midpointback, startpoint);
+        this.event = event;
     }
 
     @Override
@@ -70,6 +74,7 @@ public class SwitchAnimation implements GraphicsAnimation {
 */
         }
         else{
+            event.notifyManagers();
             throw new AnimationEndException();
         }
     }

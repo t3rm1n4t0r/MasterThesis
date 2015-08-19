@@ -81,7 +81,7 @@ public class GameModelHandler {
         }
     }
 
-    private int[][] copyModel(){
+    public int[][] copyModel(){
         int[][] copy = new int[marbles.length][marbles[0].length];
         for (int i=0; i<marbles.length; i++){
             for (int j =0; j<marbles[i].length; j++){
@@ -91,20 +91,17 @@ public class GameModelHandler {
         return copy;
     }
 
-    public void tryToSwitch(int marble1row, int marble1col, int marble2row, int marble2col) throws GameEndException {
+
+
+    public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col) throws GameEndException {
         int buffer;
         if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
             buffer = marbles[marble1row][marble1col];
             marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
             marbles[marble2row][marble2col] = buffer;
 
-            renderer.animate(new AnimationPacket(marble1row, marble1col, marble2row, marble2col));
-            int counter = 0;
-            while(renderer.isBlocked()){
-                counter ++;
-            }
 
-            Log.e("COUNTER", String.valueOf(counter));
+            //Log.e("COUNTER", String.valueOf(counter));
 
             boolean changed = false;
 
@@ -213,7 +210,11 @@ public class GameModelHandler {
     }
 
 
+    public static int getMaxWidth() {
+        return MAX_WIDTH;
+    }
 
-
-
+    public static int getMaxHeigth() {
+        return MAX_HEIGTH;
+    }
 }

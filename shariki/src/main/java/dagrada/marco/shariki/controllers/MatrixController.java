@@ -25,7 +25,7 @@ public class MatrixController {
     public void switchPosition(int row1, int col1, int row2, int col2){
 
         try {
-            handler.tryToSwitch(row1, col1, row2, col2);
+            handler.switchMarbles(row1, col1, row2, col2);
         } catch (GameEndException e) {
             try {
                 handler.nextLevel();

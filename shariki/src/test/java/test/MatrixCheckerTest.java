@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import dagrada.marco.shariki.MatrixChecker;
@@ -17,6 +19,7 @@ import static org.junit.Assert.fail;
  * Created by Marco on 27/07/2015.
  */
 
+@RunWith(MockitoJUnitRunner.class)
 public class MatrixCheckerTest {
 
     @Mock
@@ -24,6 +27,8 @@ public class MatrixCheckerTest {
 
     @Mock
     Log log;
+
+
 
     @Test
     public void testCorrectMatrixRow() throws Exception{

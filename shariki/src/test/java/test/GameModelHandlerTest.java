@@ -1,13 +1,15 @@
 package test;
 
+
 import android.content.Context;
 
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,8 @@ import static org.junit.Assert.assertTrue;
  *
  *
  */
+
+@RunWith(MockitoJUnitRunner.class)
 public class GameModelHandlerTest {
 
     private GameModelHandler handler;
@@ -32,13 +36,14 @@ public class GameModelHandlerTest {
     @Mock
     GraphicsEngine renderer;
 
-    @Mock private Context context;
+    @Mock
+    Context context;
 
     @Before
     public void setUp(){
         renderer = Mockito.mock(GraphicsEngine.class);
+        context = Mockito.mock(Context.class);
         handler = new GameModelHandler(context, renderer);
-
     }
 
 
@@ -180,7 +185,7 @@ public class GameModelHandlerTest {
                 {1,2,1,1,2,2,1,2,2,-1}
         };
         handler.setMarbles(start);
-        handler.tryToSwitch(2, 2, 2, 3);
+        handler.switchMarbles(2, 2, 2, 3);
 
         assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
         assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));
@@ -212,7 +217,7 @@ public class GameModelHandlerTest {
         };
 
         handler.setMarbles(start);
-        handler.tryToSwitch(0, 0, 1, 0);
+        handler.switchMarbles(0, 0, 1, 0);
 
         assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
         assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));
@@ -242,7 +247,7 @@ public class GameModelHandlerTest {
         };
 
         handler.setMarbles(start);
-        handler.tryToSwitch(0,0,-1,0);
+        handler.switchMarbles(0, 0, -1, 0);
 
         assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
         assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));

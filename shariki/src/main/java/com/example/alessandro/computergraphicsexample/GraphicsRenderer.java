@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Observable;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -172,10 +173,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         this.context=context;
         model = new int[CUBE_ROWS][CUBE_COLS];
 
+        colors.put(-1, "#FFFFFFFF");
         colors.put(0, "#FFFFFFFF");
         colors.put(1, "#FFFF0000");
         colors.put(2, "#FF00FF00");
-        colors.put(-1, "#FFFFFFFF");
+        colors.put(3, "#FFFFFF00");
+        colors.put(4, "#FF00FFFF");
+        colors.put(5, "#FFFF00FF");
 
     }
 
@@ -401,11 +405,11 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     @Override
     public void animate(Object object) {
         AnimationPacket packet = (AnimationPacket) object;
-        addAnimation(new SwitchAnimation(marbles.get(packet.getX1()*CUBE_COLS + packet.getY1()).getNode(), marbles.get(packet.getX2() * CUBE_COLS + packet.getY2()).getNode()));
+        addAnimation(new SwitchAnimation(marbles.get(packet.getX1()*CUBE_COLS + packet.getY1()).getNode(), marbles.get(packet.getX2() * CUBE_COLS + packet.getY2()).getNode(), packet.getEvent()));
     }
 
     public void testAnimation(){
-        SwitchAnimation animation = new SwitchAnimation(marbles.get(12).getNode(), marbles.get(17).getNode());
+        SwitchAnimation animation = new SwitchAnimation(marbles.get(12).getNode(), marbles.get(17).getNode(), null);
         addAnimation(animation);
     }
 
