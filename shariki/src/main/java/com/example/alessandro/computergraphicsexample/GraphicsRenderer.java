@@ -75,7 +75,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private float[] mvp = new float[16];
 
     Node father;
-    private HashMap<Integer, Marble> marbles = new HashMap<>();
+
+    Marble[][] marbless = new Marble[CUBE_ROWS][CUBE_COLS];
+
     private int[][] model;
     private int score;
 
@@ -106,16 +108,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         //Log.d("WIDTH", String.valueOf(width));
        // Log.d("ACTUAL", String.valueOf(getActualWidth()));
 
-        for (int i=0; i<marbles.size(); i++){
-
-            current = marbles.get(i).getNode();
-            position[0] = 0;
-            position[1] = 0;
-            position[2] = 0;
-            position[3] = 1;
+        for (int i=0; i<CUBE_ROWS; i++) {
+            for (int j = 0; j < CUBE_COLS; j++) {
 
 
-            current.getOpenGLMatrix(temp);
+                current = marbless[i][j].getNode();
+                position[0] = 0;
+                position[1] = 0;
+                position[2] = 0;
+                position[3] = 1;
+
+
+                current.getOpenGLMatrix(temp);
 
             /*
             Log.d("X", String.valueOf(temp[12]));
@@ -133,39 +137,37 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
             Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
 
 */
-            Matrix.multiplyMV(result, 0, temp, 0, position, 0);
-            Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
+                Matrix.multiplyMV(result, 0, temp, 0, position, 0);
+                Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
 
-            result[0] = result[0] / result[3];
-            result[1] = result[1] / result[3];
-            result[2] = result[2] / result[3];
-            result[3] = result[3] / result[3];
-
-
-
-            //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
-            //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
+                result[0] = result[0] / result[3];
+                result[1] = result[1] / result[3];
+                result[2] = result[2] / result[3];
+                result[3] = result[3] / result[3];
 
 
-            float cubecoordX = ((1 + result[0]) * this.width)/2;
-
-            float cubecoordY = ((1 - result[1]) * this.height)/2;
-
-            //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
+                //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
+                //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
 
 
+                float cubecoordX = ((1 + result[0]) * this.width) / 2;
+
+                float cubecoordY = ((1 - result[1]) * this.height) / 2;
+
+                //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
 
 
-            float distance = (float) Math.sqrt((x-cubecoordX)*(x-cubecoordX) + (y-cubecoordY)*(y-cubecoordY));
+                float distance = (float) Math.sqrt((x - cubecoordX) * (x - cubecoordX) + (y - cubecoordY) * (y - cubecoordY));
 
-            if(distance<RADIUS){
+                if (distance < RADIUS) {
 
-                Log.d("DISTANCE", String.valueOf(distance));
-                Log.d("NodeX", String.valueOf(cubecoordX));
-                Log.d("NodeY", String.valueOf(cubecoordY));
-                return marbles.get(i).getIndices();
+                    Log.d("DISTANCE", String.valueOf(distance));
+                    Log.d("NodeX", String.valueOf(cubecoordX));
+                    Log.d("NodeY", String.valueOf(cubecoordY));
+                    return marbless[i][j].getIndices();
 
 
+                }
             }
         }
         throw new TouchedItemNotFoundException();
@@ -247,7 +249,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
                 int[] pos = new int[2];
                 pos[0] = i;
                 pos[1] = j;
-                marbles.put(i*CUBE_COLS + j, new Marble(node, pos));
+                marbless[i][j]= new Marble(node, pos);
             }
         }
 
@@ -318,9 +320,12 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         Node node;
 
 
-        for (int i=0; i<marbles.size(); i++){
-            node = marbles.get(i).getNode();
-            node.draw();
+        for (int i=0; i<CUBE_ROWS; i++){
+            for (int j=0; j<CUBE_COLS; j++){
+                node = marbless[i][j].getNode();
+                node.draw();
+
+            }
         }
 
 
@@ -447,20 +452,16 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     @Override
     public void animate(Object object) {
         AnimationPacket packet = (AnimationPacket) object;
-        addAnimation(new SwitchAnimation(marbles.get(packet.getX1()*CUBE_COLS + packet.getY1()).getNode(), marbles.get(packet.getX2() * CUBE_COLS + packet.getY2()).getNode(), packet.getEvent()));
+        addAnimation(new SwitchAnimation(marbless[packet.getX1()][packet.getY1()].getNode(), marbless[packet.getX2()][packet.getY2()].getNode(), packet.getEvent()));
     }
 
     public void testAnimation(){
-        SwitchAnimation animation = new SwitchAnimation(marbles.get(12).getNode(), marbles.get(17).getNode(), null);
+        SwitchAnimation animation = new SwitchAnimation(marbless[2][2].getNode(), marbless[3][2].getNode(), null);
         addAnimation(animation);
     }
 
     public boolean isBlocked(){
         return isBlocked;
-    }
-
-    public HashMap<Integer, Marble> getMarbles() {
-        return marbles;
     }
 
 }
