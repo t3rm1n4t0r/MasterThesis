@@ -7,7 +7,9 @@ import java.util.LinkedList;
  */
 public abstract class GameEvent{
 
-    private LinkedList<EventManager> managers = new LinkedList();
+    private LinkedList<EventManager> managers = new LinkedList<>();
+    private Object EventData = null;
+
 
     public void addManager(EventManager manager){
         managers.addLast(manager);
@@ -18,8 +20,26 @@ public abstract class GameEvent{
 
     public void notifyManagers(){
         for (EventManager  manager : managers) {
-            manager.notifyEventConclusion(this);
+            manager.notifyEventConclusion(this, null);
         }
+    }
+
+    public void notifyManagers(Object data){
+        for (EventManager  manager : managers) {
+            manager.notifyEventConclusion(this, data);
+        }
+    }
+
+    public Object getEventData() {
+        return EventData;
+    }
+
+    public void setEventData(Object eventData) {
+        EventData = eventData;
+    }
+
+    public LinkedList<EventManager> getManagers() {
+        return managers;
     }
 
     public abstract void happen();

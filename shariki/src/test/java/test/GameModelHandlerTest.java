@@ -179,9 +179,9 @@ public class GameModelHandlerTest {
 
         int[][] finalm={
                 {1,2,3,2,2,1,2,1,1,-1},
-                {1,3,1,2,1,1,2,1,-1,0},
-                {2,1,1,3,2,2,1,2,-1,0},
-                {1,1,3,2,1,2,2,1,-1,0},
+                {1,3,2,1,2,1,1,2,1,-1},
+                {2,1,2,1,3,2,2,1,2,-1},
+                {1,1,2,3,2,1,2,2,1,-1},
                 {1,2,1,1,2,2,1,2,2,-1}
         };
         handler.setMarbles(start);
@@ -192,40 +192,9 @@ public class GameModelHandlerTest {
         assertTrue(Arrays.equals(handler.getMarbles()[2], finalm[2]));
         assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
         assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
-        assertTrue(handler.getScorekeeper().getScore()== 60);
 
     }
 
-
-    @Test
-    public void testTryToSwitchWhichShouldNotSwitch() throws GameEndException {
-
-        int[][] start={
-                {1,2,1,2,2,1,2,1,1},
-                {1,2,2,1,2,1,1,2,1},
-                {2,1,1,2,1,2,2,1,2},
-                {1,1,2,1,2,1,2,2,1},
-                {1,2,1,1,2,2,1,2,2}
-        };
-
-        int[][] finalm={
-                {1,2,1,2,2,1,2,1,1},
-                {1,2,2,1,2,1,1,2,1},
-                {2,1,1,2,1,2,2,1,2},
-                {1,1,2,1,2,1,2,2,1},
-                {1,2,1,1,2,2,1,2,2}
-        };
-
-        handler.setMarbles(start);
-        handler.switchMarbles(0, 0, 1, 0);
-
-        assertTrue(Arrays.equals(handler.getMarbles()[0], finalm[0]));
-        assertTrue(Arrays.equals(handler.getMarbles()[1], finalm[1]));
-        assertTrue(Arrays.equals(handler.getMarbles()[2], finalm[2]));
-        assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
-        assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
-
-    }
 
     @Test
     public void testTryToSwitchWhichShouldNotSwitchBecauseOfBadIndices() throws GameEndException {

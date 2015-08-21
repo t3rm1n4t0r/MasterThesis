@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import dagrada.marco.shariki.controllers.MatrixController;
+import dagrada.marco.shariki.controllers.GameController;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
 import thesis.touch.TouchActivity;
 
@@ -14,9 +14,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     private Context context;
 
     private GraphicsRenderer renderer;
-    private MatrixController controller;
+    private GameController controller;
 
-    public GraphicsView(Context context, MatrixController controller, GraphicsRenderer renderer) {
+    public GraphicsView(Context context, GameController controller, GraphicsRenderer renderer) {
         super(context);
         setEGLContextClientVersion(2);
         this.context=context;

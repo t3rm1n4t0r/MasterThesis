@@ -10,8 +10,11 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -78,8 +81,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     float t=0;
 
-    private LinkedList<GraphicsAnimation> animations = new LinkedList();
-    private LinkedList<GraphicsAnimation> blockingAnimations = new LinkedList();
+    private LinkedList<GraphicsAnimation> animations = new LinkedList<>();
+    private LinkedList<GraphicsAnimation> blockingAnimations = new LinkedList<>();
+    private LinkedList<GraphicsAnimation> toBeAdded = new LinkedList<>();
+    private LinkedList<GraphicsAnimation> toBeAddedBlocking = new LinkedList<>();
 
     private long current=0;
     private long previous=0;
@@ -325,23 +330,61 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void updateAnimations(){
 
-        for (GraphicsAnimation anim : blockingAnimations){
-            try {
-                anim.goOn();
-            } catch (AnimationEndException e) {
-                blockingAnimations.remove(anim);
-                if(blockingAnimations.size() == 0){
-                    isBlocked = false;
-                }
-            }
+        if(toBeAddedBlocking.size() > 0){
+            blockingAnimations.addAll(toBeAddedBlocking);
+            toBeAddedBlocking = new LinkedList<>();
+
+        }
+        if(toBeAdded.size() > 0) {
+            animations.addAll(toBeAdded);
+            toBeAdded = new LinkedList<>();
         }
 
-        for (GraphicsAnimation anim : animations) {
-            try {
-                anim.goOn();
-            } catch (AnimationEndException e) {
-                animations.remove(anim);
+
+        List<GraphicsAnimation> toRemove = new LinkedList<>();
+
+        for (Iterator<GraphicsAnimation> it = blockingAnimations.iterator(); it.hasNext();){
+            GraphicsAnimation anim = it.next();
+
+            anim.goOn();
+            if(anim.isEnded()){
+
+                toRemove.add(anim);
             }
+
+        }
+        try{
+            blockingAnimations.removeAll(toRemove);
+
+        }
+        catch(ConcurrentModificationException e){
+
+        }
+
+        if(blockingAnimations.size() == 0){
+            isBlocked = false;
+        }
+
+        toRemove = new LinkedList<>();
+
+        for (Iterator<GraphicsAnimation> it = animations.iterator(); it.hasNext();){
+            GraphicsAnimation anim = it.next();
+
+            anim.goOn();
+            if(anim.isEnded()){
+                toRemove.add(anim);
+
+            }
+
+        }
+
+        try{
+            animations.removeAll(toRemove);
+
+        }
+        catch (ConcurrentModificationException e)
+        {
+
         }
     }
 
@@ -394,11 +437,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     public void addAnimation(GraphicsAnimation animation) {
         if(animation.isblocking()){
             isBlocked = true;
-            blockingAnimations.add(animation);
+            toBeAddedBlocking.add(animation);
         }
         else{
-
-            animations.add(animation);
+            toBeAdded.add(animation);
         }
     }
 

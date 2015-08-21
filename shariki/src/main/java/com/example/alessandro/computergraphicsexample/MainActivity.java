@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import dagrada.marco.shariki.GameModelHandler;
 import dagrada.marco.shariki.GameStateHandler;
-import dagrada.marco.shariki.controllers.MatrixController;
+import dagrada.marco.shariki.controllers.GameController;
 import thesis.touch.GestureFilter;
 
 
@@ -27,9 +27,9 @@ public class MainActivity extends Activity {
         ArrayList<String> list = new ArrayList<>();
 
         GameStateHandler stateHandler = new GameStateHandler(handler, renderer);
-        renderer.addObserver(stateHandler);
 
-        MatrixController controller = new MatrixController(handler);
+
+        GameController controller = new GameController(stateHandler);
 
 
         GraphicsView view = new GraphicsView(this, controller, renderer);

@@ -15,19 +15,22 @@ import thesis.Graphics.GraphicsEngine;
  */
 public class GameModelHandler {
 
-    public static final int MAX_WIDTH = 5;
-    public static final int MAX_HEIGTH = 5;
-    private static final int MIN_SEGMENT_SIZE = 3;
-    private static final int CHECK_TIME_DELAY = 1500;
-    private static final int SCORE_FOR_MARBLE = 20;
+    public final int MAX_WIDTH = 5;
+    public final int MAX_HEIGTH = 5;
+    private final int MIN_SEGMENT_SIZE = 3;
+    private final int CHECK_TIME_DELAY = 1500;
+    private final int SCORE_FOR_MARBLE = 20;
 
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
     private GraphicsEngine renderer;
+
     private ScoreKeeper scorekeeper;
 
     Context context;
+
+    private boolean gameEnded;
 
     public GameModelHandler(Context context, GraphicsEngine renderer){
         this.context = context;
@@ -52,6 +55,7 @@ public class GameModelHandler {
         else{
             CURRENT_LEVEL = level;
             setMarbles(MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL)));
+            gameEnded = false;
             GraphicsUpdatePacket packet = new GraphicsUpdatePacket(marbles, 0);
             renderer.updateModel(packet);
         }
@@ -93,51 +97,13 @@ public class GameModelHandler {
 
 
 
-    public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col) throws GameEndException {
+    public void switchMarbles(int marble1row, int marble1col, int marble2row, int marble2col){
         int buffer;
         if(!(marble1row <0 || marble1col <0 || marble2row <0 || marble2col <0 || marble1row > MAX_WIDTH-1 || marble2row > MAX_WIDTH-1 || marble1col > MAX_HEIGTH-1 || marble2col > MAX_HEIGTH-1)){
             buffer = marbles[marble1row][marble1col];
             marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
             marbles[marble2row][marble2col] = buffer;
 
-
-            //Log.e("COUNTER", String.valueOf(counter));
-
-            boolean changed = false;
-
-
-            while(checkForSegments()){
-                changed = true;
-
-                updateScore();
-
-
-                /*TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-*/
-                        compactMarbles();
-/*
-                    }
-                };
-                timer.schedule(task, CHECK_TIME_DELAY);
-*/
-
-                if(checkForEndGame()){
-
-                    throw new GameEndException();
-
-                }
-                updateRenderer();
-
-
-            }
-
-            if(!changed){
-                buffer = marbles[marble1row][marble1col];
-                marbles[marble1row][marble1col] = marbles[marble2row][marble2col];
-                marbles[marble2row][marble2col] = buffer;
-            }
         }
 
 
@@ -154,22 +120,24 @@ public class GameModelHandler {
         }
     }
 
-    public void updateRenderer(){
-        GraphicsUpdatePacket packet = new GraphicsUpdatePacket(copyModel(), scorekeeper.getScore());
-        renderer.updateModel(packet);
-        renderer.update();
-    }
 
     public ScoreKeeper getScorekeeper() {
         return scorekeeper;
     }
 
     public boolean checkForEndGame(){
+
         try {
-            return MatrixChecker.CheckForEndGame(getMarbles(), MAX_WIDTH, MAX_HEIGTH);
+            this.gameEnded = MatrixChecker.CheckForEndGame(getMarbles(),  MAX_WIDTH, MAX_HEIGTH);
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
+
+        return gameEnded;
+    }
+
+    public boolean isGameEnded(){
+        return this.gameEnded;
     }
 
     public boolean checkForSegments(){
@@ -210,11 +178,16 @@ public class GameModelHandler {
     }
 
 
-    public static int getMaxWidth() {
-        return MAX_WIDTH;
+    public int getMaxWidth() {
+        return this.MAX_WIDTH;
     }
 
-    public static int getMaxHeigth() {
-        return MAX_HEIGTH;
+    public int getMaxHeigth() {
+
+        return this.MAX_HEIGTH;
     }
+
+
+
+
 }

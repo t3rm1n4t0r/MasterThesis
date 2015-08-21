@@ -22,7 +22,7 @@ import thesis.Graphics.GraphicsAnimation;
 
 public class SwitchAnimation implements GraphicsAnimation {
 
-    private static final float depth = 0.1f;
+    private final float depth = 0.1f;
     Node node1;
     Node node2;
     private SFVertex3f startpoint, endpoint, midpointfront, midpointback;
@@ -31,6 +31,7 @@ public class SwitchAnimation implements GraphicsAnimation {
     private float current = 0;
     BezierCurve curvefront, curveback;
     private GameEvent event;
+    private boolean isEnded;
 
     public SwitchAnimation(Node node1, Node node2, GameEvent event){
         this.node1 = node1;
@@ -46,23 +47,26 @@ public class SwitchAnimation implements GraphicsAnimation {
         curvefront = new SecondOrderBezierCurve(startpoint, midpointfront, endpoint);
         curveback = new SecondOrderBezierCurve(endpoint, midpointback, startpoint);
         this.event = event;
+        this.isEnded = false;
     }
 
     @Override
-    public void goOn() throws AnimationEndException {
+    public void goOn() {
 
-        if(current < TOTAL_ROTATION){
+        if(!isEnded) {
 
-            current += TOTAL_ROTATION/TOTAL_FRAMES;
-            if(current > TOTAL_ROTATION)
-                current = TOTAL_ROTATION;
+            if (current < TOTAL_ROTATION) {
 
-            try {
-                node1.getRelativeTransform().setPosition(curvefront.getValue(current));
-                node2.getRelativeTransform().setPosition(curveback.getValue(current));
-            } catch (ParameterOutOfRangeException e) {
-                e.printStackTrace();
-            }
+                current += TOTAL_ROTATION / TOTAL_FRAMES;
+                if (current > TOTAL_ROTATION)
+                    current = TOTAL_ROTATION;
+
+                try {
+                    node1.getRelativeTransform().setPosition(curvefront.getValue(current));
+                    node2.getRelativeTransform().setPosition(curveback.getValue(current));
+                } catch (ParameterOutOfRangeException e) {
+                    e.printStackTrace();
+                }
 
 
 
@@ -72,16 +76,24 @@ public class SwitchAnimation implements GraphicsAnimation {
 
             Log.d("NODE2", String.valueOf(node2.getX()) +" "+String.valueOf(node2.getY()) + " " + String.valueOf(node2.getZ()) );
 */
-        }
-        else{
-            event.notifyManagers();
-            throw new AnimationEndException();
+            } else {
+                if (event != null) {
+                    this.isEnded = true;
+                    event.notifyManagers();
+
+                }
+            }
         }
     }
 
     @Override
     public boolean isblocking() {
         return true;
+    }
+
+    @Override
+    public boolean isEnded() {
+        return this.isEnded;
     }
 
 }
