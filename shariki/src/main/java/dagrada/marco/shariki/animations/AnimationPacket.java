@@ -8,7 +8,7 @@ import dagrada.marco.shariki.GameEvent;
 public class AnimationPacket {
     private int x1, y1, x2, y2;
     private GameEvent event;
-    public AnimationPacket(int x1, int y1, int x3, int y2, GameEvent event){
+    public AnimationPacket(int x1, int y1, int x2, int y2, GameEvent event){
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;

@@ -2,9 +2,10 @@ package dagrada.marco.shariki.Events;
 
 import dagrada.marco.shariki.GameEvent;
 import dagrada.marco.shariki.GameModelHandler;
-import dagrada.marco.shariki.GraphicsUpdatePacket;
+import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.animations.WaitAnimation;
+import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
 import thesis.Graphics.GraphicsEngine;
 
 /**
@@ -49,7 +50,7 @@ public class SwitchOnModelAndCheckEvent extends GameEvent {
 
         }
 
-        setEventData(switched);
+        setEventData(new ModelUpdatePacket(switched, false));
 
     }
 

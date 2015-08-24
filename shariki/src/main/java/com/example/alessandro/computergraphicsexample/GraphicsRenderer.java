@@ -15,16 +15,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import dagrada.marco.shariki.GraphicsUpdatePacket;
-import dagrada.marco.shariki.MatrixChecker;
+import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.animations.SwitchAnimation;
-import thesis.Graphics.Exceptions.AnimationEndException;
 import thesis.Graphics.GraphicsEngine;
 import dagrada.marco.shariki.Marble;
 import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
@@ -233,7 +230,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj");
 
-        float scale = 1.5f;
+        float scale = 1.6f;
 
 
         for (int i=0; i<CUBE_COLS; i++){
@@ -453,6 +450,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     public void animate(Object object) {
         AnimationPacket packet = (AnimationPacket) object;
         addAnimation(new SwitchAnimation(marbless[packet.getX1()][packet.getY1()].getNode(), marbless[packet.getX2()][packet.getY2()].getNode(), packet.getEvent()));
+        Log.d("PRIMA", String.valueOf(packet.getX1()) + " " + String.valueOf(packet.getY1()));
+        Log.d("SECONDA", String.valueOf(packet.getX2()) + " " + String.valueOf(packet.getY2()));
+
     }
 
     public void testAnimation(){

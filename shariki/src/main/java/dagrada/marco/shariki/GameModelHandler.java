@@ -4,9 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Timer;
 
-import dagrada.marco.shariki.animations.AnimationPacket;
+import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.exceptions.GameEndException;
 import thesis.Graphics.GraphicsEngine;
 
@@ -47,17 +46,30 @@ public class GameModelHandler {
 
     public void loadLevel (int level)throws Exception{
 
-        if (level >= levels.size())
+        Log.d("LEVEL LOADED", String.valueOf(level));
+        Log.d("LEVELS", String.valueOf(levels.size()));
+
+        if (level >= levels.size()) {
+
+            Log.d("ARGH", "GOSH");
             throw new GameEndException();
+        }
         else if(level < 0){
+
+            Log.d("ARGH", "GOSH2");
             throw new Exception("Level doesn't exists");
+
+
         }
         else{
+
+            gameEnded = false;
             CURRENT_LEVEL = level;
             setMarbles(MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL)));
-            gameEnded = false;
+
             GraphicsUpdatePacket packet = new GraphicsUpdatePacket(marbles, 0);
             renderer.updateModel(packet);
+
         }
 
     }

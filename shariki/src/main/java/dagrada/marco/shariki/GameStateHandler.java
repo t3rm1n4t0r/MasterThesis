@@ -5,6 +5,8 @@ import android.util.Log;
 import dagrada.marco.shariki.Events.CheckandUpdateScoreLoopEvent;
 import dagrada.marco.shariki.Events.SwitchMarbleGraphicsEvent;
 import dagrada.marco.shariki.Events.SwitchOnModelAndCheckEvent;
+import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
+import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
 import thesis.Graphics.GraphicsEngine;
 
 /**
@@ -46,15 +48,22 @@ public class GameStateHandler implements EventManager{
     public void notifyEventConclusion(GameEvent event, Object data) {
 
         if(data != null){
-            boolean updated = (boolean) data;
+            boolean updated = ((ModelUpdatePacket) data).isChanged();
+            boolean ended =  ((ModelUpdatePacket) data).isGameEnd();
+
             if(handler.isGameEnded()) {
                 try {
                     handler.nextLevel();
+                    engine.updateModel(new GraphicsUpdatePacket(handler.getMarbles(), 0));
+                    engine.update();
                 } catch (Exception e1) {
-                    Log.d("GAME END", "<---");
+
+                    e1.printStackTrace();
+                    Log.d("GAME END", "<----");
                 }
             }
-            if(updated) {
+
+            if(updated && !ended) {
                 CheckandUpdateScoreLoopEvent event3 = new CheckandUpdateScoreLoopEvent(handler, engine);
                 event3.addManager(this);
                 queueManager.addToQueue(event3);

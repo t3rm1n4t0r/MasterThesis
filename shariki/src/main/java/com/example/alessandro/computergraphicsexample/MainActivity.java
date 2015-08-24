@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
         setContentView(view);
 
         list.add(0, "level0.txt");
+        list.add(1, "level2.txt");
         try {
             handler.loadGame(list);
         } catch (Exception e) {

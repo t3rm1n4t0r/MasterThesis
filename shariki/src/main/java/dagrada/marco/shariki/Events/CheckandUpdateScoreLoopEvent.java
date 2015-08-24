@@ -1,11 +1,10 @@
 package dagrada.marco.shariki.Events;
 
-import android.util.Log;
-
 import dagrada.marco.shariki.GameEvent;
 import dagrada.marco.shariki.GameModelHandler;
-import dagrada.marco.shariki.GraphicsUpdatePacket;
+import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.animations.WaitAnimation;
+import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
 import thesis.Graphics.GraphicsEngine;
 
 /**
@@ -28,7 +27,6 @@ public class CheckandUpdateScoreLoopEvent extends GameEvent {
     public void happen() {
 
         handler.compactMarbles();
-        handler.checkForEndGame();
 
         updateEngine();
 
@@ -41,7 +39,10 @@ public class CheckandUpdateScoreLoopEvent extends GameEvent {
 
         }
 
-        setEventData(updated);
+        ModelUpdatePacket packet = new ModelUpdatePacket( updated,
+                handler.checkForEndGame());
+
+        setEventData(packet);
 
 
 

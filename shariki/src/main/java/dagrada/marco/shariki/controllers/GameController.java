@@ -25,9 +25,9 @@ public class GameController {
 
     public void switchPosition(int row1, int col1, int row2, int col2){
 
-        Log.d("PRIMO", String.valueOf(row1)+ " "+ String.valueOf(col1));
+        //Log.d("PRIMO", String.valueOf(row1)+ " "+ String.valueOf(col1));
 
-        Log.d("SECONDO", String.valueOf(row2)+ " "+ String.valueOf(col2));
+        //Log.d("SECONDO", String.valueOf(row2)+ " "+ String.valueOf(col2));
 
         handler.switchMarbles(row1, col1, row2, col2);
 
