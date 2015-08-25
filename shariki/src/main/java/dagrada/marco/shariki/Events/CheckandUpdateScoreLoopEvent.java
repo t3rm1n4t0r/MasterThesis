@@ -28,6 +28,8 @@ public class CheckandUpdateScoreLoopEvent extends GameEvent {
 
         handler.compactMarbles();
 
+
+
         updateEngine();
 
         if(handler.checkForSegments()){

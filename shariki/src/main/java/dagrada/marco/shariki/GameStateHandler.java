@@ -1,12 +1,16 @@
 package dagrada.marco.shariki;
 
+import android.content.Context;
 import android.util.Log;
 
 import dagrada.marco.shariki.Events.CheckandUpdateScoreLoopEvent;
 import dagrada.marco.shariki.Events.SwitchMarbleGraphicsEvent;
 import dagrada.marco.shariki.Events.SwitchOnModelAndCheckEvent;
+import dagrada.marco.shariki.animations.WaitAnimation;
+import dagrada.marco.shariki.animations.WinningAnimation;
 import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
+import dagrada.marco.shariki.exceptions.GameEndException;
 import thesis.Graphics.GraphicsEngine;
 
 /**
@@ -18,8 +22,10 @@ public class GameStateHandler implements EventManager{
     private GameModelHandler handler;
     private GraphicsEngine engine;
     private EventQueueManager queueManager = new EventQueueManager();
+    private Context context;
 
-    public GameStateHandler(GameModelHandler handler, GraphicsEngine engine){
+    public GameStateHandler(Context context, GameModelHandler handler, GraphicsEngine engine){
+        this.context = context;
         this.handler = handler;
         this.engine = engine;
     }
@@ -58,8 +64,10 @@ public class GameStateHandler implements EventManager{
                     engine.update();
                 } catch (Exception e1) {
 
-                    e1.printStackTrace();
-                    Log.d("GAME END", "<----");
+                    //e1.printStackTrace();
+                    if(e1.getClass() == GameEndException.class)
+                        engine.addAnimation(new WinningAnimation(context));
+
                 }
             }
 

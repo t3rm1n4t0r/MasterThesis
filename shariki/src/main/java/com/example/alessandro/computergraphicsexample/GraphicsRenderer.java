@@ -464,4 +464,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         return isBlocked;
     }
 
+    public Context getContext() {
+        return context;
+    }
 }

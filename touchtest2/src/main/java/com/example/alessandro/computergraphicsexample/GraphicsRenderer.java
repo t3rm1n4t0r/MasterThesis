@@ -305,6 +305,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //Log.e("Graphics View Size", Arrays.toString(viewport));
     }
 
+
+
     public void printMatrix(float[] matrix, String name){
         //Need to see MVP to correctly introduce ray picking
         String matrice = new String();
@@ -337,4 +339,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         Log.d(name, matrice);
     }
+
+
 }

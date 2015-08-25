@@ -51,12 +51,10 @@ public class GameModelHandler {
 
         if (level >= levels.size()) {
 
-            Log.d("ARGH", "GOSH");
             throw new GameEndException();
         }
         else if(level < 0){
 
-            Log.d("ARGH", "GOSH2");
             throw new Exception("Level doesn't exists");
 
 

@@ -20,6 +20,7 @@ public class NodesKeeper {
     private ModelsKeeper modelskeeper;
     private MeshesKeeper mesheskeeper;
     private TexturesKeeper texturekeeper;
+    private Context context;
 
     private static HashMap<String, Node> nodes = new HashMap<String, Node>();
 
