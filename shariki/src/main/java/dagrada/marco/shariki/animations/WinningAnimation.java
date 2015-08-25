@@ -20,7 +20,7 @@ public class WinningAnimation implements GraphicsAnimation {
 
     public WinningAnimation(Context context){
         node = NodesKeeper.generateNode(context, "stdShader" ,"#FFFFD700" , "trophy.obj");
-        node.getRelativeTransform().setPosition(0, -0.2f, 0);
+        node.getRelativeTransform().setPosition(0, -0.2f, 0.5f);
         node.updateTree(new SFTransform3f());
         t=0;
     }

@@ -57,6 +57,12 @@ public class GameStateHandler implements EventManager{
             boolean updated = ((ModelUpdatePacket) data).isChanged();
             boolean ended =  ((ModelUpdatePacket) data).isGameEnd();
 
+            if(updated && !handler.isGameEnded()) {
+                CheckandUpdateScoreLoopEvent event3 = new CheckandUpdateScoreLoopEvent(handler, engine);
+                event3.addManager(this);
+                queueManager.addToQueue(event3);
+            }
+
             if(handler.isGameEnded()) {
                 try {
                     handler.nextLevel();
@@ -71,11 +77,7 @@ public class GameStateHandler implements EventManager{
                 }
             }
 
-            if(updated && !ended) {
-                CheckandUpdateScoreLoopEvent event3 = new CheckandUpdateScoreLoopEvent(handler, engine);
-                event3.addManager(this);
-                queueManager.addToQueue(event3);
-            }
+
 
         }
 
