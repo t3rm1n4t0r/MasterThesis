@@ -390,7 +390,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         }
     }
 
-
+/*
 
     public void printMatrix(float[] matrix, String name, int size){
 
@@ -426,6 +426,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         Log.d(name, matrice);
     }
+    */
 
 
     public void updateModel(Object obj){

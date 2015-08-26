@@ -33,12 +33,7 @@ public class MatrixChecker {
             int count=0;
             for (int i=0; i<matrix.length;i++)
             {
-                if(count >= minsize){
-                    for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
-                        matrix[i-1][k] =BLOWN_MARBLE;
-                    }
-                    found = true;
-                }
+
                 count = 0;
                 last = matrix[i][0];
                 for (int j=0;j<matrix[i].length; j++){
@@ -60,18 +55,20 @@ public class MatrixChecker {
 
                 }
 
+                if(count >= minsize){
+                    for (int k=matrix[i].length-count; k<matrix[i].length; k++){
+                        matrix[i][k] =BLOWN_MARBLE;
+                    }
+                    found = true;
+                }
+
             }
 
             count=0;
 
             for (int i=0; i<matrix.length;i++)
             {
-                if(count >= minsize){
-                    for (int k=matrix[i-1].length-count; k<matrix[i-1].length; k++){
-                        matrix[k][i-1] =BLOWN_MARBLE;
-                    }
-                    found = true;
-                }
+
                 count = 0;
                 last = matrix[0][i];
                 for (int j=0;j<matrix[i].length; j++){
@@ -91,6 +88,13 @@ public class MatrixChecker {
                         count++;
                     }
 
+                }
+
+                if(count >= minsize){
+                    for (int k=matrix[i].length-count; k<matrix[i].length; k++){
+                        matrix[k][i] =BLOWN_MARBLE;
+                    }
+                    found = true;
                 }
 
             }

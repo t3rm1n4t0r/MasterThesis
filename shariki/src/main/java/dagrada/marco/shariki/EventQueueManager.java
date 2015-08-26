@@ -30,5 +30,9 @@ public class EventQueueManager {
         }
     }
 
+    public int getQueueSize(){
+        return list.size();
+    }
+
 
 }

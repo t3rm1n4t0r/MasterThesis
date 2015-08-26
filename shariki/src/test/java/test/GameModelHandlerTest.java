@@ -34,16 +34,18 @@ public class GameModelHandlerTest {
     private ArrayList<String> list = new ArrayList<>();
 
     @Mock
-    GraphicsEngine renderer;
-
-    @Mock
     Context context;
 
     @Before
     public void setUp(){
-        renderer = Mockito.mock(GraphicsEngine.class);
         context = Mockito.mock(Context.class);
-        handler = new GameModelHandler(context, renderer);
+        handler = new GameModelHandler(context);
+    }
+
+    @Test(expected = Exception.class)
+    public void testLoadGame() throws Exception {
+        list.add(0, "level0.txt");
+        handler.loadGame(list);
     }
 
 
@@ -225,6 +227,108 @@ public class GameModelHandlerTest {
         assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
 
     }
+
+    @Test
+    public void testUpdateScore(){
+
+        int[][] start={
+                {0,2,1,2,2,1,2,1,1},
+                {0,2,2,1,2,1,1,2,1},
+                {0,1,1,2,1,2,2,1,2},
+                {0,1,2,1,2,1,2,2,1},
+                {0,2,1,1,2,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+        handler.updateScore();
+
+        assertTrue(handler.getScorekeeper().getScore() == 100);
+
+    }
+
+    @Test
+    public void testUpdateScore2(){
+
+        int[][] start={
+                {0,2,1,2,2,1,2,1,1},
+                {0,2,2,1,2,1,1,2,1},
+                {0,0,0,0,1,2,2,1,2},
+                {0,1,2,1,2,1,2,2,1},
+                {0,2,1,1,2,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+        handler.updateScore();
+
+        assertTrue(handler.getScorekeeper().getScore() == 160);
+
+    }
+
+    @Test
+    public void testCheckForEndGameTrue(){
+
+        int[][] start={
+                {0,2,1,2,-1,1,2,1,1},
+                {0,2,2,1,-1,1,1,2,1},
+                {0,0,0,0,-1,2,2,1,2},
+                {0,1,2,1,-1,1,2,2,1},
+                {0,2,1,1,-1,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+
+
+        assertTrue(handler.checkForEndGame());
+
+    }
+
+    @Test
+    public void testCheckForEndGameFalse(){
+
+        int[][] start={
+                {0,2,1,2,1,1,2,1,1},
+                {0,2,2,1,1,1,1,2,1},
+                {0,0,0,0,1,2,2,1,2},
+                {0,1,2,1,1,1,2,2,1},
+                {0,2,1,1,1,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+
+
+        assertFalse(handler.checkForEndGame());
+
+    }
+
+    @Test
+    public void testIsGameEnded(){
+
+        int[][] start={
+                {0,2,1,2,1,1,2,1,1},
+                {0,2,2,1,1,1,1,2,1},
+                {0,0,0,0,-1,2,2,1,2},
+                {0,1,2,1,1,1,2,2,1},
+                {0,2,1,1,1,2,1,2,2}
+        };
+
+        handler.setMarbles(start);
+        handler.checkForEndGame();
+
+
+        assertTrue(handler.isGameEnded());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

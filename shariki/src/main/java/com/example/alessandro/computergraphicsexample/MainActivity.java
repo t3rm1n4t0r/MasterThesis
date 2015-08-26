@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 
         //Setting up levels for the game
         GraphicsRenderer renderer = new GraphicsRenderer(this);
-        GameModelHandler handler = new GameModelHandler(this, renderer);
+        GameModelHandler handler = new GameModelHandler(this);
         ArrayList<String> list = new ArrayList<>();
 
         GameStateHandler stateHandler = new GameStateHandler(this, handler, renderer);
@@ -41,11 +41,8 @@ public class MainActivity extends Activity {
 
         list.add(0, "level0.txt");
         list.add(1, "level2.txt");
-        try {
-            handler.loadGame(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        stateHandler.startGame(list);
 
     }
 

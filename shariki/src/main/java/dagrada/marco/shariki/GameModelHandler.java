@@ -14,16 +14,14 @@ import thesis.Graphics.GraphicsEngine;
  */
 public class GameModelHandler {
 
-    public final int MAX_WIDTH = 5;
-    public final int MAX_HEIGTH = 5;
+    private final int MAX_WIDTH = 5;
+    private final int MAX_HEIGTH = 5;
     private final int MIN_SEGMENT_SIZE = 3;
-    private final int CHECK_TIME_DELAY = 1500;
     private final int SCORE_FOR_MARBLE = 20;
 
     private int[][] marbles;
     private ArrayList<String> levels;
     private int CURRENT_LEVEL;
-    private GraphicsEngine renderer;
 
     private ScoreKeeper scorekeeper;
 
@@ -31,9 +29,8 @@ public class GameModelHandler {
 
     private boolean gameEnded;
 
-    public GameModelHandler(Context context, GraphicsEngine renderer){
+    public GameModelHandler(Context context){
         this.context = context;
-        this.renderer = renderer;
         this.scorekeeper = new ScoreKeeper();
     }
 
@@ -44,10 +41,9 @@ public class GameModelHandler {
 
     }
 
-    public void loadLevel (int level)throws Exception{
-
-        Log.d("LEVEL LOADED", String.valueOf(level));
-        Log.d("LEVELS", String.valueOf(levels.size()));
+    private void loadLevel (int level)throws Exception{
+        //Log.d("LEVEL LOADED", String.valueOf(level));
+        //Log.d("LEVELS", String.valueOf(levels.size()));
 
         if (level >= levels.size()) {
 
@@ -65,8 +61,6 @@ public class GameModelHandler {
             CURRENT_LEVEL = level;
             setMarbles(MatrixFileReader.getMatrix(context, levels.get(CURRENT_LEVEL)));
 
-            GraphicsUpdatePacket packet = new GraphicsUpdatePacket(marbles, 0);
-            renderer.updateModel(packet);
 
         }
 

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import dagrada.marco.shariki.GameModelHandler;
 import dagrada.marco.shariki.GameStateHandler;
+import dagrada.marco.shariki.communicationpackets.SwitchDataPacket;
 import dagrada.marco.shariki.exceptions.GameEndException;
 
 /**
@@ -29,7 +30,8 @@ public class GameController {
 
         //Log.d("SECONDO", String.valueOf(row2)+ " "+ String.valueOf(col2));
 
-        handler.switchMarbles(row1, col1, row2, col2);
+        SwitchDataPacket packet = new SwitchDataPacket(row1, col1, row2, col2);
+        handler.startEventChain(packet);
 
     }
 
