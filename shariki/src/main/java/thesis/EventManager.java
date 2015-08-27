@@ -1,4 +1,4 @@
-package dagrada.marco.shariki;
+package thesis;
 
 /**
  * Created by Marco on 19/08/2015.

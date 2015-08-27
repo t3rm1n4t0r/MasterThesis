@@ -1,4 +1,4 @@
-package dagrada.marco.shariki;
+package dagrada.marco.shariki.core;
 
 import android.util.Log;
 

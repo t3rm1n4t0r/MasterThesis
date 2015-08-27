@@ -1,7 +1,6 @@
 package dagrada.marco.shariki.Events;
 
-import dagrada.marco.shariki.GameEvent;
-import dagrada.marco.shariki.GameStateHandler;
+import thesis.GameEvent;
 import dagrada.marco.shariki.animations.AnimationPacket;
 import thesis.Graphics.GraphicsEngine;
 

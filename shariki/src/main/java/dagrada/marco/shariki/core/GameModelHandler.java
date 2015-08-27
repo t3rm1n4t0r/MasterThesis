@@ -1,13 +1,10 @@
-package dagrada.marco.shariki;
+package dagrada.marco.shariki.core;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.exceptions.GameEndException;
-import thesis.Graphics.GraphicsEngine;
 
 /**
  * Created by Marco on 23/07/2015.

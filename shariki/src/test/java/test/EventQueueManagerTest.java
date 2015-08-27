@@ -1,7 +1,5 @@
 package test;
 
-import android.content.Context;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,10 +7,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import dagrada.marco.shariki.EventQueueManager;
-import dagrada.marco.shariki.GameEvent;
-import dagrada.marco.shariki.GameModelHandler;
-import dagrada.marco.shariki.exceptions.GameEndException;
+import dagrada.marco.shariki.core.EventQueueManager;
+import thesis.GameEvent;
 
 import static junit.framework.Assert.assertTrue;
 

@@ -1,7 +1,7 @@
 package dagrada.marco.shariki.Events;
 
-import dagrada.marco.shariki.GameEvent;
-import dagrada.marco.shariki.GameModelHandler;
+import thesis.GameEvent;
+import dagrada.marco.shariki.core.GameModelHandler;
 import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.animations.AnimationPacket;
 import dagrada.marco.shariki.animations.WaitAnimation;

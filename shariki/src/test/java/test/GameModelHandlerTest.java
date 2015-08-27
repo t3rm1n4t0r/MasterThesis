@@ -14,8 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import dagrada.marco.shariki.GameModelHandler;
-import thesis.Graphics.GraphicsEngine;
+import dagrada.marco.shariki.core.GameModelHandler;
 import dagrada.marco.shariki.exceptions.GameEndException;
 
 import static org.junit.Assert.assertFalse;

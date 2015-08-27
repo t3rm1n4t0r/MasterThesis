@@ -6,13 +6,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
-import dagrada.marco.shariki.GameModelHandler;
-import dagrada.marco.shariki.GameStateHandler;
+import dagrada.marco.shariki.core.GameModelHandler;
+import dagrada.marco.shariki.core.GameStateHandler;
 import dagrada.marco.shariki.controllers.GameController;
-import sfogl.integration.Node;
-import thesis.Graphics.NodesKeeper;
 import thesis.touch.GestureFilter;
 
 

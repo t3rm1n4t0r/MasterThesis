@@ -1,11 +1,7 @@
 package dagrada.marco.shariki.controllers;
 
-import android.util.Log;
-
-import dagrada.marco.shariki.GameModelHandler;
-import dagrada.marco.shariki.GameStateHandler;
+import dagrada.marco.shariki.core.GameStateHandler;
 import dagrada.marco.shariki.communicationpackets.SwitchDataPacket;
-import dagrada.marco.shariki.exceptions.GameEndException;
 
 /**
  * Created by Marco on 28/07/2015.

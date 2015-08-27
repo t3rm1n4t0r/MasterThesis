@@ -1,16 +1,13 @@
 package test;
 
 
-import android.content.Context;
-import android.test.AndroidTestCase;
-
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-import dagrada.marco.shariki.MatrixFileReader;
+import dagrada.marco.shariki.core.MatrixFileReader;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,6 +1,6 @@
 package dagrada.marco.shariki.animations;
 
-import dagrada.marco.shariki.GameEvent;
+import thesis.GameEvent;
 
 /**
  * Created by Marco on 12/08/2015.

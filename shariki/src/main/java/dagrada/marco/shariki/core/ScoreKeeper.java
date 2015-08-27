@@ -1,4 +1,4 @@
-package dagrada.marco.shariki;
+package dagrada.marco.shariki.core;
 
 /**
  * Created by Marco on 06/08/2015.

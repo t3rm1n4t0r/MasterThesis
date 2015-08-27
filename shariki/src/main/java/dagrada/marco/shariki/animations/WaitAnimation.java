@@ -1,7 +1,6 @@
 package dagrada.marco.shariki.animations;
 
-import dagrada.marco.shariki.GameEvent;
-import thesis.Graphics.Exceptions.AnimationEndException;
+import thesis.GameEvent;
 import thesis.Graphics.GraphicsAnimation;
 
 /**

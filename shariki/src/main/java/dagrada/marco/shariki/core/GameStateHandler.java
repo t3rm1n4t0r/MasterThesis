@@ -1,14 +1,14 @@
-package dagrada.marco.shariki;
+package dagrada.marco.shariki.core;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 
+import thesis.EventManager;
 import dagrada.marco.shariki.Events.CheckandUpdateScoreLoopEvent;
 import dagrada.marco.shariki.Events.SwitchMarbleGraphicsEvent;
 import dagrada.marco.shariki.Events.SwitchOnModelAndCheckEvent;
-import dagrada.marco.shariki.animations.WaitAnimation;
+import thesis.GameEvent;
 import dagrada.marco.shariki.animations.WinningAnimation;
 import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
 import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
@@ -19,7 +19,7 @@ import thesis.Graphics.GraphicsEngine;
 /**
  * Created by Marco on 19/08/2015.
  */
-public class GameStateHandler implements EventManager{
+public class GameStateHandler implements EventManager {
 
     private GameModelHandler handler;
     private GraphicsEngine engine;

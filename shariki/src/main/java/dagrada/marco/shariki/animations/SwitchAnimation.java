@@ -1,19 +1,11 @@
 package dagrada.marco.shariki.animations;
 
-import android.renderscript.Matrix3f;
-import android.util.Log;
-
-import dagrada.marco.shariki.GameEvent;
-import dagrada.marco.shariki.GameStateHandler;
+import thesis.GameEvent;
 import dagrada.marco.shariki.animations.utility.BezierCurve;
 import dagrada.marco.shariki.animations.utility.ParameterOutOfRangeException;
 import dagrada.marco.shariki.animations.utility.SecondOrderBezierCurve;
 import sfogl.integration.Node;
-import shadow.math.SFMatrix2f;
-import shadow.math.SFMatrix3f;
-import shadow.math.SFTransform3f;
 import shadow.math.SFVertex3f;
-import thesis.Graphics.Exceptions.AnimationEndException;
 import thesis.Graphics.GraphicsAnimation;
 
 /**

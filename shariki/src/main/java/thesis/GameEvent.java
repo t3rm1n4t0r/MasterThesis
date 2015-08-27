@@ -1,4 +1,4 @@
-package dagrada.marco.shariki;
+package thesis;
 
 import java.util.LinkedList;
 

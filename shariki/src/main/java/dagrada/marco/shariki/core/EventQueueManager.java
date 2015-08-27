@@ -1,9 +1,9 @@
-package dagrada.marco.shariki;
+package dagrada.marco.shariki.core;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-import dagrada.marco.shariki.exceptions.GameEndException;
+import thesis.GameEvent;
 
 /**
  * Created by Marco on 19/08/2015.
