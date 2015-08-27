@@ -5,11 +5,11 @@ package thesis.touch;
  */
 public interface TouchActivity {
 
-    public void onRightSwipe(float distance);
-    public void onLeftSwipe(float distance);
-    public void onUpSwipe(float distance);
-    public void onDownSwipe(float distance);
-    public void onDoubleTap();
-    public void onLongPress();
+    public void onRightSwipe(float startX, float startY, float endX, float endY);
+    public void onLeftSwipe(float startX, float startY, float endX, float endY);
+    public void onUpSwipe(float startX, float startY, float endX, float endY);
+    public void onDownSwipe(float startX, float startY, float endX, float endY);
+    public void onDoubleTap(float x, float y);
+    public void onLongPress(float x, float y);
     public void onSingleTapUp(float x, float y);
 }

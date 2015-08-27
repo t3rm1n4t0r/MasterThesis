@@ -32,12 +32,12 @@ public class Node {
 	    this.relativeTransform=relativeTransform;
 	}
 	
-	public Node clodeNode(){
+	public Node cloneNode(){
         SFTransform3f transform=new SFTransform3f();
         transform.set(getRelativeTransform());
         Node node=new Node(transform,getModel());
         for (int i = 0; i < getSonNodes().size(); i++) {
-            node.getSonNodes().add(getSonNodes().get(i).clodeNode());
+            node.getSonNodes().add(getSonNodes().get(i).cloneNode());
         }
         return node;
     }

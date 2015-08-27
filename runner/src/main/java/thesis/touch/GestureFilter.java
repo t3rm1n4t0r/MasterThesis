@@ -35,17 +35,17 @@ public class GestureFilter extends android.view.GestureDetector.SimpleOnGestureL
 
         if(velocityX > this.swipe_Min_Velocity && xDistance > this.swipe_Min_Distance){
             if(e1.getX() > e2.getX()) // right to left
-                myactivity.onLeftSwipe(xDistance);
+                myactivity.onLeftSwipe(e1.getX(), e1.getY(), e2.getX(), e2.getY());
             else
-                myactivity.onRightSwipe(xDistance);
+                myactivity.onRightSwipe(e1.getX(), e1.getY(), e2.getX(), e2.getY());
 
             result = true;
         }
         else if(velocityY > this.swipe_Min_Velocity && yDistance > this.swipe_Min_Distance){
             if(e1.getY() > e2.getY()) // bottom to up
-                myactivity.onUpSwipe(yDistance);
+                myactivity.onUpSwipe(e1.getX(), e1.getY(), e2.getX(), e2.getY());
             else
-                myactivity.onDownSwipe(yDistance);
+                myactivity.onDownSwipe(e1.getX(), e1.getY(), e2.getX(), e2.getY());
 
             result = true;
         }
@@ -55,13 +55,13 @@ public class GestureFilter extends android.view.GestureDetector.SimpleOnGestureL
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        myactivity.onDoubleTap();
+        myactivity.onDoubleTap(e.getX(), e.getY());
         return super.onDoubleTap(e);
     }
 
     @Override
     public void onLongPress(MotionEvent event) {
-        myactivity.onLongPress();
+        myactivity.onLongPress(event.getX(), event.getY());
     }
 
     @Override

@@ -47,6 +47,29 @@ public class GameModelHandlerTest {
         handler.loadGame(list);
     }
 
+    @Test
+    public void testCopyModel(){
+        int[][] start={
+                {0,0,0,2,2,1,2,1,1},
+                {1,2,2,1,2,1,1,2,1},
+                {2,1,1,2,1,2,2,1,2},
+                {1,1,2,1,2,1,2,2,1},
+                {1,2,1,1,2,2,1,2,2}
+        };
+        handler.setMarbles(start);
+
+        int[][] copy = handler.copyModel();
+
+
+        assertTrue(Arrays.equals(start[0], copy[0]));
+        assertTrue(Arrays.equals(start[1], copy[1]));
+        assertTrue(Arrays.equals(start[2], copy[2]));
+        assertTrue(Arrays.equals(start[3], copy[3]));
+        assertTrue(Arrays.equals(start[4], copy[4]));
+
+
+    }
+
 
     @Test
     public void testCompactMarblesRow(){
@@ -225,6 +248,12 @@ public class GameModelHandlerTest {
         assertTrue(Arrays.equals(handler.getMarbles()[3], finalm[3]));
         assertTrue(Arrays.equals(handler.getMarbles()[4], finalm[4]));
 
+    }
+
+    @Test
+    public void testGetters(){
+        assertTrue(handler.getMaxHeigth() == 5);
+        assertTrue(handler.getMaxWidth() == 5);
     }
 
     @Test
