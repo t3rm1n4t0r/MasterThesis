@@ -1,4 +1,4 @@
-package com.example.alessandro.computergraphicsexample;
+package activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -177,7 +177,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         this.context=context;
         model = new int[CUBE_ROWS][CUBE_COLS];
 
-        colors.put(-1, "#FFFFFFFF");
+        colors.put(-1, "#FF000000");
         colors.put(0, "#FFFFFFFF");
         colors.put(1, "#FFFF0000");
         colors.put(2, "#FF00FF00");
@@ -219,39 +219,27 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void update(){
 
-        float[] mat = new float[CUBE_COLS * CUBE_ROWS];
-        for (int i=0; i<CUBE_ROWS; i++){
-            for(int j=0; j<CUBE_COLS; j++) {
-                mat[i*CUBE_COLS + j] = model[i][j];
-            }
-        }
+        father = new Node();
 
-        //printMatrix(mat, "marbles");
+        float sheetScale = 1.0f;
 
-        father = NodesKeeper.generateNode(context, "stdShader", R.drawable.paddedroomtexture01, "sphere.obj");
+        Node sheet = NodesKeeper.generateNode(context, "stdShader", "#FFFFFDE8", "sheet.obj");
+        sheet.getRelativeTransform().setPosition(0, 0, 0);
+        sheet.getRelativeTransform().setMatrix(SFMatrix3f.getScale(1.0f, 1.0f, 1.0f));
+        father.getSonNodes().add(sheet);
 
-        float scale = 1.6f;
+        Node line = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
+        line.getRelativeTransform().setPosition(0, 0f, 0f);
+        line.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.25f, 0.14f, 0.14f));
+        father.getSonNodes().add(line);
+
+        Node line2 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
+        line2.getRelativeTransform().setPosition(0, 0f, -0.05f);
+        line2.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.25f, 0.14f, 0.14f));
+        father.getSonNodes().add(line2);
 
 
-        for (int i=0; i<CUBE_COLS; i++){
-            for(int j=0; j<CUBE_ROWS; j++){
-                //Log.d("MARBLE", String.valueOf(handler.getMarbles()[i][j]));
-                String id = String.valueOf(i*CUBE_COLS + j);
-                //Log.d("COLOR", colors.get(model[i][j]));
-                Node node = NodesKeeper.generateNode(context, "stdShader", colors.get(model[i][j]), "sphere.obj");
-                node.getRelativeTransform().setPosition(10 * i - 20, 10 * j - 20, 0);
-                node.getRelativeTransform().setMatrix(SFMatrix3f.getScale(scale, scale, scale));
-                node.updateTree(new SFTransform3f());
-                father.getSonNodes().add(i * CUBE_COLS + j, node);
-                int[] pos = new int[2];
-                pos[0] = i;
-                pos[1] = j;
-                marbless[i][j]= new Marble(node, pos);
-            }
-        }
 
-        //Log.d("SIZE", String.valueOf(marbles.size()));
-        Log.d("SCORE", String.valueOf(score));
 
     }
 
@@ -276,7 +264,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         //Log.d("SCREEN RATIO", "Width/Height =" + ratio);
         Matrix.frustumM(projection, 0, -ratio, ratio, -1, 1, 3, 7);
-        Matrix.setLookAtM(camera, 0, 0, 0, 4f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+
+        Matrix.setLookAtM(camera, 0, -4f, 3.7f, 0, 0f, 0f, 0f, 1.0f, 0.0f, 0.0f);
+
 
         Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
 
@@ -305,26 +295,22 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         updateAnimations();
 
 
-        float scaling=0.032f;
 
-        SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling+t, scaling+t, scaling+t);
+
+
+        float scaling=1f;
+
+        SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
 
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
 
 
 
-        Node node;
 
-
-        for (int i=0; i<CUBE_ROWS; i++){
-            for (int j=0; j<CUBE_COLS; j++){
-                node = marbless[i][j].getNode();
-                node.draw();
-
-            }
+        for (Node  node : father.getSonNodes()) {
+            node.draw();
         }
-
 
 
     }

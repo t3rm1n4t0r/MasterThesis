@@ -1,4 +1,4 @@
-package com.example.alessandro.computergraphicsexample;
+package activities;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
