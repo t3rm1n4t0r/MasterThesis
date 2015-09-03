@@ -15,11 +15,13 @@ public class GameEngine implements Runnable {
     private UpdatablesCollector collector;
     private ScoreKeeper scoreKeeper;
 
+    private float base_multiplier;
+
     public GameEngine(Handler handler, long time_delay, UpdatablesCollector collector){
         this.handler = handler;
         this.time_delay = time_delay;
         this.collector = collector;
-        scoreKeeper = new ScoreKeeper();
+        base_multiplier  = 1.0f;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class GameEngine implements Runnable {
 
             if(updatable.canBeUpdated()){
 
-                updatable.update();
+                updatable.update(base_multiplier);
             }
 
             else{
@@ -40,6 +42,10 @@ public class GameEngine implements Runnable {
             }
 
         }
+
+
+
+
 
 
         handler.postDelayed(this, time_delay);

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import dagrada.marco.shariki.controllers.GameController;
-import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
+
+import dagrada.marco.runner.GameController;
 import thesis.touch.TouchActivity;
 
 
@@ -31,13 +31,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "RIGHT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        int[] indices = new int[0];
-        try {
-            indices = renderer.detectTouchedItem(startX, startY);
-            int x = indices[0];
-            int y = indices[1];
-            controller.switchPosition(x, y, x + 1, y);
-        } catch (TouchedItemNotFoundException e) {}
+
 
     }
 
@@ -46,15 +40,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "LEFT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        int[] indices = new int[0];
-        try {
-            indices = renderer.detectTouchedItem(startX, startY);
-            int x = indices[0];
-            int y = indices[1];
-            controller.switchPosition(x, y, x - 1, y);
-        } catch (TouchedItemNotFoundException e) {
 
-        }
 
     }
 
@@ -63,15 +49,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "UP SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        int[] indices = new int[0];
-        try {
-            indices = renderer.detectTouchedItem(startX, startY);
-            int x = indices[0];
-            int y = indices[1];
-            controller.switchPosition(x, y, x, y + 1);
-        } catch (TouchedItemNotFoundException e) {
 
-        }
 
     }
 
@@ -80,15 +58,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "DOWN SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
-        int[] indices = new int[0];
-        try {
-            indices = renderer.detectTouchedItem(startX, startY);
-            int x = indices[0];
-            int y = indices[1];
-            controller.switchPosition(x, y, x,y - 1);
-        } catch (TouchedItemNotFoundException e) {
 
-        }
 
     }
 
@@ -107,15 +77,6 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onSingleTapUp(float x, float y) {
         Log.d("TOUCH", "SINGLE TAP on (" + String.valueOf(x) + "," + String.valueOf(y) + ")");
-        int[] indices = new int[0];
-        try {
-            indices = renderer.detectTouchedItem(x, y);
-            int xx = indices[0];
-            int yy = indices[1];
-            Log.d("TOUCH", "INDICES "+ String.valueOf(xx)+","+String.valueOf(yy));
-        } catch (TouchedItemNotFoundException e) {
-
-        }
 ;
     }
 

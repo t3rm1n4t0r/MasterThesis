@@ -1,9 +1,13 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.interactables;
+
+import dagrada.marco.runner.Interactable;
+import dagrada.marco.runner.ScorableItem;
+import dagrada.marco.runner.Updatable;
 
 /**
  * Created by Marco on 03/09/2015.
  */
-public class MusicalNote implements ScorableItem, Updatable{
+public class MusicalNote implements ScorableItem, Updatable, Interactable {
 
     private final float STEP_X = 0.01f;
     private final float LIMIT_X = -1.5f;
@@ -78,9 +82,17 @@ public class MusicalNote implements ScorableItem, Updatable{
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public void update(Object data) {
         if(canBeUpdated()){
-            setX(getX() + STEP_X);
-            if(getX() == LIMIT_X){
+
+            float multiplier = (float) data;
+
+            setX(getX() - (multiplier * STEP_X));
+            if(getX() <= LIMIT_X){
                 setUpdatable(false);
             }
         }
@@ -94,5 +106,15 @@ public class MusicalNote implements ScorableItem, Updatable{
     @Override
     public void setUpdatable(boolean updatable) {
         this.updatable = updatable;
+    }
+
+    @Override
+    public void interact(Interactable interactable) {
+
+    }
+
+    @Override
+    public boolean canInteract(Interactable interactable) {
+        return false;
     }
 }
