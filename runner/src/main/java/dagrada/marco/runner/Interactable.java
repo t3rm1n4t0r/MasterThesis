@@ -6,5 +6,5 @@ package dagrada.marco.runner;
 public interface Interactable {
 
     public void interact(Interactable interactable);
-    public boolean canInteract(Interactable interactable);
+    public boolean canInteractWith(Interactable interactable);
 }

@@ -50,7 +50,7 @@ public class Guitar implements Interactable {
 
     @Override
     public void interact(Interactable interactable) {
-        if (canInteract(interactable)){
+        if (canInteractWith(interactable)){
             if(interactable instanceof MusicalNote){
                 MusicalNote note = (MusicalNote) interactable;
                 scoreKeeper.updateScore(note.getScore());
@@ -61,7 +61,7 @@ public class Guitar implements Interactable {
     }
 
     @Override
-    public boolean canInteract(Interactable interactable) {
+    public boolean canInteractWith(Interactable interactable) {
         if(interactable instanceof MusicalNote){
             MusicalNote note = (MusicalNote) interactable;
             if ((note.getX() - this.getX()) <= INTERACTION_RADIUS){

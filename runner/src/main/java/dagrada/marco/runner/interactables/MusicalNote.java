@@ -114,7 +114,7 @@ public class MusicalNote implements ScorableItem, Updatable, Interactable {
     }
 
     @Override
-    public boolean canInteract(Interactable interactable) {
+    public boolean canInteractWith(Interactable interactable) {
         return false;
     }
 }

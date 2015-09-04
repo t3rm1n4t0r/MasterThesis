@@ -2,7 +2,9 @@ package dagrada.marco.runner;
 
 import android.os.Handler;
 
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Marco on 01/09/2015.
@@ -12,15 +14,19 @@ public class GameEngine implements Runnable {
 
     private Handler handler;
     private long time_delay;
-    private UpdatablesCollector collector;
+    private UpdatablesCollector updatablesCollector;
+    private InteractablesCollector interactablesCollector;
     private ScoreKeeper scoreKeeper;
+    private Interactable character;
 
     private float base_multiplier;
 
-    public GameEngine(Handler handler, long time_delay, UpdatablesCollector collector){
+    public GameEngine(Handler handler, long time_delay, UpdatablesCollector updatablesCollector, InteractablesCollector interactablesCollector, Interactable character){
         this.handler = handler;
         this.time_delay = time_delay;
-        this.collector = collector;
+        this.updatablesCollector = updatablesCollector;
+        this.interactablesCollector = interactablesCollector;
+        this.character = character;
         base_multiplier  = 1.0f;
     }
 
@@ -28,8 +34,16 @@ public class GameEngine implements Runnable {
     public void run() {
 
 
-        LinkedList<Updatable> list = collector.getUpdatables();
+        updateUpdatables(updatablesCollector.getUpdatables());
 
+        checkInteractions(this.character, interactablesCollector.getInteractables());
+
+
+        handler.postDelayed(this, time_delay);
+
+    }
+
+    public void updateUpdatables(List<Updatable> list){
         for (Updatable  updatable: list) {
 
             if(updatable.canBeUpdated()){
@@ -38,17 +52,16 @@ public class GameEngine implements Runnable {
             }
 
             else{
-                collector.removeUpdatable(updatable);
+                updatablesCollector.removeUpdatable(updatable);
             }
 
         }
+    }
 
+    public void checkInteractions(Interactable character, List<Interactable> list){
 
-
-
-
-
-        handler.postDelayed(this, time_delay);
-
+        for (Interactable  interactable: list) {
+            character.interact(interactable);
+        }
     }
 }
