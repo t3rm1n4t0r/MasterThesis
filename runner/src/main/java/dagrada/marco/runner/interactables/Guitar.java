@@ -2,11 +2,12 @@ package dagrada.marco.runner.interactables;
 
 import dagrada.marco.runner.Interactable;
 import dagrada.marco.runner.ScoreKeeper;
+import dagrada.marco.runner.Updatable;
 
 /**
  * Created by Marco on 03/09/2015.
  */
-public class Guitar implements Interactable {
+public class Guitar implements Interactable, Updatable{
 
     private final float INTERACTION_RADIUS = 0.5f;
 
@@ -74,6 +75,26 @@ public class Guitar implements Interactable {
         else{
             return false;
         }
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void update(Object data) {
+
+    }
+
+    @Override
+    public boolean canBeUpdated() {
+        return false;
+    }
+
+    @Override
+    public void setUpdatable(boolean updatable) {
 
     }
 }

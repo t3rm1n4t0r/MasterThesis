@@ -19,13 +19,12 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import dagrada.marco.shariki.communicationpackets.GraphicsUpdatePacket;
-import dagrada.marco.shariki.animations.AnimationPacket;
-import dagrada.marco.shariki.animations.SwitchAnimation;
-import shadow.math.SFVertex3f;
+import dagrada.marco.runner.Updatable;
+import dagrada.marco.runner.communicationpackets.ModelUpdatePacket;
+import dagrada.marco.runner.exceptions.TouchedItemNotFoundException;
+import dagrada.marco.runner.interactables.Guitar;
+import dagrada.marco.runner.interactables.MusicalNote;
 import thesis.Graphics.GraphicsEngine;
-import dagrada.marco.shariki.Marble;
-import dagrada.marco.shariki.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
 import shadow.math.SFMatrix3f;
@@ -74,9 +73,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     Node father;
 
-    Marble[][] marbless = new Marble[CUBE_ROWS][CUBE_COLS];
-
-    private int[][] model;
+    private List<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
 
     float t=0;
@@ -91,8 +88,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private long frametime;
 
 
-    public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException{
-
+    public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException {
+/*
         //Log.e("TOUCHED POSITION", String.valueOf(x)+","+String.valueOf(y));
 
         float[] matrix = new float[16];
@@ -134,7 +131,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
             Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
 
-*/
+
                 Matrix.multiplyMV(result, 0, temp, 0, position, 0);
                 Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
 
@@ -169,22 +166,22 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
             }
         }
         throw new TouchedItemNotFoundException();
-
+*/
+        return null;
     }
 
 
 
     public GraphicsRenderer(Context context){
         this.context=context;
-        model = new int[CUBE_ROWS][CUBE_COLS];
+        toBeDrawn = new LinkedList<>();
 
         colors.put(-1, "#FF000000");
         colors.put(0, "#FFFFFFFF");
         colors.put(1, "#FFFF0000");
-        colors.put(2, "#FF00FF00");
-        colors.put(3, "#FFFFFF00");
-        colors.put(4, "#FF00FFFF");
-        colors.put(5, "#FFFF00FF");
+        colors.put(2, "#FFFFFF00");
+        colors.put(3, "#FF00FFFF");
+        colors.put(4, "#FFFF00FF");
 
     }
 
@@ -222,15 +219,33 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         drawBackground();
 
-        Node note = NodesKeeper.generateNode(context, "stdShader", "#FFFF00D9", "musicnote.obj");
-        note.getRelativeTransform().setPosition(0, 0.20f, 0);
-        note.getRelativeTransform().setMatrix(SFMatrix3f.getScale(2.5f, 2.5f, 2.5f));
-        father.getSonNodes().add(note);
+        for (Updatable current : toBeDrawn) {
+            if(current instanceof MusicalNote){
 
-        Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarra.obj");
-        guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
-        guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.025f, 0.025f, 0.025f));
-        father.getSonNodes().add(guitar);
+                Node note = NodesKeeper.generateNode(context, "stdShader", colors.get(((MusicalNote) current).getNote()), "musicnote.obj");
+                //note.getRelativeTransform().setPosition(0, 0.20f, 0);
+
+
+                note.getRelativeTransform().setPosition(((MusicalNote) current).getX(), ((MusicalNote) current).getY(), ((MusicalNote) current).getZ());
+
+                note.getRelativeTransform().setMatrix(SFMatrix3f.getScale(2.5f, 2.5f, 2.5f));
+
+                father.getSonNodes().add(note);
+            }
+            if(current instanceof Guitar){
+
+                Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarra.obj");
+                //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
+                guitar.getRelativeTransform().setPosition(((Guitar) current).getX(), ((Guitar) current).getY(), ((Guitar) current).getZ());
+                guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.025f, 0.025f, 0.025f));
+                father.getSonNodes().add(guitar);
+            }
+        }
+
+
+
+
+
 
     }
 
@@ -503,9 +518,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void updateModel(Object obj){
 
-        GraphicsUpdatePacket packet = (GraphicsUpdatePacket)obj;
-        this.model = packet.getModel();
-        this.score = packet.getScore();
+        List<Updatable> items = ((ModelUpdatePacket) obj).getItems();
+        this.toBeDrawn = items;
+
+
     }
 
     @Override
@@ -521,16 +537,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     @Override
     public void animate(Object object) {
-        AnimationPacket packet = (AnimationPacket) object;
-        addAnimation(new SwitchAnimation(marbless[packet.getX1()][packet.getY1()].getNode(), marbless[packet.getX2()][packet.getY2()].getNode(), packet.getEvent()));
-        Log.d("PRIMA", String.valueOf(packet.getX1()) + " " + String.valueOf(packet.getY1()));
-        Log.d("SECONDA", String.valueOf(packet.getX2()) + " " + String.valueOf(packet.getY2()));
 
-    }
 
-    public void testAnimation(){
-        SwitchAnimation animation = new SwitchAnimation(marbless[2][2].getNode(), marbless[3][2].getNode(), null);
-        addAnimation(animation);
     }
 
     public boolean isBlocked(){

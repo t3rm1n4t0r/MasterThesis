@@ -6,14 +6,29 @@ package dagrada.marco.runner;
  */
 public class GameController {
 
+    private GameEngine engine;
+    private ItemsGenerator generator;
+    private boolean paused;
 
-    public GameController(){
+    public GameController(GameEngine engine, ItemsGenerator generator){
 
-
+        this.engine = engine;
+        this.generator = generator;
+        paused = true;
     }
 
-
-
+    public void toggleGame(){
+        if(paused){
+            engine.start();
+            generator.start();
+            paused = false;
+        }
+        else {
+            engine.stop();
+            generator.stop();
+            paused = true;
+        }
+    }
 
 
 }
