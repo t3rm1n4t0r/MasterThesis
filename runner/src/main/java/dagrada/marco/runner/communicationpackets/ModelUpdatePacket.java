@@ -11,17 +11,17 @@ import dagrada.marco.runner.interactables.MusicalNote;
  */
 public class ModelUpdatePacket {
 
-    private List<Updatable> items;
+    private LinkedList<Updatable> items;
 
-    public ModelUpdatePacket(List<Updatable> items){
+    public ModelUpdatePacket(LinkedList<Updatable> items){
         this.items = items;
     }
 
-    public List<Updatable> getItems() {
+    public LinkedList<Updatable> getItems() {
         return items;
     }
 
-    public void setItems(List<Updatable> items) {
+    public void setItems(LinkedList<Updatable> items) {
         this.items = items;
     }
 }

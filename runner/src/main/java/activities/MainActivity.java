@@ -30,7 +30,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Setting up levels for the game
         GraphicsRenderer renderer = new GraphicsRenderer(this);
 
         Handler handler = new Handler(Looper.getMainLooper());

@@ -30,6 +30,7 @@ public class GameEngine implements Runnable {
     private float base_multiplier;
 
     public GameEngine(Handler handler, long time_delay, UpdatablesCollector updatablesCollector, InteractablesCollector interactablesCollector, Guitar character, GraphicsEngine engine){
+
         this.handler = handler;
         this.time_delay = time_delay;
         this.updatablesCollector = updatablesCollector;

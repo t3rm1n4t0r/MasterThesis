@@ -73,7 +73,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     Node father;
 
-    private List<Updatable> toBeDrawn = new LinkedList<>();
+    private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
 
     float t=0;
@@ -219,24 +219,31 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         drawBackground();
 
+
+
         for (Updatable current : toBeDrawn) {
             if(current instanceof MusicalNote){
 
-                Node note = NodesKeeper.generateNode(context, "stdShader", colors.get(((MusicalNote) current).getNote()), "musicnote.obj");
+                MusicalNote musicalNote = (MusicalNote) current;
+
+                Node note = NodesKeeper.generateNode(context, "stdShader", colors.get(musicalNote.getNote()), "musicnote.obj");
                 //note.getRelativeTransform().setPosition(0, 0.20f, 0);
 
 
-                note.getRelativeTransform().setPosition(((MusicalNote) current).getX(), ((MusicalNote) current).getY(), ((MusicalNote) current).getZ());
+                note.getRelativeTransform().setPosition(musicalNote.getX(), musicalNote.getY(), musicalNote.getZ());
 
                 note.getRelativeTransform().setMatrix(SFMatrix3f.getScale(2.5f, 2.5f, 2.5f));
 
                 father.getSonNodes().add(note);
+
             }
             if(current instanceof Guitar){
 
+                Guitar g = (Guitar) current;
+
                 Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarra.obj");
                 //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
-                guitar.getRelativeTransform().setPosition(((Guitar) current).getX(), ((Guitar) current).getY(), ((Guitar) current).getZ());
+                guitar.getRelativeTransform().setPosition(g.getX(), g.getY(), g.getZ());
                 guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.025f, 0.025f, 0.025f));
                 father.getSonNodes().add(guitar);
             }
@@ -346,7 +353,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        update();
+        drawBackground();
 
 
 
@@ -518,7 +525,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void updateModel(Object obj){
 
-        List<Updatable> items = ((ModelUpdatePacket) obj).getItems();
+        LinkedList<Updatable> items = ((ModelUpdatePacket) obj).getItems();
         this.toBeDrawn = items;
 
 

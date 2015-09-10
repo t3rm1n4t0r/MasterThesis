@@ -1,5 +1,6 @@
 package dagrada.marco.runner;
 
+import android.content.Context;
 import android.opengl.Matrix;
 import android.os.Handler;
 
@@ -24,6 +25,7 @@ public class ItemsGenerator implements Runnable {
     private InteractablesCollector interactablesCollector;
     private UpdatablesCollector updatablesCollector;
     private boolean stopped = true;
+
 
     public ItemsGenerator(Handler handler, long timeDelay, UpdatablesCollector updatablesCollector, InteractablesCollector interactablesCollector){
 

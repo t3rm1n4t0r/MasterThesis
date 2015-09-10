@@ -18,6 +18,7 @@ public class GameController {
     }
 
     public void toggleGame(){
+
         if(paused){
             engine.start();
             generator.start();
@@ -28,6 +29,7 @@ public class GameController {
             generator.stop();
             paused = true;
         }
+
     }
 
 

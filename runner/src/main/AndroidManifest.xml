@@ -6,11 +6,11 @@
         android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="runner"
+        android:label="Runner"
         android:theme="@style/AppTheme" >
         <activity
             android:name="activities.MainActivity"
-            android:label="runner" >
+            android:label="Runner">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -42,7 +42,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
-    private static final int RADIUS = 60;
+    private static final int RADIUS = 80;
     private static final int MAX_COLOR = 250;
     float width, height;
     private boolean isBlocked = false;
@@ -101,7 +101,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         Node current;
         int[] indices = new int[2];
 
-        y = y-getSoftbuttonsbarHeight() + getStatusBarHeight();
+        //y = y-getSoftbuttonsbarHeight() + getStatusBarHeight();
+        y = y- getStatusBarHeight();
         //Log.d("WIDTH", String.valueOf(width));
        // Log.d("ACTUAL", String.valueOf(getActualWidth()));
 
