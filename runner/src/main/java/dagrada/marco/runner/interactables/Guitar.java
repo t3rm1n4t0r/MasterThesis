@@ -65,7 +65,7 @@ public class Guitar implements Interactable, Updatable{
     public boolean canInteractWith(Interactable interactable) {
         if(interactable instanceof MusicalNote){
             MusicalNote note = (MusicalNote) interactable;
-            if ((note.getX() - this.getX()) <= INTERACTION_RADIUS){
+            if ((note.getX() - this.getX()) <= INTERACTION_RADIUS && note.getZ() == this.getZ()){
                 return true;
             }
             else {

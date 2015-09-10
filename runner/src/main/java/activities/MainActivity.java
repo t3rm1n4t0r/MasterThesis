@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
 
     private GestureDetector detector;
 
-    private long updateDelay = 1000;
-    private long generationDelay = 5000;
+    private long updateDelay = 150;
+    private long generationDelay = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,10 @@ public class MainActivity extends Activity {
 
         InteractablesCollector interactablesCollector = new InteractablesCollector();
         UpdatablesCollector updatablesCollector = new UpdatablesCollector();
-        Guitar guitar = new Guitar();
+        Guitar guitar = new Guitar(-1.5f, 0.20f, 0);
 
         GameEngine engine = new GameEngine(handler, updateDelay, updatablesCollector, interactablesCollector, guitar, renderer);
-        ItemsGenerator itemsGenerator = new ItemsGenerator(handler, updateDelay, updatablesCollector, interactablesCollector);
+        ItemsGenerator itemsGenerator = new ItemsGenerator(handler, generationDelay, updatablesCollector, interactablesCollector);
 
         GameController controller = new GameController(engine, itemsGenerator);
 

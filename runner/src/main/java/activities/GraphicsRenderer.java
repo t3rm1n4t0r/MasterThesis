@@ -19,6 +19,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import dagrada.marco.runner.NodeBuffer;
 import dagrada.marco.runner.Updatable;
 import dagrada.marco.runner.communicationpackets.ModelUpdatePacket;
 import dagrada.marco.runner.exceptions.TouchedItemNotFoundException;
@@ -86,6 +87,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private long current=0;
     private long previous=0;
     private long frametime;
+
+    private NodeBuffer nodeBuffer;
 
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException {
@@ -183,6 +186,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         colors.put(3, "#FF00FFFF");
         colors.put(4, "#FFFF00FF");
 
+        nodeBuffer = new NodeBuffer();
+
     }
 
     public int getStatusBarHeight() {
@@ -217,11 +222,30 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void update(){
 
+        father = new Node();
+
+        nodeBuffer.clearList();
+
         drawBackground();
 
+        drawItems();
+
+        father.getSonNodes().addAll(nodeBuffer.getNodes());
 
 
-        for (Updatable current : toBeDrawn) {
+    }
+
+    public void drawItems(){
+
+
+        Iterator<Updatable> iterator = toBeDrawn.iterator();
+
+        Log.d("To Be Drawn Size", String.valueOf(toBeDrawn.size()));
+
+        while (iterator.hasNext()) {
+
+            Updatable current = iterator.next();
+
             if(current instanceof MusicalNote){
 
                 MusicalNote musicalNote = (MusicalNote) current;
@@ -234,7 +258,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
                 note.getRelativeTransform().setMatrix(SFMatrix3f.getScale(2.5f, 2.5f, 2.5f));
 
-                father.getSonNodes().add(note);
+                nodeBuffer.addNode(note);
 
             }
             if(current instanceof Guitar){
@@ -245,12 +269,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
                 //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
                 guitar.getRelativeTransform().setPosition(g.getX(), g.getY(), g.getZ());
                 guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.025f, 0.025f, 0.025f));
-                father.getSonNodes().add(guitar);
+                nodeBuffer.addNode(guitar);
             }
+
         }
-
-
-
 
 
 
@@ -258,93 +280,91 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void drawBackground(){
 
-        father = new Node();
-
 
         Node sheet = NodesKeeper.generateNode(context, "stdShader", "#FFFFFDE8", "sheet.obj");
         sheet.getRelativeTransform().setPosition(0, 0, 0);
         sheet.getRelativeTransform().setMatrix(SFMatrix3f.getScale(1.8f, 1.0f, 1.0f));
         sheet.updateTree(new SFTransform3f());
-        father.getSonNodes().add(sheet);
+        nodeBuffer.addNode(sheet);
 
         float LINE_LENGTH = 0.235f;
 
         Node line = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line.getRelativeTransform().setPosition(0, 0f, 0f);
         line.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line);
+        nodeBuffer.addNode(line);
 
         Node line2 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line2.getRelativeTransform().setPosition(0, 0f, -0.035f);
         line2.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line2);
+        nodeBuffer.addNode(line2);
 
         Node line3 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line3.getRelativeTransform().setPosition(0, 0f, -0.07f);
         line3.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line3);
+        nodeBuffer.addNode(line3);
 
         Node line4 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line4.getRelativeTransform().setPosition(0, 0f, 0.035f);
         line4.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line4);
+        nodeBuffer.addNode(line4);
 
         Node line5 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line5.getRelativeTransform().setPosition(0, 0f, 0.07f);
         line5.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line5);
+        nodeBuffer.addNode(line5);
 
         Node line6 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line6.getRelativeTransform().setPosition(0, 0f, 0.60f);
         line6.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line6);
+        nodeBuffer.addNode(line6);
 
 
         Node line7 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line7.getRelativeTransform().setPosition(0, 0f, 0.565f);
         line7.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line7);
+        nodeBuffer.addNode(line7);
 
         Node line8 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line8.getRelativeTransform().setPosition(0, 0f, 0.53f);
         line8.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line8);
+        nodeBuffer.addNode(line8);
 
         Node line9 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line9.getRelativeTransform().setPosition(0, 0f, 0.635f);
         line9.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line9);
+        nodeBuffer.addNode(line9);
 
         Node line10 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line10.getRelativeTransform().setPosition(0, 0f, 0.67f);
         line10.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line10);
+        nodeBuffer.addNode(line10);
 
 
         Node line11 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line11.getRelativeTransform().setPosition(0, 0f, -0.60f);
         line11.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line11);
+        nodeBuffer.addNode(line11);
 
         Node line12 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line12.getRelativeTransform().setPosition(0, 0f, -0.635f);
         line12.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line12);
+        nodeBuffer.addNode(line12);
 
         Node line13 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line13.getRelativeTransform().setPosition(0, 0f, -0.67f);
         line13.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line13);
+        nodeBuffer.addNode(line13);
 
         Node line14 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line14.getRelativeTransform().setPosition(0, 0f, -0.565f);
         line14.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line14);
+        nodeBuffer.addNode(line14);
 
         Node line15 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line15.getRelativeTransform().setPosition(0, 0f, -0.53f);
         line15.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        father.getSonNodes().add(line15);
+        nodeBuffer.addNode(line15);
 
 
 
@@ -353,7 +373,23 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        drawBackground();
+        Guitar g = new Guitar(-1.5f, 0.20f, 0);
+
+
+        MusicalNote musicalNote = new MusicalNote(1, 0,0.20f,0, 0);
+        MusicalNote musicalNote2 = new MusicalNote(2, -0.53f,0.20f,0, 0);
+        MusicalNote musicalNote3 = new MusicalNote(3, 0.53f,0.20f,0, 0);
+        MusicalNote musicalNote4 = new MusicalNote(4, 1.06f,0.20f,0, 0);
+
+
+        toBeDrawn = new LinkedList<>();
+        toBeDrawn.add(g);
+        toBeDrawn.add(musicalNote);
+        toBeDrawn.add(musicalNote2);
+        toBeDrawn.add(musicalNote3);
+        toBeDrawn.add(musicalNote4);
+
+        update();
 
 
 
@@ -404,8 +440,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
 
-
-
         float scaling=1f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
@@ -419,6 +453,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         for (Node  node : father.getSonNodes()) {
             node.draw();
         }
+
+
 
 
     }
@@ -526,6 +562,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     public void updateModel(Object obj){
 
         LinkedList<Updatable> items = ((ModelUpdatePacket) obj).getItems();
+        this.toBeDrawn = new LinkedList<>();
         this.toBeDrawn = items;
 
 

@@ -30,7 +30,7 @@ public class InteractablesCollector {
         return list;
     }
 
-    public void actualizeList(){
+    private void actualizeList(){
         list.addAll(toBeAdded);
         list.removeAll(toBeRemoved);
     }

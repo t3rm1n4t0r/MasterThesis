@@ -3,6 +3,7 @@ package dagrada.marco.runner;
 import android.content.Context;
 import android.opengl.Matrix;
 import android.os.Handler;
+import android.util.Log;
 
 import dagrada.marco.runner.interactables.MusicalNote;
 
@@ -14,8 +15,9 @@ public class ItemsGenerator implements Runnable {
     private static long minDelay = 200;
 
     private static int notes_number = 4;
+    private static int notes_starting_number = 1;
 
-    private static float start_X = 9.0f;
+    private static float start_X = 3.2f;
     private static float start_Y = 0.20f;
     private static float start_Z = 0;
     private static float z_step = 0.60f;
@@ -25,6 +27,8 @@ public class ItemsGenerator implements Runnable {
     private InteractablesCollector interactablesCollector;
     private UpdatablesCollector updatablesCollector;
     private boolean stopped = true;
+
+    private int generated=0;
 
 
     public ItemsGenerator(Handler handler, long timeDelay, UpdatablesCollector updatablesCollector, InteractablesCollector interactablesCollector){
@@ -57,9 +61,11 @@ public class ItemsGenerator implements Runnable {
     @Override
     public void run() {
 
-        int notetype = (int) Math.random() * notes_number;
+        int notetype = notes_starting_number + ((int) (Math.random() * notes_number));
 
-        int binary = (int) Math.random() * 3;
+        Log.d("NOTE TYPE", String.valueOf(notetype));
+
+        int binary = (int) (Math.random() * 3);
 
         float z = start_Z;
 
@@ -77,6 +83,12 @@ public class ItemsGenerator implements Runnable {
 
         updatablesCollector.addUpdatable(note);
         interactablesCollector.addInteractable(note);
+
+        generated++;
+
+        Log.d("Generated", String.valueOf(generated));
+
+        setNextLaunch();
 
     }
 
