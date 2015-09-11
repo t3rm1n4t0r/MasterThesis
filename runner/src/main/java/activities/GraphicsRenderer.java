@@ -73,6 +73,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private float[] mvp = new float[16];
 
     Node father;
+    Node backgroundfather;
 
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
@@ -226,8 +227,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         nodeBuffer.clearList();
 
-        drawBackground();
-
         drawItems();
 
         father.getSonNodes().addAll(nodeBuffer.getNodes());
@@ -265,10 +264,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
                 Guitar g = (Guitar) current;
 
-                Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarra.obj");
+                Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarrina.obj");
                 //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
                 guitar.getRelativeTransform().setPosition(g.getX(), g.getY(), g.getZ());
-                guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.025f, 0.025f, 0.025f));
+                guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.1f, 0.1f, 0.1f));
                 nodeBuffer.addNode(guitar);
             }
 
@@ -280,91 +279,93 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     public void drawBackground(){
 
+        backgroundfather = new Node();
+
 
         Node sheet = NodesKeeper.generateNode(context, "stdShader", "#FFFFFDE8", "sheet.obj");
         sheet.getRelativeTransform().setPosition(0, 0, 0);
         sheet.getRelativeTransform().setMatrix(SFMatrix3f.getScale(1.8f, 1.0f, 1.0f));
         sheet.updateTree(new SFTransform3f());
-        nodeBuffer.addNode(sheet);
+        backgroundfather.getSonNodes().add(sheet);
 
         float LINE_LENGTH = 0.235f;
 
         Node line = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line.getRelativeTransform().setPosition(0, 0f, 0f);
         line.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line);
+        backgroundfather.getSonNodes().add(line);
 
         Node line2 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line2.getRelativeTransform().setPosition(0, 0f, -0.035f);
         line2.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line2);
+        backgroundfather.getSonNodes().add(line2);
 
         Node line3 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line3.getRelativeTransform().setPosition(0, 0f, -0.07f);
         line3.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line3);
+        backgroundfather.getSonNodes().add(line3);
 
         Node line4 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line4.getRelativeTransform().setPosition(0, 0f, 0.035f);
         line4.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line4);
+        backgroundfather.getSonNodes().add(line4);
 
         Node line5 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line5.getRelativeTransform().setPosition(0, 0f, 0.07f);
         line5.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line5);
+        backgroundfather.getSonNodes().add(line5);
 
         Node line6 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line6.getRelativeTransform().setPosition(0, 0f, 0.60f);
         line6.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line6);
+        backgroundfather.getSonNodes().add(line6);
 
 
         Node line7 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line7.getRelativeTransform().setPosition(0, 0f, 0.565f);
         line7.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line7);
+        backgroundfather.getSonNodes().add(line7);
 
         Node line8 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line8.getRelativeTransform().setPosition(0, 0f, 0.53f);
         line8.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line8);
+        backgroundfather.getSonNodes().add(line8);
 
         Node line9 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line9.getRelativeTransform().setPosition(0, 0f, 0.635f);
         line9.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line9);
+        backgroundfather.getSonNodes().add(line9);
 
         Node line10 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line10.getRelativeTransform().setPosition(0, 0f, 0.67f);
         line10.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line10);
+        backgroundfather.getSonNodes().add(line10);
 
 
         Node line11 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line11.getRelativeTransform().setPosition(0, 0f, -0.60f);
         line11.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line11);
+        backgroundfather.getSonNodes().add(line11);
 
         Node line12 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line12.getRelativeTransform().setPosition(0, 0f, -0.635f);
         line12.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line12);
+        backgroundfather.getSonNodes().add(line12);
 
         Node line13 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line13.getRelativeTransform().setPosition(0, 0f, -0.67f);
         line13.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line13);
+        backgroundfather.getSonNodes().add(line13);
 
         Node line14 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line14.getRelativeTransform().setPosition(0, 0f, -0.565f);
         line14.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line14);
+        backgroundfather.getSonNodes().add(line14);
 
         Node line15 = NodesKeeper.generateNode(context, "stdShader", "#EF686868", "line.obj");
         line15.getRelativeTransform().setPosition(0, 0f, -0.53f);
         line15.getRelativeTransform().setMatrix(SFMatrix3f.getScale(LINE_LENGTH, 0.10f, 0.10f));
-        nodeBuffer.addNode(line15);
+        backgroundfather.getSonNodes().add(line15);
 
 
 
@@ -388,6 +389,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         toBeDrawn.add(musicalNote2);
         toBeDrawn.add(musicalNote3);
         toBeDrawn.add(musicalNote4);
+
+
+        drawBackground();
 
         update();
 
@@ -443,10 +447,14 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         float scaling=1f;
 
         SFMatrix3f matrix3f=SFMatrix3f.getScale(scaling, scaling, scaling);
-
+        backgroundfather.getRelativeTransform().setMatrix(matrix3f);
+        backgroundfather.updateTree(new SFTransform3f());
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
 
+        for (Node  node : backgroundfather.getSonNodes()) {
+            node.draw();
+        }
 
 
 
