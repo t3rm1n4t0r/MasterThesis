@@ -32,7 +32,9 @@ public class InteractablesCollector {
 
     private void actualizeList(){
         list.addAll(toBeAdded);
+        toBeAdded = new LinkedList<>();
         list.removeAll(toBeRemoved);
+        toBeRemoved = new LinkedList<>();
     }
 
 }

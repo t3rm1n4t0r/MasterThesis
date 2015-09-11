@@ -1,5 +1,7 @@
 package dagrada.marco.runner.interactables;
 
+import android.util.Log;
+
 import dagrada.marco.runner.Interactable;
 import dagrada.marco.runner.ScoreKeeper;
 import dagrada.marco.runner.Updatable;
@@ -55,6 +57,7 @@ public class Guitar implements Interactable, Updatable{
             if(interactable instanceof MusicalNote){
                 MusicalNote note = (MusicalNote) interactable;
                 scoreKeeper.updateScore(note.getScore());
+                Log.e("SCORE", String.valueOf(scoreKeeper.getScore()));
                 note.setUpdatable(false);
                 note.interact(this);
             }

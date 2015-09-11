@@ -32,9 +32,11 @@ public class UpdatablesCollector {
 
     public void actualizeList(){
         list.addAll(toBeAdded);
+        toBeAdded = new LinkedList<>();
         for (Updatable  current: toBeRemoved) {
             list.remove(current);
         }
+        toBeRemoved = new LinkedList<>();
     }
 
 }

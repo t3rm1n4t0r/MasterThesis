@@ -9,7 +9,7 @@ import dagrada.marco.runner.Updatable;
  */
 public class MusicalNote implements ScorableItem, Updatable, Interactable {
 
-    private final float STEP_X = 0.005f;
+    private final float STEP_X = 0.05f;
     private final float LIMIT_X = -1.5f;
     private boolean updatable;
 

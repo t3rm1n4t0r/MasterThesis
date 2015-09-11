@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
 
     private GestureDetector detector;
 
-    private long updateDelay = 150;
-    private long generationDelay = 1500;
+    private long updateDelay = 80;
+    private long generationDelay = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

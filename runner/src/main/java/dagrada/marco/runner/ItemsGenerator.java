@@ -63,7 +63,7 @@ public class ItemsGenerator implements Runnable {
 
         int notetype = notes_starting_number + ((int) (Math.random() * notes_number));
 
-        Log.d("NOTE TYPE", String.valueOf(notetype));
+        //Log.d("NOTE TYPE", String.valueOf(notetype));
 
         int binary = (int) (Math.random() * 3);
 
@@ -86,7 +86,7 @@ public class ItemsGenerator implements Runnable {
 
         generated++;
 
-        Log.d("Generated", String.valueOf(generated));
+        //Log.d("Generated", String.valueOf(generated));
 
         setNextLaunch();
 

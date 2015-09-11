@@ -240,7 +240,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         Iterator<Updatable> iterator = toBeDrawn.iterator();
 
-        Log.d("To Be Drawn Size", String.valueOf(toBeDrawn.size()));
+        //Log.d("To Be Drawn Size", String.valueOf(toBeDrawn.size()));
 
         while (iterator.hasNext()) {
 
@@ -563,6 +563,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         LinkedList<Updatable> items = ((ModelUpdatePacket) obj).getItems();
         this.toBeDrawn = new LinkedList<>();
+        //this.toBeDrawn.addAll(items);
         this.toBeDrawn = items;
 
 

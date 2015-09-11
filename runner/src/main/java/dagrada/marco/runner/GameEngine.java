@@ -80,6 +80,7 @@ public class GameEngine implements Runnable {
 
             else{
                 updatablesCollector.removeUpdatable(updatable);
+                interactablesCollector.removeInteractable((Interactable)updatable);
             }
 
         }
@@ -87,6 +88,7 @@ public class GameEngine implements Runnable {
 
     public void checkInteractions(Interactable character, List<Interactable> list){
 
+        //Log.d("INTERACTIONS", String.valueOf(list.size()));
         for (Interactable  interactable: list) {
             character.interact(interactable);
         }
