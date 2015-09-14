@@ -31,6 +31,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "RIGHT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
+        controller.moveRight();
 
 
     }
@@ -40,6 +41,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         Log.d("TOUCH", "LEFT SWIPE");
         Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
+        controller.moveLeft();
 
 
     }

@@ -88,6 +88,7 @@ public class Guitar implements Interactable, Updatable{
 
     @Override
     public void update(Object data) {
+        setZ((float)data);
 
     }
 

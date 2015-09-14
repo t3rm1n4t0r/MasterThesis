@@ -264,7 +264,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
                 Guitar g = (Guitar) current;
 
-                Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "chitarrina.obj");
+                Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "guitar2.obj");
                 //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
                 guitar.getRelativeTransform().setPosition(g.getX(), g.getY(), g.getZ());
                 guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.1f, 0.1f, 0.1f));
