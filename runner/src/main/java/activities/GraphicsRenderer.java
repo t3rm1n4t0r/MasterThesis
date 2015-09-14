@@ -249,8 +249,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         drawItems();
 
         father.getSonNodes().addAll(nodeBuffer.getNodes());
+        nodeBuffer.clearList();
 
         drawScore(score);
+
+        scorefather.getSonNodes().addAll(nodeBuffer.getNodes());
+
+        nodeBuffer.clearList();
 
 
     }
@@ -414,9 +419,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         plane.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.15f, 1f, 1f));
         plane.updateTree(new SFTransform3f());
 
-        scorefather.getSonNodes().add(plane);
+        nodeBuffer.addNode(plane);
 
-        for (int i=0; i<scoreString.length(); i++){
+        for (int i=0; i<scoreString.length(); i++) {
 
             Node number = NodesKeeper.generateNode(context, "stdShader", "#FF000000", numbersTextures.get(scoreString.charAt(i)));
             number.getRelativeTransform().setPosition(0, 0, (i * digit_distance)-beginning);
@@ -424,7 +429,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
             number.getRelativeTransform().setMatrix(matrix.MultMatrix(SFMatrix3f.getRotationX(3.14f)));
             number.updateTree(new SFTransform3f());
-            scorefather.getSonNodes().add(number);
+            nodeBuffer.addNode(number);
 
         }
 
