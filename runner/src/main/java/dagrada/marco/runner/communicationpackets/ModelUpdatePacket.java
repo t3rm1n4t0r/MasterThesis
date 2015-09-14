@@ -12,9 +12,11 @@ import dagrada.marco.runner.interactables.MusicalNote;
 public class ModelUpdatePacket {
 
     private LinkedList<Updatable> items;
+    private int score;
 
-    public ModelUpdatePacket(LinkedList<Updatable> items){
+    public ModelUpdatePacket(LinkedList<Updatable> items, int score){
         this.items = items;
+        this.score = score;
     }
 
     public LinkedList<Updatable> getItems() {
@@ -23,5 +25,13 @@ public class ModelUpdatePacket {
 
     public void setItems(LinkedList<Updatable> items) {
         this.items = items;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

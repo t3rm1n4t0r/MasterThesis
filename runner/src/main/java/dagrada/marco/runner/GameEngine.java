@@ -98,7 +98,11 @@ public class GameEngine implements Runnable {
         LinkedList<Updatable> items = new LinkedList<>();
         items.addAll(updatablesCollector.getUpdatables());
         items.add(character);
-        engine.updateModel(new ModelUpdatePacket(items));
+        engine.updateModel(new ModelUpdatePacket(items, character.getScoreKeeper().getScore()));
         engine.update();
+    }
+
+    public void accelerate(){
+        this.base_multiplier+=0.1f;
     }
 }

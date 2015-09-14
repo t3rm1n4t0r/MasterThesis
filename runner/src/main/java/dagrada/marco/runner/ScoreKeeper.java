@@ -5,10 +5,14 @@ package dagrada.marco.runner;
  */
 public class ScoreKeeper {
 
-    private int score;
 
-    public ScoreKeeper(){
+
+    private int score;
+    private GameEngine engine;
+
+    public ScoreKeeper(GameEngine engine){
         score = 0;
+        this.engine = engine;
     }
 
     public int getScore() {
@@ -17,5 +21,8 @@ public class ScoreKeeper {
 
     public void updateScore(int amount){
         score +=amount;
+        if(score > 0 && score%500 == 0){
+            engine.accelerate();
+        }
     }
 }

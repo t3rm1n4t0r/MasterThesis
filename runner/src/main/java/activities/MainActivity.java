@@ -15,6 +15,7 @@ import dagrada.marco.runner.GameEngine;
 import dagrada.marco.runner.GuitarController;
 import dagrada.marco.runner.InteractablesCollector;
 import dagrada.marco.runner.ItemsGenerator;
+import dagrada.marco.runner.ScoreKeeper;
 import dagrada.marco.runner.UpdatablesCollector;
 import dagrada.marco.runner.interactables.Guitar;
 import thesis.touch.GestureFilter;
@@ -37,11 +38,13 @@ public class MainActivity extends Activity {
 
         InteractablesCollector interactablesCollector = new InteractablesCollector();
         UpdatablesCollector updatablesCollector = new UpdatablesCollector();
-        Guitar guitar = new Guitar(-1.5f, 0.30f, 0);
+        Guitar guitar = new Guitar(-1.3f, 0.30f, 0, null);
 
         GuitarController guitarController = new GuitarController(guitar);
 
         GameEngine engine = new GameEngine(handler, updateDelay, updatablesCollector, interactablesCollector, guitar, renderer);
+        ScoreKeeper keeper = new ScoreKeeper(engine);
+        guitar.setScoreKeeper(keeper);
         ItemsGenerator itemsGenerator = new ItemsGenerator(handler, generationDelay, updatablesCollector, interactablesCollector);
 
         GameController controller = new GameController(engine, itemsGenerator, guitarController);

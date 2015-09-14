@@ -74,6 +74,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     Node father;
     Node backgroundfather;
+    Node scorefather;
 
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
@@ -89,7 +90,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private long previous=0;
     private long frametime;
 
+    private float guitarfloating=0;
+    private float floatingincrement=0.002f;
+
     private NodeBuffer nodeBuffer;
+
+    private HashMap<Character, String> numbersTextures = new HashMap<>();
+
 
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException {
@@ -189,6 +196,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         nodeBuffer = new NodeBuffer();
 
+        numbersTextures.put('0', "numbers_0.obj");
+        numbersTextures.put('1', "numbers_1.obj");
+        numbersTextures.put('2', "numbers_2.obj");
+        numbersTextures.put('3', "numbers_3.obj");
+        numbersTextures.put('4', "numbers_4.obj");
+        numbersTextures.put('5', "numbers_5.obj");
+        numbersTextures.put('6', "numbers_6.obj");
+        numbersTextures.put('7', "numbers_7.obj");
+        numbersTextures.put('8', "numbers_8.obj");
+        numbersTextures.put('9', "numbers_9.obj");
+
+
     }
 
     public int getStatusBarHeight() {
@@ -231,6 +250,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         father.getSonNodes().addAll(nodeBuffer.getNodes());
 
+        drawScore(score);
+
 
     }
 
@@ -267,7 +288,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
                 Node guitar = NodesKeeper.generateNode(context, "stdShader", "#FF00FF00", "guitar2.obj");
                 //guitar.getRelativeTransform().setPosition(-1.5f, 0.20f, 0);
                 guitar.getRelativeTransform().setPosition(g.getX(), g.getY(), g.getZ());
-                guitar.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.1f, 0.1f, 0.1f));
+                SFMatrix3f matrix = SFMatrix3f.getScale(0.06f, 0.06f, 0.06f);
+                guitar.getRelativeTransform().setMatrix(matrix.MultMatrix(SFMatrix3f.getRotationX(guitarfloating)));
                 nodeBuffer.addNode(guitar);
             }
 
@@ -280,6 +302,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     public void drawBackground(){
 
         backgroundfather = new Node();
+
 
 
         Node sheet = NodesKeeper.generateNode(context, "stdShader", "#FFFFFDE8", "sheet.obj");
@@ -371,10 +394,48 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
     }
 
+    public void drawScore(int score){
+
+        float digit_distance = 0.12f;
+        float number_scale = 0.045f;
+
+        scorefather = new Node();
+
+        String scoreString = String.valueOf(score);
+
+        float beginning = ((scoreString.length()-1)/2)*digit_distance;
+        if(scoreString.length()%2 == 0)
+            beginning+=0.5f*digit_distance;
+
+        //Log.d("STRINGA", String.valueOf(scoreString.length()));
+
+        Node plane = NodesKeeper.generateNode(context, "stdShader", "#FFFFFFFF", "1x1plane.obj");
+        plane.getRelativeTransform().setPosition(0,0,0);
+        plane.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.15f, 1f, 1f));
+        plane.updateTree(new SFTransform3f());
+
+        scorefather.getSonNodes().add(plane);
+
+        for (int i=0; i<scoreString.length(); i++){
+
+            Node number = NodesKeeper.generateNode(context, "stdShader", "#FF000000", numbersTextures.get(scoreString.charAt(i)));
+            number.getRelativeTransform().setPosition(0, 0, (i * digit_distance)-beginning);
+            SFMatrix3f matrix = SFMatrix3f.getScale(number_scale, number_scale, number_scale);
+
+            number.getRelativeTransform().setMatrix(matrix.MultMatrix(SFMatrix3f.getRotationX(3.14f)));
+            number.updateTree(new SFTransform3f());
+            scorefather.getSonNodes().add(number);
+
+        }
+
+
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        Guitar g = new Guitar(-1.5f, 0.20f, 0);
+
+        Guitar g = new Guitar(-1.5f, 0.30f, 0, null);
 
 
         MusicalNote musicalNote = new MusicalNote(1, 0,0.20f,0, 0);
@@ -384,6 +445,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
         toBeDrawn = new LinkedList<>();
+
         toBeDrawn.add(g);
         toBeDrawn.add(musicalNote);
         toBeDrawn.add(musicalNote2);
@@ -393,7 +455,15 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         drawBackground();
 
+
         update();
+
+        toBeDrawn = new LinkedList<>();
+
+        update();
+
+        drawScore(1234567890);
+        drawScore(0);
 
 
 
@@ -442,7 +512,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         updateAnimations();
 
-
+        guitarfloating+=floatingincrement;
+        if(guitarfloating >= ((float)Math.PI/8) || guitarfloating <= -((float)Math.PI/8))
+            floatingincrement*=-1;
 
         float scaling=1f;
 
@@ -459,6 +531,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
 
         for (Node  node : father.getSonNodes()) {
+            node.draw();
+        }
+
+        scorefather.getRelativeTransform().setPosition(-2f, 0.3f, 0);
+        scorefather.updateTree(new SFTransform3f());
+
+        for (Node  node : scorefather.getSonNodes()) {
             node.draw();
         }
 
@@ -573,6 +652,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         this.toBeDrawn = new LinkedList<>();
         //this.toBeDrawn.addAll(items);
         this.toBeDrawn = items;
+        this.score = ((ModelUpdatePacket) obj).getScore();
 
 
     }

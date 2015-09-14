@@ -16,15 +16,15 @@ public class Guitar implements Interactable, Updatable{
     private float x, y, z;
     private ScoreKeeper scoreKeeper;
 
-    public Guitar(){
-        scoreKeeper = new ScoreKeeper();
+    public Guitar(ScoreKeeper scoreKeeper){
+        this.scoreKeeper = scoreKeeper;
     }
 
-    public Guitar(float x, float y, float z){
+    public Guitar(float x, float y, float z, ScoreKeeper scoreKeeper){
         setX(x);
         setY(y);
         setZ(z);
-        scoreKeeper = new ScoreKeeper();
+        this.scoreKeeper = scoreKeeper;
     }
 
     public float getX() {
@@ -51,13 +51,17 @@ public class Guitar implements Interactable, Updatable{
         this.z = z;
     }
 
+    public void setScoreKeeper(ScoreKeeper scoreKeeper) {
+        this.scoreKeeper = scoreKeeper;
+    }
+
     @Override
     public void interact(Interactable interactable) {
         if (canInteractWith(interactable)){
             if(interactable instanceof MusicalNote){
                 MusicalNote note = (MusicalNote) interactable;
                 scoreKeeper.updateScore(note.getScore());
-                Log.e("SCORE", String.valueOf(scoreKeeper.getScore()));
+                //Log.e("SCORE", String.valueOf(scoreKeeper.getScore()));
                 note.setUpdatable(false);
                 note.interact(this);
             }
@@ -100,5 +104,9 @@ public class Guitar implements Interactable, Updatable{
     @Override
     public void setUpdatable(boolean updatable) {
 
+    }
+
+    public ScoreKeeper getScoreKeeper() {
+        return scoreKeeper;
     }
 }
