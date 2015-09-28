@@ -19,7 +19,7 @@ import thesis.Graphics.GraphicsEngine;
 /**
  * Created by Marco on 19/08/2015.
  */
-public class GameStateHandler implements EventManager {
+public class GameEventHandler implements EventManager {
 
     private GameModelHandler handler;
     private GraphicsEngine engine;
@@ -27,7 +27,7 @@ public class GameStateHandler implements EventManager {
     private Context context;
     private boolean started;
 
-    public GameStateHandler(Context context, GameModelHandler handler, GraphicsEngine engine){
+    public GameEventHandler(Context context, GameModelHandler handler, GraphicsEngine engine){
         this.context = context;
         this.handler = handler;
         this.engine = engine;

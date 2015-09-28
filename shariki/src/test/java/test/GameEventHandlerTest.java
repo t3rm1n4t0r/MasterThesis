@@ -11,10 +11,8 @@ import java.util.ArrayList;
 
 import dagrada.marco.shariki.communicationpackets.ModelUpdatePacket;
 import dagrada.marco.shariki.communicationpackets.SwitchDataPacket;
-import dagrada.marco.shariki.core.EventQueueManager;
 import dagrada.marco.shariki.core.GameModelHandler;
-import dagrada.marco.shariki.core.GameStateHandler;
-import thesis.GameEvent;
+import dagrada.marco.shariki.core.GameEventHandler;
 import thesis.Graphics.GraphicsEngine;
 
 import static junit.framework.Assert.assertTrue;
@@ -23,9 +21,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Marco on 27/08/2015.
  */
-public class GameStateHandlerTest {
+public class GameEventHandlerTest {
 
-    private GameStateHandler stateHandler;
+    private GameEventHandler stateHandler;
 
     @Mock
     private Context context;
@@ -44,7 +42,7 @@ public class GameStateHandlerTest {
         when(modelHandler.getMaxWidth()).thenReturn(5);
         when(modelHandler.isGameEnded()).thenReturn(true);
         engine = Mockito.mock(GraphicsEngine.class);
-        stateHandler = new GameStateHandler(context, modelHandler, engine);
+        stateHandler = new GameEventHandler(context, modelHandler, engine);
         ArrayList<String> list = new ArrayList<>();
         list.add(0, "level0.txt");
         stateHandler.startGame(list);

@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import dagrada.marco.shariki.core.GameModelHandler;
-import dagrada.marco.shariki.core.GameStateHandler;
+import dagrada.marco.shariki.core.GameEventHandler;
 import dagrada.marco.shariki.controllers.GameController;
 import thesis.touch.GestureFilter;
 
@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
         GameModelHandler handler = new GameModelHandler(this);
         ArrayList<String> list = new ArrayList<>();
 
-        GameStateHandler stateHandler = new GameStateHandler(this, handler, renderer);
+        GameEventHandler stateHandler = new GameEventHandler(this, handler, renderer);
 
 
         GameController controller = new GameController(stateHandler);

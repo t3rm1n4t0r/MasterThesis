@@ -1,6 +1,6 @@
 package dagrada.marco.shariki.controllers;
 
-import dagrada.marco.shariki.core.GameStateHandler;
+import dagrada.marco.shariki.core.GameEventHandler;
 import dagrada.marco.shariki.communicationpackets.SwitchDataPacket;
 
 /**
@@ -8,15 +8,15 @@ import dagrada.marco.shariki.communicationpackets.SwitchDataPacket;
  */
 public class GameController {
 
-    private GameStateHandler handler;
+    private GameEventHandler handler;
 
-    public GameController(GameStateHandler handler){
+    public GameController(GameEventHandler handler){
         this.handler = handler;
 
     }
 
 
-    public GameStateHandler getHandler() {
+    public GameEventHandler getHandler() {
         return handler;
     }
 
