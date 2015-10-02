@@ -1,4 +1,4 @@
-package thesis;
+package thesis.utils;
 
 import java.util.LinkedList;
 
@@ -7,11 +7,11 @@ import java.util.LinkedList;
  */
 public abstract class GameEvent{
 
-    private LinkedList<EventManager> managers = new LinkedList<>();
+    private LinkedList<GameEventManager> managers = new LinkedList<>();
     private Object EventData = null;
 
 
-    public void addManager(EventManager manager){
+    public void addManager(GameEventManager manager){
         managers.addLast(manager);
     }
     public void removeAllManagers(){
@@ -19,13 +19,13 @@ public abstract class GameEvent{
     }
 
     public void notifyManagers(){
-        for (EventManager  manager : managers) {
+        for (GameEventManager manager : managers) {
             manager.notifyEventConclusion(this, null);
         }
     }
 
     public void notifyManagers(Object data){
-        for (EventManager  manager : managers) {
+        for (GameEventManager manager : managers) {
             manager.notifyEventConclusion(this, data);
         }
     }
@@ -38,7 +38,7 @@ public abstract class GameEvent{
         EventData = eventData;
     }
 
-    public LinkedList<EventManager> getManagers() {
+    public LinkedList<GameEventManager> getManagers() {
         return managers;
     }
 

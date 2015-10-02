@@ -1,10 +1,8 @@
 package dagrada.marco.runner.communicationpackets;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import dagrada.marco.runner.Updatable;
-import dagrada.marco.runner.interactables.MusicalNote;
+import thesis.utils.Updatable;
 
 /**
  * Created by Marco on 08/09/2015.

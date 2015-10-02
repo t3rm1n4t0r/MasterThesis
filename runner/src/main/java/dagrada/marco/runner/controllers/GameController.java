@@ -1,5 +1,8 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.controllers;
 
+
+import dagrada.marco.runner.core.GameEngine;
+import dagrada.marco.runner.core.ItemsGenerator;
 
 /**
  * Created by Marco on 28/07/2015.

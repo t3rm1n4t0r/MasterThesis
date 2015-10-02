@@ -1,10 +1,8 @@
 package dagrada.marco.runner.interactables;
 
-import android.util.Log;
-
-import dagrada.marco.runner.Interactable;
-import dagrada.marco.runner.ScoreKeeper;
-import dagrada.marco.runner.Updatable;
+import thesis.utils.Interactable;
+import dagrada.marco.runner.core.ScoreKeeper;
+import thesis.utils.Updatable;
 
 /**
  * Created by Marco on 03/09/2015.

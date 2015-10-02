@@ -7,16 +7,14 @@ import android.os.Looper;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import java.util.ArrayList;
 
-
-import dagrada.marco.runner.GameController;
-import dagrada.marco.runner.GameEngine;
-import dagrada.marco.runner.GuitarController;
-import dagrada.marco.runner.InteractablesCollector;
-import dagrada.marco.runner.ItemsGenerator;
-import dagrada.marco.runner.ScoreKeeper;
-import dagrada.marco.runner.UpdatablesCollector;
+import dagrada.marco.runner.controllers.GameController;
+import dagrada.marco.runner.core.GameEngine;
+import dagrada.marco.runner.controllers.GuitarController;
+import thesis.utils.InteractablesCollector;
+import dagrada.marco.runner.core.ItemsGenerator;
+import dagrada.marco.runner.core.ScoreKeeper;
+import thesis.utils.UpdatablesCollector;
 import dagrada.marco.runner.interactables.Guitar;
 import thesis.touch.GestureFilter;
 

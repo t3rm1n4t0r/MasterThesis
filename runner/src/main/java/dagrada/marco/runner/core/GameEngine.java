@@ -1,21 +1,24 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.core;
 
-import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import dagrada.marco.runner.communicationpackets.ModelUpdatePacket;
 import dagrada.marco.runner.interactables.Guitar;
 import thesis.Graphics.GraphicsEngine;
+import thesis.utils.Interactable;
+import thesis.utils.InteractablesCollector;
+import thesis.utils.InteractionChecker;
+import thesis.utils.Updatable;
+import thesis.utils.UpdatablesCollector;
+import thesis.utils.Updater;
 
 /**
  * Created by Marco on 01/09/2015.
  */
-public class GameEngine implements Runnable {
+public class GameEngine implements Runnable, Updater, InteractionChecker {
 
 
     private Handler handler;
@@ -25,7 +28,6 @@ public class GameEngine implements Runnable {
     private Guitar character;
     private boolean stopped;
     GraphicsEngine engine;
-
 
     private float base_multiplier;
 
@@ -55,9 +57,9 @@ public class GameEngine implements Runnable {
     public void run() {
 
 
-        updateUpdatables(updatablesCollector.getUpdatables());
+        updateUpdatables();
 
-        checkInteractions(this.character, interactablesCollector.getInteractables());
+        checkInteractions();
 
 
         updateGraphics();
@@ -70,7 +72,10 @@ public class GameEngine implements Runnable {
 
     }
 
-    public void updateUpdatables(List<Updatable> list){
+    public void updateUpdatables(){
+
+        List<Updatable> list = updatablesCollector.getUpdatables();
+
         for (Updatable  updatable: list) {
 
             if(updatable.canBeUpdated()){
@@ -86,7 +91,10 @@ public class GameEngine implements Runnable {
         }
     }
 
-    public void checkInteractions(Interactable character, List<Interactable> list){
+    public void checkInteractions(){
+
+        Interactable character=this.character;
+        List<Interactable> list = interactablesCollector.getInteractables();
 
         //Log.d("INTERACTIONS", String.valueOf(list.size()));
         for (Interactable  interactable: list) {

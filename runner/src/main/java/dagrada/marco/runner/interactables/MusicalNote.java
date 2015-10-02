@@ -1,8 +1,8 @@
 package dagrada.marco.runner.interactables;
 
-import dagrada.marco.runner.Interactable;
-import dagrada.marco.runner.ScorableItem;
-import dagrada.marco.runner.Updatable;
+import thesis.utils.Interactable;
+import thesis.utils.ScorableItem;
+import thesis.utils.Updatable;
 
 /**
  * Created by Marco on 03/09/2015.

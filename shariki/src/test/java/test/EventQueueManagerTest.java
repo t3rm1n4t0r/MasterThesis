@@ -34,7 +34,7 @@ public class EventQueueManagerTest {
     @Test
     public void testQueueBehaviour(){
         queueManager.addToQueue(event1);
-        assertTrue(queueManager.getQueueSize() == 1);
+            assertTrue(queueManager.getQueueSize() == 1);
         queueManager.addToQueue(event2);
         assertTrue(queueManager.getQueueSize() == 2);
         assertTrue(queueManager.getNextEvent().equals(event1));

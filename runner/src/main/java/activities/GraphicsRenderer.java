@@ -8,7 +8,6 @@ import android.opengl.Matrix;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -19,8 +18,8 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import dagrada.marco.runner.NodeBuffer;
-import dagrada.marco.runner.Updatable;
+import thesis.Graphics.NodeCollector;
+import thesis.utils.Updatable;
 import dagrada.marco.runner.communicationpackets.ModelUpdatePacket;
 import dagrada.marco.runner.exceptions.TouchedItemNotFoundException;
 import dagrada.marco.runner.interactables.Guitar;
@@ -93,7 +92,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
     private float guitarfloating=0;
     private float floatingincrement=0.002f;
 
-    private NodeBuffer nodeBuffer;
+    private NodeCollector nodeCollector;
 
     private HashMap<Character, String> numbersTextures = new HashMap<>();
 
@@ -194,7 +193,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         colors.put(3, "#FF00FFFF");
         colors.put(4, "#FFFF00FF");
 
-        nodeBuffer = new NodeBuffer();
+        nodeCollector = new NodeCollector();
 
         numbersTextures.put('0', "numbers_0.obj");
         numbersTextures.put('1', "numbers_1.obj");
@@ -244,18 +243,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
         father = new Node();
 
-        nodeBuffer.clearList();
+        nodeCollector.clearList();
 
         drawItems();
 
-        father.getSonNodes().addAll(nodeBuffer.getNodes());
-        nodeBuffer.clearList();
+        father.getSonNodes().addAll(nodeCollector.getNodes());
+        nodeCollector.clearList();
 
         drawScore(score);
 
-        scorefather.getSonNodes().addAll(nodeBuffer.getNodes());
+        scorefather.getSonNodes().addAll(nodeCollector.getNodes());
 
-        nodeBuffer.clearList();
+        nodeCollector.clearList();
 
 
     }
@@ -283,7 +282,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
                 note.getRelativeTransform().setMatrix(SFMatrix3f.getScale(2.5f, 2.5f, 2.5f));
                 note.updateTree(new SFTransform3f());
-                nodeBuffer.addNode(note);
+                nodeCollector.addNode(note);
 
             }
             if(current instanceof Guitar){
@@ -296,7 +295,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
                 SFMatrix3f matrix = SFMatrix3f.getScale(0.06f, 0.06f, 0.06f);
                 guitar.getRelativeTransform().setMatrix(matrix.MultMatrix(SFMatrix3f.getRotationX(guitarfloating)));
                 guitar.updateTree(new SFTransform3f());
-                nodeBuffer.addNode(guitar);
+                nodeCollector.addNode(guitar);
             }
 
         }
@@ -435,7 +434,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
         plane.getRelativeTransform().setMatrix(SFMatrix3f.getScale(0.15f, 1f, 1f));
         plane.updateTree(new SFTransform3f());
 
-        nodeBuffer.addNode(plane);
+        nodeCollector.addNode(plane);
 
         for (int i=0; i<scoreString.length(); i++) {
 
@@ -445,7 +444,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer, GraphicsEngine 
 
             number.getRelativeTransform().setMatrix(matrix.MultMatrix(SFMatrix3f.getRotationX(3.14f)));
             number.updateTree(new SFTransform3f());
-            nodeBuffer.addNode(number);
+            nodeCollector.addNode(number);
 
         }
 

@@ -1,4 +1,4 @@
-package dagrada.marco.runner;
+package thesis.utils;
 
 /**
  * Created by Marco on 03/09/2015.

@@ -1,11 +1,10 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.core;
 
-import android.content.Context;
-import android.opengl.Matrix;
 import android.os.Handler;
-import android.util.Log;
 
 import dagrada.marco.runner.interactables.MusicalNote;
+import thesis.utils.InteractablesCollector;
+import thesis.utils.UpdatablesCollector;
 
 /**
  * Created by Marco on 08/09/2015.
@@ -61,6 +60,20 @@ public class ItemsGenerator implements Runnable {
     @Override
     public void run() {
 
+        MusicalNote note = generate();
+
+        updatablesCollector.addUpdatable(note);
+        interactablesCollector.addInteractable(note);
+
+        generated++;
+
+        //Log.d("Generated", String.valueOf(generated));
+
+        setNextLaunch();
+
+    }
+
+    public MusicalNote generate(){
         int notetype = notes_starting_number + ((int) (Math.random() * notes_number));
 
         //Log.d("NOTE TYPE", String.valueOf(notetype));
@@ -79,17 +92,7 @@ public class ItemsGenerator implements Runnable {
             z+=z_step;
         }
 
-        MusicalNote note = new MusicalNote(notetype, start_X, start_Y, z, 50);
-
-        updatablesCollector.addUpdatable(note);
-        interactablesCollector.addInteractable(note);
-
-        generated++;
-
-        //Log.d("Generated", String.valueOf(generated));
-
-        setNextLaunch();
-
+        return new MusicalNote(notetype, start_X, start_Y, z, 50);
     }
 
     private void setNextLaunch(){

@@ -1,4 +1,4 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.core;
 
 /**
  * Created by Marco on 06/08/2015.

@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 
-import dagrada.marco.runner.GameController;
+import dagrada.marco.runner.controllers.GameController;
 import thesis.touch.TouchActivity;
 
 

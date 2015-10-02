@@ -1,4 +1,4 @@
-package dagrada.marco.runner;
+package thesis.Graphics;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,12 +8,12 @@ import sfogl.integration.Node;
 /**
  * Created by Marco on 10/09/2015.
  */
-public class NodeBuffer {
+public class NodeCollector {
 
     private LinkedList<Node> toBeAdded;
     private LinkedList<Node> nodes;
 
-    public NodeBuffer(){
+    public NodeCollector(){
         toBeAdded = new LinkedList<>();
         nodes = new LinkedList<>();
     }

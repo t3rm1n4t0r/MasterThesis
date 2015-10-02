@@ -1,4 +1,4 @@
-package dagrada.marco.runner;
+package dagrada.marco.runner.controllers;
 
 import dagrada.marco.runner.interactables.Guitar;
 
