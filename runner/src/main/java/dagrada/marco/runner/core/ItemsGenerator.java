@@ -47,15 +47,31 @@ public class ItemsGenerator implements Runnable {
     }
 
     public void start(){
-        stopped = false;
-        setNextLaunch();
+        if(isStopped()) {
+            stopped = false;
+            setNextLaunch();
+        }
     }
 
     public void stop(){
-        stopped = true;
-        handler.removeCallbacks(this);
+        if(!isStopped()) {
+            stopped = true;
+            handler.removeCallbacks(this);
+        }
     }
 
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public long getTimeDelay() {
+        return timeDelay;
+    }
+
+    public void setTimeDelay(long timeDelay) {
+
+        this.timeDelay = timeDelay;
+    }
 
     @Override
     public void run() {
@@ -105,5 +121,9 @@ public class ItemsGenerator implements Runnable {
         else {
             handler.postDelayed(this, timeDelay);
         }
+    }
+
+    public int getGenerated() {
+        return generated;
     }
 }

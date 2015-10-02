@@ -34,7 +34,11 @@ public class GameEngine implements Runnable, Updater, InteractionChecker {
     public GameEngine(Handler handler, long time_delay, UpdatablesCollector updatablesCollector, InteractablesCollector interactablesCollector, Guitar character, GraphicsEngine engine){
 
         this.handler = handler;
-        this.time_delay = time_delay;
+        if(time_delay > 0)
+            this.time_delay = time_delay;
+        else {
+            this.time_delay = 100;
+        }
         this.updatablesCollector = updatablesCollector;
         this.interactablesCollector = interactablesCollector;
         this.character = character;
@@ -44,13 +48,23 @@ public class GameEngine implements Runnable, Updater, InteractionChecker {
     }
 
     public void start(){
-        stopped = false;
-        handler.postDelayed(this, time_delay);
+
+        if(isStopped()) {
+            stopped = false;
+            handler.postDelayed(this, time_delay);
+        }
     }
 
     public void stop(){
-        this.stopped = true;
-        handler.removeCallbacks(this);
+
+        if(!isStopped()) {
+            this.stopped = true;
+            handler.removeCallbacks(this);
+        }
+    }
+
+    public boolean isStopped() {
+        return stopped;
     }
 
     @Override
@@ -112,5 +126,9 @@ public class GameEngine implements Runnable, Updater, InteractionChecker {
 
     public void accelerate(){
         this.base_multiplier+=0.1f;
+    }
+
+    public float getBase_multiplier() {
+        return base_multiplier;
     }
 }
