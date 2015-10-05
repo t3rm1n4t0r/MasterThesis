@@ -1,1 +1,1 @@
-include ':app', ':appEpicOrg', ':ComputerGraphicsExample', ':test0', ':test1', ':nodekeepertest', ':touchtest', ':arthastest', ':touchtest2', ':shariki', ':runner'
+include ':app', ':appEpicOrg', ':ComputerGraphicsExample', ':test0', ':test1', ':nodekeepertest', ':touchtest', ':arthastest', ':touchtest2', ':shariki', ':runner', ':aquarium'
