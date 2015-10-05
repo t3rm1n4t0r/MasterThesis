@@ -1,4 +1,4 @@
-package activities;
+package thesis.Graphics;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

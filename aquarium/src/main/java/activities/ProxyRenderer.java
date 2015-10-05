@@ -6,7 +6,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import activities.renderers.EditRenderer;
+import activities.renderers.PanoramicRenderer;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
+import thesis.Graphics.GameRenderer;
 import thesis.Graphics.GraphicsAnimation;
 
 /**
@@ -20,8 +22,9 @@ public class ProxyRenderer extends GameRenderer {
     private GameRenderer proxyRenderer;
 
     private EditRenderer editRenderer;
+    private PanoramicRenderer panoramicRenderer;
 
-
+    boolean rend = true;
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException {
 
@@ -30,10 +33,26 @@ public class ProxyRenderer extends GameRenderer {
 
     }
 
+    public void toggleRenderer(){
+
+        rend = !rend;
+
+        if(rend){
+            this.proxyRenderer = editRenderer;
+        }
+        else {
+            this.proxyRenderer = panoramicRenderer;
+        }
+
+        proxyRenderer.drawBackground();
+
+    }
+
 
 
     public ProxyRenderer(Context context){
         editRenderer = new EditRenderer(context);
+        panoramicRenderer = new PanoramicRenderer(context);
         proxyRenderer = editRenderer;
 
     }
@@ -76,7 +95,8 @@ public class ProxyRenderer extends GameRenderer {
 
 
 
-
+        editRenderer.onSurfaceCreated(gl, config);
+        panoramicRenderer.onSurfaceCreated(gl, config);
 
        proxyRenderer.onSurfaceCreated(gl, config);
 

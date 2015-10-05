@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
                 //Get the time and position and check what that was :)
 
                 view.onUp(event.getX(), event.getY());
-                Log.e("test","Action down");
+                Log.e("test","Action up");
             }
 
         }

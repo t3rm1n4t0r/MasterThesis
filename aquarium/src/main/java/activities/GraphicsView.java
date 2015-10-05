@@ -66,6 +66,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
     @Override
     public void onDoubleTap(float x, float y) {
+
+        renderer.toggleRenderer();
+
         Log.d("TOUCH", "DOUBLE TAP");
 
     }

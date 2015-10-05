@@ -7,6 +7,7 @@ import android.opengl.Matrix;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -17,13 +18,13 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import thesis.Graphics.GameRenderer;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
 import shadow.math.SFMatrix3f;
 import shadow.math.SFTransform3f;
 import shadow.math.SFVertex3f;
+import thesis.Graphics.GameRenderer;
 import thesis.Graphics.GraphicsAnimation;
 import thesis.Graphics.NodeCollector;
 import thesis.Graphics.NodesKeeper;
@@ -33,8 +34,8 @@ import thesis.utils.Updatable;
 /**
  * Created by Marco on 05/10/2015.
  */
-public class EditRenderer extends GameRenderer {
 
+public class PanoramicRenderer extends GameRenderer{
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
@@ -70,7 +71,6 @@ public class EditRenderer extends GameRenderer {
     Node father;
     Node backgroundfather;
     Node scorefather;
-    Node menufather;
 
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
@@ -89,20 +89,19 @@ public class EditRenderer extends GameRenderer {
     private NodeCollector nodeCollector;
 
     private Node[][] tiles = new Node[5][5];
-    private Node[] menu = new Node[5];
 
     private HashMap<Character, String> numbersTextures = new HashMap<>();
 
-    public EditRenderer(Context context){
+    public PanoramicRenderer(Context context){
         this.context=context;
         toBeDrawn = new LinkedList<>();
 
         colors.put(-1, "#FF000000");
-        colors.put(0, "#FFAAAAAA");
-        colors.put(1, "#FF00FF00");
-        colors.put(2, "#FFFFFFFF");
-        colors.put(3, "#FFFFFFFF");
-        colors.put(4, "#FFFFFFFF");
+        colors.put(0, "#FFFFFFFF");
+        colors.put(1, "#FFFF0000");
+        colors.put(2, "#FFFFFF00");
+        colors.put(3, "#FF00FFFF");
+        colors.put(4, "#FFFF00FF");
 
         nodeCollector = new NodeCollector();
 
@@ -291,7 +290,7 @@ public class EditRenderer extends GameRenderer {
         backgroundfather = new Node();
 
         float TILE_SCALE = 1f;
-        float TILE_DISTANCE = 2.1f;
+        float TILE_DISTANCE = 2f;
 
         for (int i=0; i<5; i++){
             for (int j=0; j<5; j++){
@@ -326,25 +325,7 @@ public class EditRenderer extends GameRenderer {
         plant.updateTree(new SFTransform3f());
         backgroundfather.getSonNodes().add(plant);
 
-    }
 
-    public void drawMenu(){
-
-        menufather = new Node();
-
-        float TILE_SCALE = 1f;
-        float TILE_DISTANCE = 2.1f;
-        float RIGHT_MENU_CENTER = 7.5f;
-
-
-        for (int j=0; j<5; j++){
-            Node tile = NodesKeeper.generateNode(context, "stdShader", colors.get(j), "tile_0.obj");
-            tile.getRelativeTransform().setPosition(j*TILE_DISTANCE - 2f*TILE_DISTANCE, 0, RIGHT_MENU_CENTER);
-            tile.getRelativeTransform().setMatrix(SFMatrix3f.getScale(TILE_SCALE, TILE_SCALE, TILE_SCALE));
-            tile.updateTree(new SFTransform3f());
-            menu[j] = tile;
-            menufather.getSonNodes().add(tile);
-        }
 
     }
 
@@ -399,7 +380,7 @@ public class EditRenderer extends GameRenderer {
 
         drawBackground();
 
-        drawMenu();
+
 
 
 
@@ -421,7 +402,7 @@ public class EditRenderer extends GameRenderer {
         Matrix.frustumM(projection, 0, -ratio, ratio, -1, 1, 3, 7);
 
 
-        Matrix.setLookAtM(camera, 0, 0f, 4f, 0f, 0f, 0f, 0f, 1f, 0.0f, 0.0f);
+        Matrix.setLookAtM(camera, 0, -3f, 3f, 0f, 0f, 0f, 0f, 1f, 0.0f, 0.0f);
 
         Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
 
@@ -458,22 +439,9 @@ public class EditRenderer extends GameRenderer {
         backgroundfather.updateTree(new SFTransform3f());
 
 
-
         for (Node  node : backgroundfather.getSonNodes()) {
             node.draw();
         }
-
-
-        menufather.getRelativeTransform().setMatrix(matrix3f);
-        menufather.updateTree(new SFTransform3f());
-
-
-
-        for (Node  node : menufather.getSonNodes()) {
-            node.draw();
-        }
-
-
 
 
         /*
@@ -628,3 +596,5 @@ public class EditRenderer extends GameRenderer {
         return context;
     }
 }
+
+
