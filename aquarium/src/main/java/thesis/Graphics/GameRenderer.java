@@ -33,7 +33,6 @@ public abstract class GameRenderer implements GraphicsEngine,  GLSurfaceView.Ren
     public abstract void updateAnimations();
 
 
-
     public abstract void updateModel(Object obj);
     public abstract void addAnimation(GraphicsAnimation animation);
     public abstract void animate(Object object);

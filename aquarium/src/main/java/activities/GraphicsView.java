@@ -5,7 +5,9 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 
+import dagrada.marco.aquarium.ResourceManager;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
+import thesis.Graphics.GameRenderer;
 import thesis.touch.TouchActivity;
 
 
@@ -15,8 +17,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
     private ProxyRenderer renderer;
     //private GameController controller;
+    private ResourceManager manager;
 
-    public GraphicsView(Context context, ProxyRenderer renderer) {
+    public GraphicsView(Context context, ProxyRenderer renderer, ResourceManager manager) {
         super(context);
         setEGLContextClientVersion(2);
         this.context=context;
@@ -24,6 +27,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
         this.renderer = renderer;
         setRenderer(this.renderer);
         //this.controller = controller;
+        this.manager = manager;
     }
 
     @Override
@@ -67,7 +71,9 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
     @Override
     public void onDoubleTap(float x, float y) {
 
-        renderer.toggleRenderer();
+        //renderer.toggleRenderer();
+
+        manager.loadAllResources();
 
         Log.d("TOUCH", "DOUBLE TAP");
 
@@ -106,7 +112,7 @@ public class GraphicsView extends GLSurfaceView implements TouchActivity{
 
     }
 
-    public ProxyRenderer getRenderer() {
-        return renderer;
+    public GameRenderer getRenderer() {
+        return this.renderer;
     }
 }

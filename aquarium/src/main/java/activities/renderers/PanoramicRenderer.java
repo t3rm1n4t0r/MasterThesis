@@ -325,6 +325,18 @@ public class PanoramicRenderer extends GameRenderer{
         plant.updateTree(new SFTransform3f());
         backgroundfather.getSonNodes().add(plant);
 
+        float AMPHORA_SCALE = 3f;
+
+        Node amphora = NodesKeeper.generateNode(context, "stdShader", "#FFE29F5B", "vase.obj");
+        SFVertex3f position3 = new SFVertex3f();
+        tiles[3][4].getRelativeTransform().getPosition(position3);
+        amphora.getRelativeTransform().setPosition(position3);
+        SFMatrix3f matrix3f = SFMatrix3f.getScale(AMPHORA_SCALE, AMPHORA_SCALE, AMPHORA_SCALE);
+        matrix3f.MultMatrix(SFMatrix3f.getRotationX(1.2f));
+        amphora.getRelativeTransform().setMatrix(matrix3f);
+        amphora.updateTransform(new SFTransform3f());
+        backgroundfather.getSonNodes().add(amphora);
+
 
 
     }

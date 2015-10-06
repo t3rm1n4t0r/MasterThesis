@@ -132,6 +132,8 @@ public class ProxyRenderer extends GameRenderer {
         proxyRenderer.updateAnimations();
     }
 
+
+
 /*
 
     public void printMatrix(float[] matrix, String name, int size){

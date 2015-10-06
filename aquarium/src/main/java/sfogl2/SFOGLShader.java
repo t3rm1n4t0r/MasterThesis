@@ -90,25 +90,25 @@ public class SFOGLShader {
 		
 		this.shadingProgram=GLES20.glCreateProgram();
 		
-		Log.i("SFOGLShader", "Compiling Vertex Shader");
-        Log.i("SFOGLShader", vertexShader);
+		//Log.i("SFOGLShader", "Compiling Vertex Shader");
+        //Log.i("SFOGLShader", vertexShader);
 		compileVertexShader();
 		String compilerOutput = compiledShaderInfo( vShader);
 		//writer.println(compilerOutput);
-        Log.i("SFOGLShader", compilerOutput);
+        //Log.i("SFOGLShader", compilerOutput);
 
-        Log.i("SFOGLShader", "Compiling Fragment Shader");
-        Log.i("SFOGLShader", fragmentShader);
+        //Log.i("SFOGLShader", "Compiling Fragment Shader");
+        //Log.i("SFOGLShader", fragmentShader);
 		compileFragmentShader();
 		compilerOutput = compiledShaderInfo(fShader);
 		//writer.println(compilerOutput);
-        Log.i("SFOGLShader", compilerOutput);
+        //Log.i("SFOGLShader", compilerOutput);
 
-        Log.i("SFOGLShader", "Linking Program");
+        //Log.i("SFOGLShader", "Linking Program");
 		compileProgram(shadingProgram,vShader,fShader);
 		compilerOutput = compiledProgramInfo(shadingProgram);
 		//writer.println(compilerOutput);
-        Log.i("SFOGLShader", compilerOutput);
+        //Log.i("SFOGLShader", compilerOutput);
 	}
 
 	public void compileShader(){

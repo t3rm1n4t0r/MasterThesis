@@ -1,6 +1,7 @@
 package thesis.Graphics;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -43,6 +44,7 @@ public class ShadersKeeper {
             program.init();
             shaders.put(shadername, program);
         }
+
 
 
     }

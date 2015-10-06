@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Build;
 import android.os.SystemClock;
+import android.renderscript.Matrix3f;
 import android.util.DisplayMetrics;
 
 import java.util.ConcurrentModificationException;
@@ -17,6 +18,8 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
+import dagrada.marco.aquarium.communicationpackets.ItemsPacket;
 import thesis.Graphics.GameRenderer;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
@@ -38,7 +41,7 @@ public class EditRenderer extends GameRenderer {
     private static final String STANDARD_SHADER = "stdShader";
     private static final int CUBE_ROWS = 5;
     private static final int CUBE_COLS = 5;
-    private static final int RADIUS = 70;
+    private static final int RADIUS = 75;
     private static final int MAX_COLOR = 250;
     float width, height;
     private boolean isBlocked = false;
@@ -71,6 +74,7 @@ public class EditRenderer extends GameRenderer {
     Node backgroundfather;
     Node scorefather;
     Node menufather;
+    Node itemsfather;
 
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
@@ -90,8 +94,32 @@ public class EditRenderer extends GameRenderer {
 
     private Node[][] tiles = new Node[5][5];
     private Node[] menu = new Node[5];
+    //private int[][] background = new int[5][5];
+    //private int[][] items = new int[5][5];
+
+    int[][] background = {
+            {2, 1, 0, 0, 2},
+            {0, 0, 0, 0, 1},
+            {0, 0, 1, 0, 1},
+            {2, 0, 0, 2, 0},
+            {0, 0, 2, 1, 0}
+    };
+
+    int[][] items = {
+            {2, 0, 0, 2, 1},
+            {0, 0, 0, 0, 2},
+            {0, 0, 3, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 2, 1, 0}
+    };
+
+
 
     private HashMap<Character, String> numbersTextures = new HashMap<>();
+    private HashMap<Integer, String> tilesTextures = new HashMap<>();
+    private HashMap<Integer, String> itemsTextures = new HashMap<>();
+    private HashMap<Integer, String> itemsColors = new HashMap<>();
+    private HashMap<Integer, SFMatrix3f> itemsTransforms = new HashMap<>();
 
     public EditRenderer(Context context){
         this.context=context;
@@ -100,7 +128,7 @@ public class EditRenderer extends GameRenderer {
         colors.put(-1, "#FF000000");
         colors.put(0, "#FFAAAAAA");
         colors.put(1, "#FF00FF00");
-        colors.put(2, "#FFFFFFFF");
+        colors.put(2, "#FFFF0000");
         colors.put(3, "#FFFFFFFF");
         colors.put(4, "#FFFFFFFF");
 
@@ -116,6 +144,29 @@ public class EditRenderer extends GameRenderer {
         numbersTextures.put('7', "numbers_7.obj");
         numbersTextures.put('8', "numbers_8.obj");
         numbersTextures.put('9', "numbers_9.obj");
+
+        tilesTextures.put(0, "tile_0.obj");
+        tilesTextures.put(1, "tile_1.obj");
+        tilesTextures.put(2, "tile_2.obj");
+
+        itemsTextures.put(1, "stone.obj");
+        itemsTextures.put(2, "plant.obj");
+        itemsTextures.put(3, "vase.obj");
+
+        itemsColors.put(1, "#FF727B84");
+        itemsColors.put(2, "#FF76A912");
+        itemsColors.put(3, "#FFE29F5B");
+
+        float STONE_SCALE = 0.65f;
+        itemsTransforms.put(1, SFMatrix3f.getScale(STONE_SCALE, STONE_SCALE, STONE_SCALE));
+
+        float PLANT_SCALE = 6f;
+        itemsTransforms.put(2, SFMatrix3f.getScale(PLANT_SCALE, PLANT_SCALE, PLANT_SCALE));
+
+        float AMPHORA_SCALE = 3f;
+        SFMatrix3f matrix3f = SFMatrix3f.getScale(AMPHORA_SCALE, AMPHORA_SCALE, AMPHORA_SCALE);
+        matrix3f.MultMatrix(SFMatrix3f.getRotationX(1.2f));
+        itemsTransforms.put(3, matrix3f);
 
 
     }
@@ -251,6 +302,8 @@ public class EditRenderer extends GameRenderer {
 
     public void update(){
 
+        drawBackground();
+        /*
         father = new Node();
 
         nodeCollector.clearList();
@@ -266,7 +319,7 @@ public class EditRenderer extends GameRenderer {
 
         nodeCollector.clearList();
 
-
+*/
     }
 
     public void drawItems(){
@@ -293,9 +346,9 @@ public class EditRenderer extends GameRenderer {
         float TILE_SCALE = 1f;
         float TILE_DISTANCE = 2.1f;
 
-        for (int i=0; i<5; i++){
-            for (int j=0; j<5; j++){
-                Node tile = NodesKeeper.generateNode(context, "stdShader", "#FFC2B280", "tile_0.obj");
+        for (int i=0; i<background.length; i++){
+            for (int j=0; j<background[0].length; j++){
+                Node tile = NodesKeeper.generateNode(context, "stdShader", "#FFC2B280", tilesTextures.get(background[i][j]));
                 tile.getRelativeTransform().setPosition(i*TILE_DISTANCE - 2f*TILE_DISTANCE, 0, j*TILE_DISTANCE-2f*TILE_DISTANCE);
                 tile.getRelativeTransform().setMatrix(SFMatrix3f.getScale(TILE_SCALE, TILE_SCALE, TILE_SCALE));
                 tile.updateTree(new SFTransform3f());
@@ -304,27 +357,23 @@ public class EditRenderer extends GameRenderer {
             }
         }
 
-        float STONE_SCALE = 0.65f;
+        for (int i=0; i<items.length; i++){
+            for (int j=0; j<items[0].length; j++){
 
-        Node stone = NodesKeeper.generateNode(context, "stdShader", "#FF727B84", "stone.obj");
-        SFVertex3f position = new SFVertex3f();
-        tiles[0][0].getRelativeTransform().getPosition(position);
-        stone.getRelativeTransform().setPosition(position);
-        stone.getRelativeTransform().setMatrix(SFMatrix3f.getScale(STONE_SCALE, STONE_SCALE, STONE_SCALE));
-        stone.updateTree(new SFTransform3f());
-        backgroundfather.getSonNodes().add(stone);
+                if(items[i][j] !=0){
 
+                    Node item = NodesKeeper.generateNode(context, "stdShader", itemsColors.get(items[i][j]), itemsTextures.get(items[i][j]));
+                    SFVertex3f position = new SFVertex3f();
+                    tiles[i][j].getRelativeTransform().getPosition(position);
+                    item.getRelativeTransform().setPosition(position);
+                    item.getRelativeTransform().setMatrix(itemsTransforms.get(items[i][j]));
+                    item.updateTree(new SFTransform3f());
+                    backgroundfather.getSonNodes().add(item);
+                }
 
-        float PLANT_SCALE = 6f;
+            }
+        }
 
-
-        Node plant = NodesKeeper.generateNode(context, "stdShader", "#FF76A912", "plant.obj");
-        SFVertex3f position2 = new SFVertex3f();
-        tiles[2][2].getRelativeTransform().getPosition(position2);
-        plant.getRelativeTransform().setPosition(position2);
-        plant.getRelativeTransform().setMatrix(SFMatrix3f.getScale(PLANT_SCALE, PLANT_SCALE, PLANT_SCALE));
-        plant.updateTree(new SFTransform3f());
-        backgroundfather.getSonNodes().add(plant);
 
     }
 
@@ -399,6 +448,10 @@ public class EditRenderer extends GameRenderer {
 
         drawBackground();
 
+        background = new int[5][5];
+        items = new int[5][5];
+
+        drawBackground();
         drawMenu();
 
 
@@ -598,7 +651,14 @@ public class EditRenderer extends GameRenderer {
 
     public void updateModel(Object obj){
 
-
+        if(obj instanceof BackgroundPacket){
+            BackgroundPacket p = (BackgroundPacket)obj;
+            this.background = p.getGrid();
+        }
+        if(obj instanceof ItemsPacket){
+            ItemsPacket p = (ItemsPacket)obj;
+            this.items = p.getGrid();
+        }
 
 
     }
