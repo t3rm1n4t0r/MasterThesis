@@ -13,6 +13,10 @@ import thesis.Graphics.GraphicsEngine;
  */
 public class ItemsHolder implements Resource {
 
+    private static final int STONE = 1;
+    private static final int PLANT = 2;
+    private static final int VASE = 3;
+
     private int[][] grid;
     private GraphicsEngine engine;
     private FileHandler fileHandler;
@@ -21,6 +25,12 @@ public class ItemsHolder implements Resource {
         this.engine = engine;
         grid = new int[5][5];
         this.fileHandler = fileHandler;
+    }
+
+    public void setItem(int row, int column, int itemID){
+        if(itemID == 1 || itemID == 2 || itemID == 3 ) {
+            this.grid[row][column] = itemID;
+        }
     }
 
     @Override

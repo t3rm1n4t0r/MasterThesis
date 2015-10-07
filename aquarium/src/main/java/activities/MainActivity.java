@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import java.io.IOException;
 
 import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.controllers.EditController;
 import dagrada.marco.aquarium.filehandlers.MatrixFileHandler;
 import dagrada.marco.aquarium.resources.BackgroundHolder;
 import dagrada.marco.aquarium.resources.ItemsHolder;
@@ -24,7 +25,7 @@ public class MainActivity extends Activity {
     private long updateDelay = 80;
     private long generationDelay = 3000;
 
-    private GraphicsView view;
+    private EditController controller;
     ResourceManager manager;
 
     @Override
@@ -113,8 +114,9 @@ public class MainActivity extends Activity {
         manager.setResource(ResourceManager.BACKGROUND, holder);
         manager.setResource(ResourceManager.ITEMS, holder2);
 
-        view = new GraphicsView(this, renderer, manager);
-        detector = new GestureDetector(this, new GestureFilter(view));
+        GraphicsView view = new GraphicsView(this, renderer);
+        controller = new EditController(this, renderer, manager);
+        detector = new GestureDetector(this, new GestureFilter(controller));
         detector.setIsLongpressEnabled(false);
         setContentView(view);
 
@@ -133,16 +135,16 @@ public class MainActivity extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event){
 
-        if (detector.onTouchEvent(event)== true){
+        if (detector.isLongpressEnabled() && detector.onTouchEvent(event)== true){
             //Fling or other gesture detected (not logpress because it is disabled)
         }
         else{
             //Manually handle the event.
             if (event.getAction() == MotionEvent.ACTION_DOWN)
             {
-                view.onUp(event.getX(), event.getY());
+                controller.onDown(event.getX(), event.getY());
                 //Remember the time and press position
-                Log.e("test", "Action down");
+                //Log.e("test", "Action down");
             }
             if (event.getAction() == MotionEvent.ACTION_MOVE)
             {
@@ -150,16 +152,16 @@ public class MainActivity extends Activity {
                 // if current position differs much then press positon then discard whole thing
                 // If position change is minimal then after 0.5s that is a longpress. You can now process your other gestures
 
-                view.onMove(event.getX(), event.getY());
+                controller.onMove(event.getX(), event.getY());
 
-                Log.e("test","Action move");
+                //Log.e("test","Action move");
             }
             if (event.getAction() == MotionEvent.ACTION_UP)
             {
                 //Get the time and position and check what that was :)
 
-                view.onUp(event.getX(), event.getY());
-                Log.e("test","Action up");
+                controller.onUp(event.getX(), event.getY());
+                //Log.e("test","Action up");
             }
 
         }

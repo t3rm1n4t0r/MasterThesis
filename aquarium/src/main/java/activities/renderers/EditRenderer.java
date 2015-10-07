@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.renderscript.Matrix3f;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
 import dagrada.marco.aquarium.communicationpackets.ItemsPacket;
+import dagrada.marco.aquarium.communicationpackets.ProxyItemMovePacket;
+import dagrada.marco.aquarium.communicationpackets.ProxyItemPacket;
 import thesis.Graphics.GameRenderer;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
@@ -74,7 +77,9 @@ public class EditRenderer extends GameRenderer {
     Node backgroundfather;
     Node scorefather;
     Node menufather;
-    Node itemsfather;
+    Node itemsfather = new Node();
+
+    Node proxyItem;
 
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
@@ -192,24 +197,23 @@ public class EditRenderer extends GameRenderer {
 
 
 
+
         Iterator iterator = backgroundfather.getSonNodes().iterator();
 
+        if(x<1450f) {
+
+            for (int i = 0; i < CUBE_ROWS; i++) {
+                for (int j = 0; j < CUBE_COLS; j++) {
 
 
-        for (int i=0; i<CUBE_ROWS; i++) {
-            for (int j = 0; j < CUBE_COLS; j++) {
+                    current = tiles[i][j];
+                    position[0] = 0;
+                    position[1] = 0;
+                    position[2] = 0;
+                    position[3] = 1;
 
 
-
-
-                current = tiles[i][j];
-                position[0] = 0;
-                position[1] = 0;
-                position[2] = 0;
-                position[3] = 1;
-
-
-                current.getOpenGLMatrix(temp);
+                    current.getOpenGLMatrix(temp);
 /*
 
             Log.d("X", String.valueOf(temp[12]));
@@ -220,51 +224,122 @@ public class EditRenderer extends GameRenderer {
 
 
 */
-                Matrix.multiplyMM(matrix, 0, mvp, 0, temp, 0);
+                    Matrix.multiplyMM(matrix, 0, mvp, 0, temp, 0);
 
-                //Matrix.multiplyMM(matrix, 0, temp, 0, mvp, 0);
+                    //Matrix.multiplyMM(matrix, 0, temp, 0, mvp, 0);
 
-                Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
-
-
-                Matrix.multiplyMV(result, 0, temp, 0, position, 0);
-                Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
-
-                result[0] = result[0] / result[3];
-                result[1] = result[1] / result[3];
-                result[2] = result[2] / result[3];
-                result[3] = result[3] / result[3];
+                    Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
 
 
-                //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
-                //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
+                    Matrix.multiplyMV(result, 0, temp, 0, position, 0);
+                    Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
+
+                    result[0] = result[0] / result[3];
+                    result[1] = result[1] / result[3];
+                    result[2] = result[2] / result[3];
+                    result[3] = result[3] / result[3];
 
 
-                float cubecoordX = ((1 + result[0]) * this.width) / 2;
-
-                float cubecoordY = ((1 - result[1]) * this.height) / 2;
-
-                //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
+                    //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
+                    //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
 
 
-                float distance = (float) Math.sqrt((x - cubecoordX) * (x - cubecoordX) + (y - cubecoordY) * (y - cubecoordY));
+                    float cubecoordX = ((1 + result[0]) * this.width) / 2;
 
-                if (distance < RADIUS) {
+                    float cubecoordY = ((1 - result[1]) * this.height) / 2;
+
+                    //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
+
+
+                    float distance = (float) Math.sqrt((x - cubecoordX) * (x - cubecoordX) + (y - cubecoordY) * (y - cubecoordY));
+
+                    if (distance < RADIUS) {
 /*
                     Log.d("DISTANCE", String.valueOf(distance));
                     Log.d("NodeX", String.valueOf(cubecoordX));
                     Log.d("NodeY", String.valueOf(cubecoordY));
                     */
-                    int[] res = new int[2];
-                    res[0] = i;
-                    res[1] = j;
-                    return res;
+                        int[] res = new int[2];
+                        res[0] = i;
+                        res[1] = j;
+                        return res;
 
 
+                    }
                 }
             }
+            throw new TouchedItemNotFoundException();
+
         }
-        throw new TouchedItemNotFoundException();
+
+        else{
+            for (int i = 0; i < CUBE_ROWS; i++) {
+
+                    current = menu[i];
+                    position[0] = 0;
+                    position[1] = 0;
+                    position[2] = 0;
+                    position[3] = 1;
+
+
+                    current.getOpenGLMatrix(temp);
+/*
+
+            Log.d("X", String.valueOf(temp[12]));
+
+            Log.d("Y", String.valueOf(temp[13]));
+
+            Log.d("Z", String.valueOf(temp[14]));
+
+
+*/
+                    Matrix.multiplyMM(matrix, 0, mvp, 0, temp, 0);
+
+                    //Matrix.multiplyMM(matrix, 0, temp, 0, mvp, 0);
+
+                    Matrix.multiplyMV(result, 0, matrix, 0, position, 0);
+
+
+                    Matrix.multiplyMV(result, 0, temp, 0, position, 0);
+                    Matrix.multiplyMV(result, 0, mvp, 0, result, 0);
+
+                    result[0] = result[0] / result[3];
+                    result[1] = result[1] / result[3];
+                    result[2] = result[2] / result[3];
+                    result[3] = result[3] / result[3];
+
+
+                    //printMatrix(matrix, "Node " + String.valueOf(i) + " Final Matrix", 4);
+                    //printVector(result, "Node " + String.valueOf(i)+ " Final Position");
+
+
+                    float cubecoordX = ((1 + result[0]) * this.width) / 2;
+
+                    float cubecoordY = ((1 - result[1]) * this.height) / 2;
+
+                    //Log.d("SCREEN POSITION", String.valueOf(cubecoordX) + ","+ String.valueOf(cubecoordY));
+
+
+                    float distance = (float) Math.sqrt((x - cubecoordX) * (x - cubecoordX) + (y - cubecoordY) * (y - cubecoordY));
+
+                    if (distance < RADIUS) {
+/*
+                    Log.d("DISTANCE", String.valueOf(distance));
+                    Log.d("NodeX", String.valueOf(cubecoordX));
+                    Log.d("NodeY", String.valueOf(cubecoordY));
+                    */
+                        int[] res = new int[2];
+                        res[0] = -1;
+                        res[1] = i;
+                        return res;
+
+
+                    }
+
+            }
+            throw new TouchedItemNotFoundException();
+
+        }
 
 
     }
@@ -439,8 +514,6 @@ public class EditRenderer extends GameRenderer {
 
 
 
-
-
         toBeDrawn = new LinkedList<>();
 
 
@@ -450,6 +523,7 @@ public class EditRenderer extends GameRenderer {
 
         background = new int[5][5];
         items = new int[5][5];
+
 
         drawBackground();
         drawMenu();
@@ -526,6 +600,14 @@ public class EditRenderer extends GameRenderer {
             node.draw();
         }
 
+        itemsfather.getRelativeTransform().setMatrix(matrix3f);
+        itemsfather.updateTree(new SFTransform3f());
+
+        //Log.e("------------->", String.valueOf(itemsfather.getSonNodes().size()));
+
+        for (Node  node : itemsfather.getSonNodes()) {
+            node.draw();
+        }
 
 
 
@@ -658,6 +740,42 @@ public class EditRenderer extends GameRenderer {
         if(obj instanceof ItemsPacket){
             ItemsPacket p = (ItemsPacket)obj;
             this.items = p.getGrid();
+        }
+        if(obj instanceof ProxyItemPacket){
+
+            ProxyItemPacket p = (ProxyItemPacket)obj;
+            itemsfather = new Node();
+            if(p.getItem() == 0)
+                this.proxyItem = null;
+            else{
+                this.proxyItem = NodesKeeper.generateNode(context, STANDARD_SHADER, itemsColors.get(p.getItem()), itemsTextures.get(p.getItem()));
+                SFVertex3f position = new SFVertex3f();
+                menu[p.getItem()-1].getRelativeTransform().getPosition(position);
+                proxyItem.getRelativeTransform().setPosition(position);
+                proxyItem.getRelativeTransform().setMatrix(itemsTransforms.get(p.getItem()));
+                itemsfather.getSonNodes().add(proxyItem);
+            }
+        }
+        if(obj instanceof ProxyItemMovePacket){
+
+            if (proxyItem != null) {
+                ProxyItemMovePacket p = (ProxyItemMovePacket) obj;
+
+
+                SFVertex3f v = new SFVertex3f(p.getDy(), 0, -p.getDx());
+                SFVertex3f v2 = new SFVertex3f();
+
+                //Log.d("--->", String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
+                //Log.d("---->", String.valueOf(p.getDx())+" "+String.valueOf(p.getDy()));
+
+
+                //Log.d("----->", String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
+                proxyItem.getRelativeTransform().getPosition(v2);
+                v2.subtract3f(v);
+                proxyItem.getRelativeTransform().setPosition(v2);
+                proxyItem.updateTransform(new SFTransform3f());
+            }
+
         }
 
 
