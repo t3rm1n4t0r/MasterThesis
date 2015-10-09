@@ -31,7 +31,7 @@ public class MatrixFileHandler implements FileHandler{
         BufferedReader br = new BufferedReader((new InputStreamReader(context.openFileInput(filename))));
         String buffer;
         String[] current;
-        int[][] matrix = null;
+        int[][] matrix = new int[5][5];
 
         //Reading the matrix from file
 

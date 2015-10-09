@@ -27,10 +27,11 @@ public class BackgroundHolder implements Resource {
     public void store() {
         try {
             fileHandler.writeToFile(this.grid);
+            updateGraphics();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updateGraphics();
+
     }
 
     @Override
@@ -38,10 +39,11 @@ public class BackgroundHolder implements Resource {
         try {
             int[][] result = (int[][])fileHandler.readFromFile();
             this.grid = result;
+            updateGraphics();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updateGraphics();
+
     }
 
     public void updateGraphics(){

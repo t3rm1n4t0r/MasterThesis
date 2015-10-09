@@ -1,5 +1,6 @@
 package dagrada.marco.aquarium.controllers;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.util.Log;
 
@@ -61,7 +62,7 @@ public class EditController implements TouchActivity{
     @Override
     public void onUpSwipe(float startX, float startY, float endX, float endY) {
         Log.d("TOUCH", "UP SWIPE");
-        Log.d("START POINT", "("+String.valueOf(startX)+","+String.valueOf(startY)+")");
+        Log.d("START POINT", "(" + String.valueOf(startX) + "," + String.valueOf(startY) + ")");
         Log.d("END POINT", "("+String.valueOf(endX)+","+String.valueOf(endY)+")");
 
 
@@ -103,22 +104,34 @@ public class EditController implements TouchActivity{
     @Override
     public void onDown(float x, float y) {
         //Log.d("DOWN", "<---");
-        if(x>1460) {
+
             try {
                 selected = renderer.detectTouchedItem(x, y);
-                ProxyItemPacket p = new ProxyItemPacket(selected[1]+1);
-                renderer.updateModel(p);
-                previousx = x;
-                previousy = y;
+                if(selected[0] == -1 ) {
+                    switch (selected[1]){
+                        case 0:case 1:case 2:
+                            ProxyItemPacket p = new ProxyItemPacket(selected[1] + 1);
+                            renderer.updateModel(p);
+                            previousx = x;
+                            previousy = y;
+                            break;
+
+                        default:break;
+
+                    }
+
+                }
+
             } catch (TouchedItemNotFoundException e) {
 
             }
-        }
+
     }
 
     @Override
     public void onMove(float x, float y) {
         moving = true;
+
         float dx = x - previousx;
         float dy = y - previousy;
         //Log.d("DISTANCE", String.valueOf(dx*MULTIPLIER)+" "+String.valueOf(dy*MULTIPLIER));
@@ -131,22 +144,57 @@ public class EditController implements TouchActivity{
     @Override
     public void onUp(float x, float y) {
 
-        if(moving) {
+        int[] res;
+
+        ProxyItemPacket pk = new ProxyItemPacket(0);
+        renderer.updateModel(pk);
+
+        if(selected!=null) {
             try {
-                if (x < 1460) {
-                    int[] res = renderer.detectTouchedItem(x, y);
+                res = renderer.detectTouchedItem(x, y);
+
+                if (res[0] >= 0 && selected[0] == res[0] && selected[1] == res[1]) {
                     ItemsHolder holder = (ItemsHolder) manager.getResource(ResourceManager.ITEMS);
-                    holder.setItem(res[0], res[1], selected[1]+1);
+                    holder.setItem(res[0], res[1], ItemsHolder.NO_ITEM);
                     holder.updateGraphics();
 
+
                 }
-                ProxyItemPacket p = new ProxyItemPacket(ProxyItemPacket.UNSELECTED);
-                renderer.updateModel(p);
+                if (res[0] == -1 && selected[0] == res[0] && selected[1] == res[1]){
+                    switch (res[1]){
+                        case 3:
+                            manager.loadAllResources();
+                            break;
+                        case 4:
+                            manager.storeAllResources();
+                            break;
+                        default:break;
+                    }
+
+                }
+
+                if (moving) {
+
+                    if (res[0] >= 0) {
+                        ItemsHolder holder = (ItemsHolder) manager.getResource(ResourceManager.ITEMS);
+                        holder.setItem(res[0], res[1], selected[1] + 1);
+                        holder.updateGraphics();
+                        ProxyItemPacket p = new ProxyItemPacket(ProxyItemPacket.UNSELECTED);
+                        renderer.updateModel(p);
+                    }
+
+
+                }
+                moving = false;
+                selected = null;
+
+
             } catch (TouchedItemNotFoundException e) {
                 //e.printStackTrace();
             }
         }
-        moving = false;
+
+
     }
 
     public GameRenderer getRenderer() {

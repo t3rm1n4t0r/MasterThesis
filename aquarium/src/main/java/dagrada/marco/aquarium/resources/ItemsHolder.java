@@ -1,5 +1,7 @@
 package dagrada.marco.aquarium.resources;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import dagrada.marco.aquarium.FileHandler;
@@ -13,9 +15,10 @@ import thesis.Graphics.GraphicsEngine;
  */
 public class ItemsHolder implements Resource {
 
-    private static final int STONE = 1;
-    private static final int PLANT = 2;
-    private static final int VASE = 3;
+    public static final int NO_ITEM = 0;
+    public static final int STONE = 1;
+    public static final int PLANT = 2;
+    public static final int VASE = 3;
 
     private int[][] grid;
     private GraphicsEngine engine;
@@ -28,7 +31,7 @@ public class ItemsHolder implements Resource {
     }
 
     public void setItem(int row, int column, int itemID){
-        if(itemID == 1 || itemID == 2 || itemID == 3 ) {
+        if(itemID == 0 || itemID == 1 || itemID == 2 || itemID == 3 ) {
             this.grid[row][column] = itemID;
         }
     }
@@ -37,10 +40,11 @@ public class ItemsHolder implements Resource {
     public void store() {
         try {
             fileHandler.writeToFile(this.grid);
+            updateGraphics();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
-        updateGraphics();
+
     }
 
     @Override
@@ -48,11 +52,11 @@ public class ItemsHolder implements Resource {
         try {
             int[][] result = (int[][])fileHandler.readFromFile();
             this.grid = result;
-
+            updateGraphics();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
-        updateGraphics();
+
     }
 
     public void updateGraphics(){
