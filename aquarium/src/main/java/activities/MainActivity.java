@@ -2,16 +2,17 @@ package activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 
 import java.io.IOException;
 
+import activities.renderers.ProxyRenderer;
+import dagrada.marco.aquarium.GameModeHandler;
+import dagrada.marco.aquarium.GameModeObserver;
 import dagrada.marco.aquarium.ResourceManager;
-import dagrada.marco.aquarium.controllers.EditController;
+import dagrada.marco.aquarium.controllers.ProxyController;
 import dagrada.marco.aquarium.filehandlers.MatrixFileHandler;
 import dagrada.marco.aquarium.resources.BackgroundHolder;
 import dagrada.marco.aquarium.resources.ItemsHolder;
@@ -25,7 +26,7 @@ public class MainActivity extends Activity {
     private long updateDelay = 80;
     private long generationDelay = 3000;
 
-    private EditController controller;
+    private ProxyController controller;
     ResourceManager manager;
 
     @Override
@@ -115,9 +116,12 @@ public class MainActivity extends Activity {
         manager.setResource(ResourceManager.ITEMS, holder2);
 
         GraphicsView view = new GraphicsView(this, renderer);
-        controller = new EditController(this, renderer, manager);
+        GameModeHandler handler = new GameModeHandler();
+        controller = new ProxyController(this, renderer, manager, handler);
         detector = new GestureDetector(this, new GestureFilter(controller));
         detector.setIsLongpressEnabled(false);
+        GameModeObserver observer = new GameModeObserver(controller, renderer, manager, detector);
+        handler.addObserver(observer);
         setContentView(view);
 
 

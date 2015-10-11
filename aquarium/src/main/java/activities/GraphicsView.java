@@ -2,15 +2,10 @@ package activities;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 
-import dagrada.marco.aquarium.ResourceManager;
-import dagrada.marco.aquarium.communicationpackets.ProxyItemMovePacket;
-import dagrada.marco.aquarium.communicationpackets.ProxyItemPacket;
-import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
+import activities.renderers.ProxyRenderer;
 import thesis.Graphics.GameRenderer;
-import thesis.touch.TouchActivity;
 
 
 public class GraphicsView extends GLSurfaceView{

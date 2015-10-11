@@ -1,10 +1,10 @@
 package dagrada.marco.aquarium.controllers;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.util.Log;
 
-import activities.ProxyRenderer;
+import activities.renderers.ProxyRenderer;
+import dagrada.marco.aquarium.GameModeHandler;
 import dagrada.marco.aquarium.ResourceManager;
 import dagrada.marco.aquarium.communicationpackets.ProxyItemMovePacket;
 import dagrada.marco.aquarium.communicationpackets.ProxyItemPacket;
@@ -26,15 +26,17 @@ public class EditController implements TouchActivity{
     private float previousx, previousy;
     private boolean moving;
     int[] selected;
+    private GameModeHandler gameModeHandler;
+
 
     private final float MULTIPLIER = 0.0101f;
 
-    public EditController(Context context, ProxyRenderer renderer, ResourceManager manager) {
+    public EditController(Context context, ProxyRenderer renderer, ResourceManager manager, GameModeHandler gameModeHandler) {
 
         this.context=context;
 
         this.renderer = renderer;
-
+        this.gameModeHandler = gameModeHandler;
         //this.controller = controller;
         this.manager = manager;
     }
@@ -167,6 +169,9 @@ public class EditController implements TouchActivity{
                             break;
                         case 4:
                             manager.storeAllResources();
+                            break;
+                        case 5:
+                            gameModeHandler.setGamemode(GameModeHandler.GAMEMODE_PANORAMIC);
                             break;
                         default:break;
                     }

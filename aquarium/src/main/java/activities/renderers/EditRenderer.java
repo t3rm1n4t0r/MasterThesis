@@ -98,7 +98,7 @@ public class EditRenderer extends GameRenderer {
     private NodeCollector nodeCollector;
 
     private Node[][] tiles = new Node[5][5];
-    private Node[] menu = new Node[5];
+    private Node[] menu = new Node[6];
     //private int[][] background = new int[5][5];
     //private int[][] items = new int[5][5];
 
@@ -136,6 +136,7 @@ public class EditRenderer extends GameRenderer {
         colors.put(2, "#FFFF0000");
         colors.put(3, "#FFFFFFFF");
         colors.put(4, "#FFFFFFFF");
+        colors.put(5, "#FF009475");
 
         nodeCollector = new NodeCollector();
 
@@ -200,7 +201,7 @@ public class EditRenderer extends GameRenderer {
 
         Iterator iterator = backgroundfather.getSonNodes().iterator();
 
-        if(x<1450f) {
+
 
             for (int i = 0; i < CUBE_ROWS; i++) {
                 for (int j = 0; j < CUBE_COLS; j++) {
@@ -268,12 +269,12 @@ public class EditRenderer extends GameRenderer {
                     }
                 }
             }
-            throw new TouchedItemNotFoundException();
+            //throw new TouchedItemNotFoundException();
 
-        }
 
-        else{
-            for (int i = 0; i < CUBE_ROWS; i++) {
+
+
+            for (int i = 0; i < 6; i++) {
 
                     current = menu[i];
                     position[0] = 0;
@@ -339,7 +340,7 @@ public class EditRenderer extends GameRenderer {
             }
             throw new TouchedItemNotFoundException();
 
-        }
+
 
 
     }
@@ -469,6 +470,18 @@ public class EditRenderer extends GameRenderer {
             menu[j] = tile;
             menufather.getSonNodes().add(tile);
         }
+
+        for (int j=5; j<6; j++){
+            Node tile = NodesKeeper.generateNode(context, "stdShader", colors.get(j), "tile_0.obj");
+            tile.getRelativeTransform().setPosition((j-5) * TILE_DISTANCE - 2f * TILE_DISTANCE, 0, -RIGHT_MENU_CENTER);
+            tile.getRelativeTransform().setMatrix(SFMatrix3f.getScale(TILE_SCALE, TILE_SCALE, TILE_SCALE));
+            tile.updateTree(new SFTransform3f());
+            menu[j] = tile;
+            menufather.getSonNodes().add(tile);
+
+        }
+
+        Log.e("MENU ITEMS", String.valueOf(menufather.getSonNodes().size()));
 
     }
 

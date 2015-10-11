@@ -1,4 +1,4 @@
-package activities;
+package activities.renderers;
 
 import android.content.Context;
 
@@ -23,8 +23,9 @@ public class ProxyRenderer extends GameRenderer {
 
     private EditRenderer editRenderer;
     private PanoramicRenderer panoramicRenderer;
+    private GameRenderer[] renderers;
+    private int current;
 
-    boolean rend = true;
 
     public int[] detectTouchedItem(float x, float y) throws TouchedItemNotFoundException {
 
@@ -33,27 +34,31 @@ public class ProxyRenderer extends GameRenderer {
 
     }
 
-    public void toggleRenderer(){
+    public void toggleRenderer(int gamemode){
 
-        rend = !rend;
+        switch (gamemode){
+            case 0:case 1:
+                this.current = gamemode;
+                this.proxyRenderer = renderers[current];
+                proxyRenderer.drawBackground();
+                proxyRenderer.drawItems();
+                break;
+            default:break;
 
-        if(rend){
-            this.proxyRenderer = editRenderer;
         }
-        else {
-            this.proxyRenderer = panoramicRenderer;
-        }
 
-        proxyRenderer.drawBackground();
+
 
     }
 
 
 
     public ProxyRenderer(Context context){
-        editRenderer = new EditRenderer(context);
-        panoramicRenderer = new PanoramicRenderer(context);
-        proxyRenderer = editRenderer;
+        current = 0;
+        renderers = new GameRenderer[2];
+        renderers[0] = new EditRenderer(context);
+        renderers[1] = new PanoramicRenderer(context);
+        proxyRenderer = renderers[current];
 
     }
 
@@ -94,11 +99,11 @@ public class ProxyRenderer extends GameRenderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
 
+        for (int i=0; i<renderers.length; i++) {
+            renderers[i].onSurfaceCreated(gl, config);
+        }
 
-        editRenderer.onSurfaceCreated(gl, config);
-        panoramicRenderer.onSurfaceCreated(gl, config);
-
-       proxyRenderer.onSurfaceCreated(gl, config);
+       //proxyRenderer.onSurfaceCreated(gl, config);
 
 
 
@@ -111,12 +116,9 @@ public class ProxyRenderer extends GameRenderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
-        proxyRenderer.onSurfaceChanged(gl, width, height);
-
-
-
-
-
+        for (int i=0; i<renderers.length; i++) {
+            renderers[i].onSurfaceChanged(gl, width, height);
+        }
 
     }
 
