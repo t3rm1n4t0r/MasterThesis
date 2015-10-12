@@ -2,13 +2,11 @@ package activities.renderers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -21,8 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
 import dagrada.marco.aquarium.communicationpackets.ItemsPacket;
-import dagrada.marco.aquarium.communicationpackets.ProxyItemMovePacket;
-import dagrada.marco.aquarium.communicationpackets.ProxyItemPacket;
+import dagrada.marco.aquarium.communicationpackets.RotationPacket;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
@@ -85,7 +82,8 @@ public class PanoramicRenderer extends GameRenderer {
     private LinkedList<Updatable> toBeDrawn = new LinkedList<>();
     private int score;
 
-    float t;
+    float tx = 0, ty = 0;
+    float tx_step = 0, ty_step = 0;
 
     private LinkedList<GraphicsAnimation> animations = new LinkedList<>();
     private LinkedList<GraphicsAnimation> blockingAnimations = new LinkedList<>();
@@ -127,7 +125,7 @@ public class PanoramicRenderer extends GameRenderer {
     private HashMap<Integer, SFMatrix3f> itemsTransforms = new HashMap<>();
 
     public PanoramicRenderer(Context context) {
-        t=0;
+        tx =0;
         this.context = context;
         toBeDrawn = new LinkedList<>();
 
@@ -417,12 +415,17 @@ public class PanoramicRenderer extends GameRenderer {
 
 
         float scaling = 0.45f;
-        t+=0.1f;
-        float rotation = 0f + t;
+        tx = tx + tx_step;
+
+        float rotationx = 0f + tx;
         //Log.e("ROTATION", String.valueOf(rotation));
 
-        SFMatrix3f matrix3f = SFMatrix3f.getScale(scaling, scaling, scaling);
-        matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
+        SFMatrix3f matrix3f = SFMatrix3f.getRotationY(rotationx);
+
+
+        matrix3f = matrix3f.MultMatrix(SFMatrix3f.getScale(scaling, scaling, scaling));
+
+        //matrix3f.MultMatrix(SFMatrix3f.getRotationY(rotation));
         backgroundfather.getRelativeTransform().setMatrix(matrix3f);
         backgroundfather.updateTree(new SFTransform3f());
 
@@ -579,41 +582,14 @@ public class PanoramicRenderer extends GameRenderer {
             ItemsPacket p = (ItemsPacket) obj;
             this.items = p.getGrid();
         }
-        if (obj instanceof ProxyItemPacket) {
+        if (obj instanceof RotationPacket){
+            RotationPacket p = (RotationPacket)obj;
+            this.tx_step = p.getRotationX();
+            this.ty_step = p.getRotationY();
+            ty = ty + ty_step;
+            Matrix.setLookAtM(camera, 0, 0f, 3f+ty, 5f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
-            ProxyItemPacket p = (ProxyItemPacket) obj;
-            itemsfather = new Node();
-            if (p.getItem() == 0)
-                this.proxyItem = null;
-            else {
-                this.proxyItem = NodesKeeper.generateNode(context, STANDARD_SHADER, itemsColors.get(p.getItem()), itemsTextures.get(p.getItem()));
-                SFVertex3f position = new SFVertex3f();
-                menu[p.getItem() - 1].getRelativeTransform().getPosition(position);
-                proxyItem.getRelativeTransform().setPosition(position);
-                proxyItem.getRelativeTransform().setMatrix(itemsTransforms.get(p.getItem()));
-                itemsfather.getSonNodes().add(proxyItem);
-            }
-        }
-        if (obj instanceof ProxyItemMovePacket) {
-
-            if (proxyItem != null) {
-                ProxyItemMovePacket p = (ProxyItemMovePacket) obj;
-
-
-                SFVertex3f v = new SFVertex3f(p.getDy(), 0, -p.getDx());
-                SFVertex3f v2 = new SFVertex3f();
-
-                //Log.d("--->", String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
-                //Log.d("---->", String.valueOf(p.getDx())+" "+String.valueOf(p.getDy()));
-
-
-                //Log.d("----->", String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
-                proxyItem.getRelativeTransform().getPosition(v2);
-                v2.subtract3f(v);
-                proxyItem.getRelativeTransform().setPosition(v2);
-                proxyItem.updateTransform(new SFTransform3f());
-            }
-
+            Matrix.multiplyMM(mvp, 0, projection, 0, camera, 0);
         }
 
 

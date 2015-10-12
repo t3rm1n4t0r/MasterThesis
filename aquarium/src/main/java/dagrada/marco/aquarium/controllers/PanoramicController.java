@@ -5,6 +5,8 @@ import android.content.Context;
 import activities.renderers.ProxyRenderer;
 import dagrada.marco.aquarium.GameModeHandler;
 import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.communicationpackets.RotationPacket;
+import thesis.Graphics.GraphicsEngine;
 import thesis.touch.TouchActivity;
 
 /**
@@ -13,29 +15,36 @@ import thesis.touch.TouchActivity;
 public class PanoramicController implements TouchActivity {
 
     private GameModeHandler gameModeHandler;
+    private GraphicsEngine engine;
 
     public PanoramicController(Context context, ProxyRenderer renderer, ResourceManager manager, GameModeHandler gameModeHandler){
         this.gameModeHandler = gameModeHandler;
+        this.engine = renderer;
     }
 
     @Override
     public void onRightSwipe(float startX, float startY, float endX, float endY) {
+        RotationPacket p = new RotationPacket(0.01f, 0);
+        engine.updateModel(p);
 
     }
 
     @Override
     public void onLeftSwipe(float startX, float startY, float endX, float endY) {
-
+        RotationPacket p = new RotationPacket(-0.01f, 0);
+        engine.updateModel(p);
     }
 
     @Override
     public void onUpSwipe(float startX, float startY, float endX, float endY) {
-
+        RotationPacket p = new RotationPacket(0, 0.2f);
+        engine.updateModel(p);
     }
 
     @Override
     public void onDownSwipe(float startX, float startY, float endX, float endY) {
-
+        RotationPacket p = new RotationPacket(0, -0.2f);
+        engine.updateModel(p);
     }
 
     @Override
@@ -50,7 +59,8 @@ public class PanoramicController implements TouchActivity {
 
     @Override
     public void onSingleTapUp(float x, float y) {
-
+        RotationPacket p = new RotationPacket(0, 0);
+        engine.updateModel(p);
     }
 
     @Override
