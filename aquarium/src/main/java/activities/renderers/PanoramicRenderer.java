@@ -17,10 +17,13 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import dagrada.marco.aquarium.animations.BubbleAnimation;
+import dagrada.marco.aquarium.animations.BubbleFluxAnimation;
 import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
 import dagrada.marco.aquarium.communicationpackets.ItemsPacket;
 import dagrada.marco.aquarium.communicationpackets.RotationPacket;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
+import dagrada.marco.aquarium.resources.ItemsHolder;
 import sfogl.integration.Node;
 import sfogl2.SFOGLSystemState;
 import shadow.math.SFMatrix3f;
@@ -168,7 +171,7 @@ public class PanoramicRenderer extends GameRenderer {
         float PLANT_SCALE = 6f;
         itemsTransforms.put(2, SFMatrix3f.getScale(PLANT_SCALE, PLANT_SCALE, PLANT_SCALE));
 
-        float AMPHORA_SCALE = 3f;
+        float AMPHORA_SCALE = 2.5f;
         SFMatrix3f matrix3f = SFMatrix3f.getScale(AMPHORA_SCALE, AMPHORA_SCALE, AMPHORA_SCALE);
         matrix3f.MultMatrix(SFMatrix3f.getRotationX(1.2f));
         itemsTransforms.put(3, matrix3f);
@@ -285,6 +288,11 @@ public class PanoramicRenderer extends GameRenderer {
                 }
 
             }
+        }
+
+        if(items[2][2] == ItemsHolder.VASE){
+            BubbleFluxAnimation a = new BubbleFluxAnimation(context, tiles[2][2].getX(), tiles[2][2].getY()+1.2f, tiles[2][2].getZ());
+            addAnimation(a);
         }
 
 
@@ -414,7 +422,7 @@ public class PanoramicRenderer extends GameRenderer {
         updateAnimations();
 
 
-        float scaling = 0.45f;
+        float scaling = 0.35f;
         tx = tx + tx_step;
 
         float rotationx = 0f + tx;

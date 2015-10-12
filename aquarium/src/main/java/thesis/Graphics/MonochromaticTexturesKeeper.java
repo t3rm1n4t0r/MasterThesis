@@ -34,7 +34,7 @@ public class MonochromaticTexturesKeeper {
         Bitmap bitmap = Bitmap.createBitmap(64, 64, conf);
         bitmap.eraseColor(color);
 
-        int textureModel = SFOGLTextureModel.generateTextureObjectModel(SFImageFormat.RGB, GLES20.GL_REPEAT, GLES20.GL_REPEAT, GLES20.GL_LINEAR, GLES20.GL_LINEAR);
+        int textureModel = SFOGLTextureModel.generateTextureObjectModel(SFImageFormat.RGBA, GLES20.GL_REPEAT, GLES20.GL_REPEAT, GLES20.GL_LINEAR, GLES20.GL_LINEAR);
         BitmapTexture tex = BitmapTexture.loadBitmapTexture(bitmap, textureModel);
         tex.init();
         return tex;
