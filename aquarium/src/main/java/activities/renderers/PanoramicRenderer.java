@@ -221,7 +221,7 @@ public class PanoramicRenderer extends GameRenderer {
     public void update() {
 
         drawBackground();
-        /*
+
         father = new Node();
 
         nodeCollector.clearList();
@@ -231,6 +231,7 @@ public class PanoramicRenderer extends GameRenderer {
         father.getSonNodes().addAll(nodeCollector.getNodes());
         nodeCollector.clearList();
 
+        /*
         drawScore(score);
 
         scorefather.getSonNodes().addAll(nodeCollector.getNodes());
@@ -242,15 +243,13 @@ public class PanoramicRenderer extends GameRenderer {
 
     public void drawItems() {
 
+        float fish_scale = 0.05f;
 
-        Iterator<Updatable> iterator = toBeDrawn.iterator();
-
-        //Log.d("To Be Drawn Size", String.valueOf(toBeDrawn.size()));
-
-        while (iterator.hasNext()) {
-
-
-        }
+        Node fish = NodesKeeper.generateNode(context, "stdShader", "#FFFA6900", "fish.obj");
+        fish.getRelativeTransform().setPosition(0, 2f, 0);
+        fish.getRelativeTransform().setMatrix(SFMatrix3f.getScale(fish_scale, fish_scale, fish_scale));
+        fish.updateTree(new SFTransform3f());
+        nodeCollector.addNode(fish);
 
 
     }
@@ -372,13 +371,13 @@ public class PanoramicRenderer extends GameRenderer {
         toBeDrawn = new LinkedList<>();
 
 
-        drawBackground();
+        update();
 
         background = new int[5][5];
         items = new int[5][5];
 
-
-        drawBackground();
+        update();
+        //drawBackground();
        //drawMenu();
 
 
@@ -417,6 +416,8 @@ public class PanoramicRenderer extends GameRenderer {
         //Log.d("TIME", String.valueOf(frametime));
 
         SFOGLSystemState.cleanupColorAndDepth(red, green, blue, 1);
+
+        //SFOGLSystemState.cleanupColorAndDepth(0, 148/256, 117/256, 1);
 
         ShadersKeeper.getProgram(STANDARD_SHADER).setupProjection(mvp);
 
@@ -464,13 +465,15 @@ public class PanoramicRenderer extends GameRenderer {
 
 
 
-        /*
+
         father.getRelativeTransform().setMatrix(matrix3f);
         father.updateTree(new SFTransform3f());
 
         for (Node  node : father.getSonNodes()) {
             node.draw();
         }
+
+        /*
 
         scorefather.getRelativeTransform().setPosition(-2f, 0.3f, 0);
         scorefather.updateTree(new SFTransform3f());
