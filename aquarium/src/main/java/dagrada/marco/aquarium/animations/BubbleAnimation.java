@@ -28,7 +28,7 @@ public class BubbleAnimation implements GraphicsAnimation{
 
     public BubbleAnimation(Context context, float x, float y, float z, float radius){
         ended = false;
-        bubble = NodesKeeper.generateNode(context, "stdShader", "#25FFFFFF", "sphere.obj");
+        bubble = NodesKeeper.generateNode(context, "stdShader", "#77FFFFFF", "sphere.obj");
         this.radius = radius;
         bubble.getRelativeTransform().setPosition(x, y, z + radius);
         float bubble_scale = ((float)Math.random())*max_bubble_scale;

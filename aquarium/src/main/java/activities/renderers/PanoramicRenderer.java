@@ -2,6 +2,7 @@ package activities.renderers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Build;
@@ -53,8 +54,9 @@ public class PanoramicRenderer extends GameRenderer {
     HashMap<Integer, String> colors = new HashMap<>();
 
     float red = 0;
-    float blue = 0;
-    float green = 0;
+    float blue = 148/255;
+    float green = 117/255;
+
 
     Context context;
 
@@ -176,9 +178,7 @@ public class PanoramicRenderer extends GameRenderer {
         matrix3f.MultMatrix(SFMatrix3f.getRotationX(1.2f));
         itemsTransforms.put(3, matrix3f);
 
-        this.red = 0;
-        this.green = 117;
-        this.blue = 148;
+
 
 
     }
@@ -258,6 +258,7 @@ public class PanoramicRenderer extends GameRenderer {
     public void drawBackground() {
 
         backgroundfather = new Node();
+        this.animations = new LinkedList<>();
 
         float TILE_SCALE = 1f;
         float TILE_DISTANCE = 2f;
