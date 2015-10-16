@@ -1,10 +1,9 @@
 package dagrada.marco.aquarium.resources;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import dagrada.marco.aquarium.FileHandler;
-import dagrada.marco.aquarium.Resource;
+import thesis.utils.FileHandler;
+import thesis.utils.Resource;
 import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
 import thesis.Graphics.GraphicsEngine;
 

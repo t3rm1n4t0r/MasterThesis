@@ -5,7 +5,7 @@ import android.util.Log;
 
 import activities.renderers.ProxyRenderer;
 import dagrada.marco.aquarium.GameModeHandler;
-import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.MyResourceManager;
 import dagrada.marco.aquarium.communicationpackets.ProxyItemMovePacket;
 import dagrada.marco.aquarium.communicationpackets.ProxyItemPacket;
 import dagrada.marco.aquarium.exceptions.TouchedItemNotFoundException;
@@ -22,7 +22,7 @@ public class EditController implements TouchActivity{
 
     private ProxyRenderer renderer;
     //private GameController controller;
-    private ResourceManager manager;
+    private MyResourceManager manager;
     private float previousx, previousy;
     private boolean moving;
     int[] selected;
@@ -31,7 +31,7 @@ public class EditController implements TouchActivity{
 
     private final float MULTIPLIER = 0.0101f;
 
-    public EditController(Context context, ProxyRenderer renderer, ResourceManager manager, GameModeHandler gameModeHandler) {
+    public EditController(Context context, ProxyRenderer renderer, MyResourceManager manager, GameModeHandler gameModeHandler) {
 
         this.context=context;
 
@@ -156,7 +156,7 @@ public class EditController implements TouchActivity{
                 res = renderer.detectTouchedItem(x, y);
 
                 if (res[0] >= 0 && selected[0] == res[0] && selected[1] == res[1]) {
-                    ItemsHolder holder = (ItemsHolder) manager.getResource(ResourceManager.ITEMS);
+                    ItemsHolder holder = (ItemsHolder) manager.getResource(MyResourceManager.ITEMS);
                     holder.setItem(res[0], res[1], ItemsHolder.NO_ITEM);
                     holder.updateGraphics();
 
@@ -181,7 +181,7 @@ public class EditController implements TouchActivity{
                 if (moving) {
 
                     if (res[0] >= 0) {
-                        ItemsHolder holder = (ItemsHolder) manager.getResource(ResourceManager.ITEMS);
+                        ItemsHolder holder = (ItemsHolder) manager.getResource(MyResourceManager.ITEMS);
                         holder.setItem(res[0], res[1], selected[1] + 1);
                         holder.updateGraphics();
                         ProxyItemPacket p = new ProxyItemPacket(ProxyItemPacket.UNSELECTED);

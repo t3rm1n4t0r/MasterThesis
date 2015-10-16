@@ -1,12 +1,9 @@
 package dagrada.marco.aquarium.resources;
 
-import android.util.Log;
-
 import java.io.IOException;
 
-import dagrada.marco.aquarium.FileHandler;
-import dagrada.marco.aquarium.Resource;
-import dagrada.marco.aquarium.communicationpackets.BackgroundPacket;
+import thesis.utils.FileHandler;
+import thesis.utils.Resource;
 import dagrada.marco.aquarium.communicationpackets.ItemsPacket;
 import thesis.Graphics.GraphicsEngine;
 

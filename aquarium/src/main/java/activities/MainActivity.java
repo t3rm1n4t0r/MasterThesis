@@ -11,7 +11,7 @@ import java.io.IOException;
 import activities.renderers.ProxyRenderer;
 import dagrada.marco.aquarium.GameModeHandler;
 import dagrada.marco.aquarium.GameModeObserver;
-import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.MyResourceManager;
 import dagrada.marco.aquarium.controllers.ProxyController;
 import dagrada.marco.aquarium.filehandlers.MatrixFileHandler;
 import dagrada.marco.aquarium.resources.BackgroundHolder;
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
     private long generationDelay = 3000;
 
     private ProxyController controller;
-    ResourceManager manager;
+    MyResourceManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +111,9 @@ public class MainActivity extends Activity {
         BackgroundHolder holder = new BackgroundHolder(renderer, handler1);
         ItemsHolder holder2 = new ItemsHolder(renderer, handler2);
 
-        manager = new ResourceManager();
-        manager.setResource(ResourceManager.BACKGROUND, holder);
-        manager.setResource(ResourceManager.ITEMS, holder2);
+        manager = new MyResourceManager();
+        manager.setResource(MyResourceManager.BACKGROUND, holder);
+        manager.setResource(MyResourceManager.ITEMS, holder2);
 
         GraphicsView view = new GraphicsView(this, renderer);
         GameModeHandler handler = new GameModeHandler();

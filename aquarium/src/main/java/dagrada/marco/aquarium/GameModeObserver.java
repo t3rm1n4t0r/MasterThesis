@@ -15,10 +15,10 @@ public class GameModeObserver implements Observer {
 
     private ProxyController controller;
     private ProxyRenderer renderer;
-    private ResourceManager manager;
+    private MyResourceManager manager;
     private GestureDetector detector;
 
-    public GameModeObserver(ProxyController controller, ProxyRenderer renderer, ResourceManager manager, GestureDetector detector){
+    public GameModeObserver(ProxyController controller, ProxyRenderer renderer, MyResourceManager manager, GestureDetector detector){
         this.controller = controller;
         this.renderer = renderer;
         this.manager = manager;

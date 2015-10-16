@@ -4,7 +4,7 @@ import android.content.Context;
 
 import activities.renderers.ProxyRenderer;
 import dagrada.marco.aquarium.GameModeHandler;
-import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.MyResourceManager;
 import thesis.touch.TouchActivity;
 
 /**
@@ -18,12 +18,12 @@ public class ProxyController implements TouchActivity {
 
     private ProxyRenderer renderer;
     //private GameController controller;
-    private ResourceManager manager;
+    private MyResourceManager manager;
     private TouchActivity[] controllers;
     private int current;
     private GameModeHandler gameModeHandler;
 
-    public ProxyController(Context context, ProxyRenderer renderer, ResourceManager manager, GameModeHandler gameModeHandler){
+    public ProxyController(Context context, ProxyRenderer renderer, MyResourceManager manager, GameModeHandler gameModeHandler){
         this.context=context;
 
         this.renderer = renderer;

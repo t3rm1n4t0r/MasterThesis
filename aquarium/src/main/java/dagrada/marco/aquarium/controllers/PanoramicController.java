@@ -4,7 +4,7 @@ import android.content.Context;
 
 import activities.renderers.ProxyRenderer;
 import dagrada.marco.aquarium.GameModeHandler;
-import dagrada.marco.aquarium.ResourceManager;
+import dagrada.marco.aquarium.MyResourceManager;
 import dagrada.marco.aquarium.communicationpackets.RotationPacket;
 import thesis.Graphics.GraphicsEngine;
 import thesis.touch.TouchActivity;
@@ -17,7 +17,7 @@ public class PanoramicController implements TouchActivity {
     private GameModeHandler gameModeHandler;
     private GraphicsEngine engine;
 
-    public PanoramicController(Context context, ProxyRenderer renderer, ResourceManager manager, GameModeHandler gameModeHandler){
+    public PanoramicController(Context context, ProxyRenderer renderer, MyResourceManager manager, GameModeHandler gameModeHandler){
         this.gameModeHandler = gameModeHandler;
         this.engine = renderer;
     }

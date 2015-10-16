@@ -246,7 +246,7 @@ public class PanoramicRenderer extends GameRenderer {
         float fish_scale = 0.05f;
 
         Node fish = NodesKeeper.generateNode(context, "stdShader", "#FFFA6900", "fish.obj");
-        fish.getRelativeTransform().setPosition(0, 2f, 0);
+        fish.getRelativeTransform().setPosition(2.5f, 2f, 0);
         fish.getRelativeTransform().setMatrix(SFMatrix3f.getScale(fish_scale, fish_scale, fish_scale));
         fish.updateTree(new SFTransform3f());
         nodeCollector.addNode(fish);
